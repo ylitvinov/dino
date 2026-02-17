@@ -7,6 +7,7 @@ video and image generation.
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 from pathlib import Path
 from typing import Any
@@ -80,6 +81,11 @@ class KieClient:
         **kwargs: Any,
     ) -> httpx.Response:
         """Execute an HTTP request."""
+        if "json" in kwargs:
+            logger.debug(
+                "KIE request %s %s payload:\n%s",
+                method, url, json.dumps(kwargs["json"], indent=2, ensure_ascii=False),
+            )
         try:
             response = await self._client.request(method, url, **kwargs)
             response.raise_for_status()
