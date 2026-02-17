@@ -20,7 +20,17 @@
     "1": {
       "status": "submit_failed",
       "completed": false,
-      "error": "API error (code=422): {'code': 422, 'msg': 'The length of each multi_prompt.prompt must not exceed 500 characters.', 'data': None}"
+      "error": "API error (code=422): {'code': 422, 'msg': \"sound must be 'on' when multi_shots is true.\", 'data': None}"
+    },
+    "1": {
+      "task_id": "d331482cfbbbc5400af4a8d89d16173a",
+      "status": "failed",
+      "completed": false,
+      "url": null,
+      "local_path": null,
+      "shot_count": 2,
+      "elements": [],
+      "error": "Task d331482cfbbbc5400af4a8d89d16173a did not complete within 300s. Last status: pending"
     }
   }
 }
