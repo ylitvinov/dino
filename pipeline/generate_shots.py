@@ -151,6 +151,7 @@ async def generate_shots(
     scenario_path: str,
     config_path: str | None = None,
     scene_ids: list[int] | None = None,
+    dry_run: bool = False,
 ) -> None:
     """Generate videos for scenes using multi-shot API.
 
@@ -271,9 +272,32 @@ async def generate_shots(
         return
 
     console.print(
-        f"\n[bold]Generating {len(scene_tasks)} multi-shot task(s) "
+        f"\n[bold]{'[DRY RUN] Would generate' if dry_run else 'Generating'} "
+        f"{len(scene_tasks)} multi-shot task(s) "
         f"for {total_scenes} scene(s)...[/bold]\n"
     )
+
+    if dry_run:
+        for stask in scene_tasks:
+            total_parts = sum(1 for t in scene_tasks if t.scene_id == stask.scene_id)
+            skey = _scene_status_key(stask.scene_id, stask.part, total_parts)
+            fname = _scene_filename(stask.scene_id, stask.part, total_parts)
+            total_dur = sum(s["duration"] for s in stask.shots)
+            console.print(f"[cyan]── Scene {skey} -> {fname}[/cyan]")
+            console.print(f"   Shots: {len(stask.shots)}, Total duration: {total_dur}s")
+            console.print(f"   Mode: {mode}, Aspect: {aspect_ratio}, CFG: {cfg_scale}")
+            if stask.elements:
+                elem_summary = ", ".join(
+                    f"{e.name} ({len(e.image_urls)} imgs)" for e in stask.elements
+                )
+                console.print(f"   Elements: {elem_summary}")
+            if stask.negative_prompt:
+                console.print(f"   Negative: {stask.negative_prompt[:80]}...")
+            for i, shot in enumerate(stask.shots):
+                console.print(f"   Shot {i+1} ({shot['duration']}s): {shot['prompt'][:120]}...")
+            console.print()
+        console.print("[bold yellow]Dry run complete. No API calls were made.[/bold yellow]")
+        return
 
     async with KieClient(api_key=api_key, base_url=config["api"]["base_url"]) as client:
         # Phase 1: Submit multi-shot tasks
