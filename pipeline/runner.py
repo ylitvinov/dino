@@ -102,9 +102,10 @@ def cmd_generate_elements(ctx: click.Context, scenario: str) -> None:
 
 @cli.command("generate-scene")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
+@click.option("--dry-run", is_flag=True, help="Log what would be generated without calling API")
 @click.argument("scene", type=int)
 @click.pass_context
-def cmd_generate_scene(ctx: click.Context, scenario: str, scene: int) -> None:
+def cmd_generate_scene(ctx: click.Context, scenario: str, dry_run: bool, scene: int) -> None:
     """Generate videos for a specific scene. Usage: generate-scene -s scenario.yaml 1"""
     from pipeline.generate_shots import generate_shots
 
@@ -112,7 +113,7 @@ def cmd_generate_scene(ctx: click.Context, scenario: str, scene: int) -> None:
     console.print(f"[bold]Starting generation for scene {scene}...[/bold]")
 
     try:
-        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, scene_ids=[scene]))
+        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, scene_ids=[scene], dry_run=dry_run))
     except FileNotFoundError as exc:
         console.print(f"[red]Error: {exc}[/red]")
         sys.exit(1)
@@ -275,8 +276,9 @@ def cmd_status(ctx: click.Context, scenario: str | None) -> None:
 
 @cli.command("run-all")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
+@click.option("--dry-run", is_flag=True, help="Log what would be generated without calling API (video only)")
 @click.pass_context
-def cmd_run_all(ctx: click.Context, scenario: str) -> None:
+def cmd_run_all(ctx: click.Context, scenario: str, dry_run: bool) -> None:
     """Run the full pipeline: elements -> shots -> download."""
     from pipeline.generate_elements import generate_elements
     from pipeline.generate_shots import generate_shots
@@ -287,15 +289,21 @@ def cmd_run_all(ctx: click.Context, scenario: str) -> None:
     try:
         # Step 1: Generate element reference images
         console.rule("[bold blue]Step 1: Generate Element Reference Images[/bold blue]")
-        asyncio.run(generate_elements(scenario_path=scenario, config_path=config_path))
+        if dry_run:
+            console.print("[dim]Skipped in dry-run mode[/dim]")
+        else:
+            asyncio.run(generate_elements(scenario_path=scenario, config_path=config_path))
 
         # Step 2: Generate scenes
         console.rule("[bold blue]Step 2: Generate Scenes[/bold blue]")
-        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path))
+        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, dry_run=dry_run))
 
         # Step 3: Download any remaining files
         console.rule("[bold blue]Step 3: Download Remaining Files[/bold blue]")
-        asyncio.run(download_all(scenario_path=scenario, config_path=config_path))
+        if dry_run:
+            console.print("[dim]Skipped in dry-run mode[/dim]")
+        else:
+            asyncio.run(download_all(scenario_path=scenario, config_path=config_path))
 
         console.rule("[bold green]Pipeline Complete[/bold green]")
 
