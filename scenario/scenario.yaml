@@ -2,11 +2,11 @@ style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm p
 
 kling_elements:
   - name: "Topa"
-    description: "Small bright-green baby triceratops. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized. Rounded 3D Pixar-style."
+    description: "Bright-green baby triceratops, big brown eyes, orange frill."
   - name: "Pusha"
-    description: "Small fluffy purple pterodactyl. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized. Rounded 3D Pixar-style."
+    description: "Fluffy purple baby pterodactyl, big blue eyes, pink beak."
   - name: "Valley"
-    description: "Prehistoric valley with lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke, winding river. Warm pastel palette."
+    description: "Prehistoric valley, colorful flowers, friendly volcanoes, river."
 
 scenes:
   - id: 1

@@ -18,14 +18,29 @@
   },
   "scenes": {
     "1": {
-      "status": "submit_failed",
+      "task_id": "c4d184e8b9fb46a743d1fb3a3b9b9d7b",
+      "status": "failed",
       "completed": false,
-      "error": "API error (code=422): {'code': 422, 'msg': \"kling_elements element 'Valley'.element_input_urls must contain between 2 and 4 images.\", 'data': None}"
+      "url": null,
+      "local_path": null,
+      "shot_count": 3,
+      "elements": [
+        "Valley",
+        "Topa"
+      ],
+      "error": "Unknown error"
     },
     "1": {
-      "status": "submit_failed",
+      "task_id": "407d6732a5a1804d367854e60fa30d01",
+      "status": "submitted",
       "completed": false,
-      "error": "API error (code=422): {'code': 422, 'msg': \"kling_elements element 'Valley'.element_input_urls must contain between 2 and 4 images.\", 'data': None}"
+      "url": null,
+      "local_path": null,
+      "shot_count": 3,
+      "elements": [
+        "Valley",
+        "Topa"
+      ]
     }
   }
 }

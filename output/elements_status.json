@@ -54,8 +54,13 @@
       "views": {
         "view_0": {
           "status": "completed",
-          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365866030-mvxtgkzby7a.png",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771367722021-p5z2y7x2vel.png",
           "local_path": "output/elements/Valley/Valley1.png"
+        },
+        "view_1": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771367724641-o75pu6i3s38.png",
+          "local_path": "output/elements/Valley/Valley2.png"
         }
       },
       "completed": true
