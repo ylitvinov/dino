@@ -1,44 +1,19 @@
 {
   "shots": {
-    "1__": {
+    "1__1": {
       "status": "submit_failed",
       "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+      "error": "API error (code=402): {'code': 402, 'msg': 'Credits insufficient : Your current balance isn’t enough to run this request. Please top up to continue.', 'data': None}"
     },
-    "2__": {
+    "1__2": {
       "status": "submit_failed",
       "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+      "error": "API error (code=402): {'code': 402, 'msg': 'Credits insufficient : Your current balance isn’t enough to run this request. Please top up to continue.', 'data': None}"
     },
-    "3__": {
+    "1__3": {
       "status": "submit_failed",
       "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
-    },
-    "4__": {
-      "status": "submit_failed",
-      "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
-    },
-    "5__": {
-      "status": "submit_failed",
-      "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
-    },
-    "6__": {
-      "status": "submit_failed",
-      "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
-    },
-    "7__": {
-      "status": "submit_failed",
-      "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
-    },
-    "8__": {
-      "status": "submit_failed",
-      "completed": false,
-      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+      "error": "API error (code=402): {'code': 402, 'msg': 'Credits insufficient : Your current balance isn’t enough to run this request. Please top up to continue.', 'data': None}"
     }
   }
 }
