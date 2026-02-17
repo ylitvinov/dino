@@ -17,9 +17,6 @@ from pipeline.models import Element, TaskStatus
 
 logger = logging.getLogger(__name__)
 
-# Retry configuration
-_MAX_RETRIES = 5
-_RETRY_BACKOFF_BASE = 2.0
 _DEFAULT_TIMEOUT = 60.0
 _DOWNLOAD_TIMEOUT = 300.0
 
@@ -76,71 +73,39 @@ class KieClient:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    async def _request_with_retry(
+    async def _request(
         self,
         method: str,
         url: str,
         **kwargs: Any,
     ) -> httpx.Response:
-        """Execute an HTTP request with retry logic for 429 and 5xx errors."""
-        last_exc: Exception | None = None
-        for attempt in range(_MAX_RETRIES):
-            try:
-                response = await self._client.request(method, url, **kwargs)
-
-                if response.status_code == 429:
-                    retry_after = float(
-                        response.headers.get("Retry-After", _RETRY_BACKOFF_BASE ** attempt)
-                    )
-                    logger.warning(
-                        "Rate limited (429). Retrying in %.1fs (attempt %d/%d)",
-                        retry_after, attempt + 1, _MAX_RETRIES,
-                    )
-                    await asyncio.sleep(retry_after)
-                    continue
-
-                if response.status_code >= 500:
-                    wait = _RETRY_BACKOFF_BASE ** attempt
-                    logger.warning(
-                        "Server error %d. Retrying in %.1fs (attempt %d/%d)",
-                        response.status_code, wait, attempt + 1, _MAX_RETRIES,
-                    )
-                    await asyncio.sleep(wait)
-                    continue
-
-                response.raise_for_status()
-                return response
-
-            except httpx.TimeoutException as exc:
-                last_exc = exc
-                wait = _RETRY_BACKOFF_BASE ** attempt
-                logger.warning(
-                    "Request timeout. Retrying in %.1fs (attempt %d/%d)",
-                    wait, attempt + 1, _MAX_RETRIES,
-                )
-                await asyncio.sleep(wait)
-            except httpx.HTTPStatusError as exc:
-                raise KieApiError(
-                    f"HTTP {exc.response.status_code}: {exc.response.text}",
-                    status_code=exc.response.status_code,
-                    body=exc.response.text,
-                ) from exc
-
-        raise KieApiError(
-            f"Max retries ({_MAX_RETRIES}) exceeded",
-        ) from last_exc
+        """Execute an HTTP request."""
+        try:
+            response = await self._client.request(method, url, **kwargs)
+            response.raise_for_status()
+            return response
+        except httpx.HTTPStatusError as exc:
+            raise KieApiError(
+                f"HTTP {exc.response.status_code}: {exc.response.text}",
+                status_code=exc.response.status_code,
+                body=exc.response.text,
+            ) from exc
+        except httpx.TimeoutException as exc:
+            raise KieApiError(f"Request timeout: {exc}") from exc
 
     def _parse_task_id(self, data: dict) -> str:
         """Extract task_id from API response, handling nested structures."""
-        # Try data.data.task_id (nested)
+        # Try data.data.task_id / data.data.taskId (nested)
         if "data" in data and isinstance(data["data"], dict):
             inner = data["data"]
-            if "task_id" in inner:
-                return inner["task_id"]
+            for key in ("task_id", "taskId"):
+                if key in inner:
+                    return inner[key]
 
-        # Try data.task_id (flat)
-        if "task_id" in data:
-            return data["task_id"]
+        # Try data.task_id / data.taskId (flat)
+        for key in ("task_id", "taskId"):
+            if key in data:
+                return data[key]
 
         raise KieApiError(
             f"Could not extract task_id from response: {data}",
@@ -157,16 +122,38 @@ class KieClient:
         if "data" in data and isinstance(data["data"], dict):
             task_data = data["data"]
 
-        task_id = task_data.get("task_id", "")
-        status = task_data.get("status", "unknown")
+        task_id = task_data.get("taskId", task_data.get("task_id", ""))
 
-        # Extract output URL — try video first, then image
+        # KIE.ai uses "state" (success/fail/waiting/queuing/generating)
+        # Map to our internal statuses (pending/processing/completed/failed)
+        raw_state = task_data.get("state", task_data.get("status", "unknown"))
+        state_map = {
+            "waiting": "pending",
+            "queuing": "pending",
+            "generating": "processing",
+            "success": "completed",
+            "fail": "failed",
+        }
+        status = state_map.get(raw_state, raw_state)
+
+        # Extract output URL from resultJson or output field
         output_url: str | None = None
-        output = task_data.get("output")
-        if isinstance(output, dict):
-            output_url = output.get("video_url") or output.get("image_url")
-        elif isinstance(output, str) and output:
-            output_url = output
+        result_json = task_data.get("resultJson")
+        if isinstance(result_json, str) and result_json:
+            import json as _json
+            try:
+                result = _json.loads(result_json)
+                urls = result.get("resultUrls", [])
+                if urls:
+                    output_url = urls[0]
+            except _json.JSONDecodeError:
+                pass
+        if not output_url:
+            output = task_data.get("output")
+            if isinstance(output, dict):
+                output_url = output.get("video_url") or output.get("image_url")
+            elif isinstance(output, str) and output:
+                output_url = output
 
         # Extract error
         error: str | None = None
@@ -249,7 +236,7 @@ class KieClient:
             body["input"]["kling_elements"] = kling_elements
 
         logger.info("Creating video task: prompt=%r, elements=%d", prompt[:80], len(kling_elements))
-        response = await self._request_with_retry("POST", "/api/v1/jobs/createTask", json=body)
+        response = await self._request("POST", "/api/v1/jobs/createTask", json=body)
         data = response.json()
 
         # Check for API-level errors
@@ -260,6 +247,95 @@ class KieClient:
 
         task_id = self._parse_task_id(data)
         logger.info("Video task created: %s", task_id)
+        return task_id
+
+    async def create_multi_shot_task(
+        self,
+        shots: list[dict],
+        negative_prompt: str = "",
+        elements: list[Element] | None = None,
+        mode: str = "pro",
+        aspect_ratio: str = "16:9",
+        cfg_scale: float = 0.5,
+    ) -> str:
+        """Create a Kling 3.0 multi-shot video generation task.
+
+        Submits multiple shots as a single request for visual continuity.
+
+        Args:
+            shots: List of {"prompt": str, "duration": int} dicts.
+            negative_prompt: Things to avoid in the generated video.
+            elements: Optional list of Element objects with reference images.
+            mode: Generation mode ("std" or "pro").
+            aspect_ratio: Output aspect ratio.
+            cfg_scale: Classifier-free guidance scale.
+
+        Returns:
+            The task_id string for polling.
+
+        Raises:
+            ValueError: If shots exceed limits (>6 shots or >15s total).
+            KieApiError: On API errors.
+        """
+        if len(shots) > 6:
+            raise ValueError(f"Multi-shot supports max 6 shots, got {len(shots)}")
+        total_duration = sum(s["duration"] for s in shots)
+        if total_duration > 15:
+            raise ValueError(f"Multi-shot supports max 15s total, got {total_duration}s")
+
+        kling_elements = []
+        if elements:
+            for el in elements:
+                if el.image_urls:
+                    kling_elements.append({
+                        "name": el.name,
+                        "description": el.description,
+                        "element_input_urls": el.image_urls,
+                    })
+
+        multi_prompt = [
+            {"prompt": s["prompt"], "duration": s["duration"]}
+            for s in shots
+        ]
+
+        body: dict[str, Any] = {
+            "model": "kling-3.0/video",
+            "task_type": "video_generation",
+            "input": {
+                "multi_shots": True,
+                "multi_prompt": multi_prompt,
+                "negative_prompt": negative_prompt,
+                "duration": str(total_duration),
+                "mode": mode,
+                "aspect_ratio": aspect_ratio,
+                "cfg_scale": cfg_scale,
+                "sound": True,
+            },
+            "config": {
+                "webhook_config": {
+                    "endpoint": "",
+                    "secret": "",
+                },
+            },
+        }
+
+        if kling_elements:
+            body["input"]["kling_elements"] = kling_elements
+
+        logger.info(
+            "Creating multi-shot task: %d shots, %ds total, elements=%d",
+            len(shots), total_duration, len(kling_elements),
+        )
+        response = await self._request("POST", "/api/v1/jobs/createTask", json=body)
+        data = response.json()
+
+        code = data.get("code")
+        if code is not None and code != 200:
+            error_msg = data.get("message", data.get("error", str(data)))
+            raise KieApiError(f"API error (code={code}): {error_msg}", body=data)
+
+        task_id = self._parse_task_id(data)
+        logger.info("Multi-shot task created: %s", task_id)
         return task_id
 
     async def create_image_task(
@@ -292,7 +368,7 @@ class KieClient:
         }
 
         logger.info("Creating image task: prompt=%r", prompt[:80])
-        response = await self._request_with_retry("POST", "/api/v1/jobs/createTask", json=body)
+        response = await self._request("POST", "/api/v1/jobs/createTask", json=body)
         data = response.json()
 
         code = data.get("code")
@@ -316,7 +392,7 @@ class KieClient:
         Raises:
             KieApiError: On API errors.
         """
-        response = await self._request_with_retry("GET", f"/api/v1/jobs/{task_id}")
+        response = await self._request("GET", f"/api/v1/jobs/recordInfo?taskId={task_id}")
         data = response.json()
         return self._parse_task_status(data)
 

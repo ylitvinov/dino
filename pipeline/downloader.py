@@ -77,7 +77,7 @@ async def download_all(
             local_path = elements_dir / elem_name / f"{view_key}.png"
             downloads.append((f"element:{elem_name}/{view_key}", url, local_path, elements_status_path, elements_status))
 
-    # Check shot videos
+    # Check shot videos (legacy single-shot format)
     for shot_key, shot_data in shots_status.get("shots", {}).items():
         url = shot_data.get("url")
         if not url or not shot_data.get("completed"):
@@ -89,6 +89,19 @@ async def download_all(
 
         local_path = shots_dir / f"{shot_key}.mp4"
         downloads.append((f"shot:{shot_key}", url, local_path, shots_status_path, shots_status))
+
+    # Check scene videos (multi-shot format)
+    for scene_key, scene_data in shots_status.get("scenes", {}).items():
+        url = scene_data.get("url")
+        if not url or not scene_data.get("completed"):
+            continue
+
+        local = scene_data.get("local_path")
+        if local and Path(local).exists():
+            continue
+
+        local_path = shots_dir / f"scene_{scene_key}.mp4"
+        downloads.append((f"scene:{scene_key}", url, local_path, shots_status_path, shots_status))
 
     if not downloads:
         console.print("[green]All files are already downloaded.[/green]")
@@ -134,3 +147,7 @@ def _update_local_path(status: dict, label: str, local_path: str) -> None:
         shot_key = label[len("shot:"):]
         if shot_key in status.get("shots", {}):
             status["shots"][shot_key]["local_path"] = local_path
+    elif label.startswith("scene:"):
+        scene_key = label[len("scene:"):]
+        if scene_key in status.get("scenes", {}):
+            status["scenes"][scene_key]["local_path"] = local_path

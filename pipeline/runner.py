@@ -55,12 +55,13 @@ def _load_status(config_path: str, scenario_path: str | None = None) -> dict:
             elem_data = json.load(f)
         result["elements"] = elem_data.get("elements", {})
 
-    # Load per-scenario shots status
+    # Load per-scenario shots/scenes status
     shots_status_path = paths["status_file"]
     if shots_status_path.exists():
         with open(shots_status_path, "r", encoding="utf-8") as f:
             shots_data = json.load(f)
         result["shots"] = shots_data.get("shots", {})
+        result["scenes"] = shots_data.get("scenes", {})
 
     return result
 
@@ -224,15 +225,52 @@ def cmd_status(ctx: click.Context, scenario: str | None) -> None:
         console.print(table)
         console.print()
 
+    # Scenes table (multi-shot)
+    scenes = status.get("scenes", {})
+    if scenes:
+        table = Table(title="Scenes (Multi-Shot)", show_lines=True)
+        table.add_column("Scene", style="cyan")
+        table.add_column("Task ID", max_width=20)
+        table.add_column("Shots", justify="center")
+        table.add_column("Status", justify="center")
+        table.add_column("Local File", max_width=40)
+
+        for scene_key, scene_data in sorted(scenes.items()):
+            task_id = scene_data.get("task_id", "N/A")
+            shot_count = scene_data.get("shot_count", "?")
+            scene_status = scene_data.get("status", "unknown")
+            local_path = scene_data.get("local_path", "")
+            error = scene_data.get("error", "")
+
+            if scene_data.get("completed"):
+                status_str = "[green]DONE[/green]"
+            elif scene_status == "failed":
+                status_str = "[red]FAILED[/red]"
+            elif scene_status == "submitted":
+                status_str = "[yellow]SUBMITTED[/yellow]"
+            else:
+                status_str = f"[dim]{scene_status.upper()}[/dim]"
+
+            display_path = local_path or (f"Error: {error}" if error else "")
+            table.add_row(scene_key, str(task_id)[:20], str(shot_count), status_str, display_path)
+
+        console.print(table)
+        console.print()
+
     # Summary
     total_elems = len(elements)
     done_elems = sum(1 for e in elements.values() if e.get("completed"))
     total_shots = len(shots)
     done_shots = sum(1 for s in shots.values() if s.get("completed"))
+    total_scenes = len(scenes)
+    done_scenes = sum(1 for s in scenes.values() if s.get("completed"))
 
     console.print(f"[bold]Summary:[/bold]")
     console.print(f"  Elements: {done_elems}/{total_elems} completed")
-    console.print(f"  Shots: {done_shots}/{total_shots} completed")
+    if total_shots:
+        console.print(f"  Shots (legacy): {done_shots}/{total_shots} completed")
+    if total_scenes:
+        console.print(f"  Scenes (multi-shot): {done_scenes}/{total_scenes} completed")
 
 
 @cli.command("run-all")

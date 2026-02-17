@@ -15,5 +15,12 @@
       "completed": false,
       "error": "API error (code=402): {'code': 402, 'msg': 'Credits insufficient : Your current balance isn’t enough to run this request. Please top up to continue.', 'data': None}"
     }
+  },
+  "scenes": {
+    "1": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=422): {'code': 422, 'msg': 'The length of each multi_prompt.prompt must not exceed 500 characters.', 'data': None}"
+    }
   }
 }
