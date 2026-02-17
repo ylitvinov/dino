@@ -1,0 +1,22 @@
+# KIE.ai API Configuration
+# Get your API key at: https://kie.ai
+
+api:
+  api_key: "31cba65baa191b08fd847ebd391a6f5b"
+  base_url: "https://api.kie.ai"
+
+generation:
+  model: "kling-3.0/video"
+  image_model: "kling-3.0/image"
+  mode: "pro"           # "std" or "pro"
+  duration: 5            # seconds per shot (5 or 10)
+  aspect_ratio: "16:9"
+  cfg_scale: 0.5
+
+polling:
+  interval_seconds: 10
+  max_wait_seconds: 300
+
+output:
+  base_dir: "output"
+  elements_dir: "output/elements"

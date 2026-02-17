@@ -1,0 +1,212 @@
+global:
+  model: "kling-3.0/video"
+  mode: "pro"
+  duration: 5
+  aspect_ratio: "16:9"
+  style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes."
+  continuity_characters: "Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. 3D Pixar-style, soft shapes, warm pastels, no harsh shadows."
+  continuity_backgrounds: "Use @[ElementName] as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes."
+  negative_prompt: "Realistic/photorealistic style, dark shadows, harsh lighting, scary, monsters, aggressive teeth, extra fingers, disfigured, blurry, low res, morphing faces, jerky motion, flickering, adult proportions, sharp angular shapes, speech bubbles, text overlays, subtitles, mouth shapes forming words, background inconsistency, environment morphing between shots."
+
+elements:
+  characters:
+    - name: "Topa"
+      description: "Small bright-green baby triceratops. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized. Rounded 3D Pixar-style."
+      reference_prompts:
+        - "Character sheet front view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops facing camera. Big round brown eyes, pink cheeks, small orange frill on head. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet side view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops in perfect side profile. Big round brown eye visible, pink cheek, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet 3/4 view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops at three-quarter angle. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet full body: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops standing, all four legs visible. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body turnaround, centered, studio lighting."
+
+    - name: "Pusha"
+      description: "Small fluffy purple pterodactyl. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized. Rounded 3D Pixar-style."
+      reference_prompts:
+        - "Character sheet front view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl facing camera. Big round blue eyes, pink beak, fluffy wings spread slightly, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet side view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl in perfect side profile. Big round blue eye visible, pink beak, fluffy wing, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet 3/4 view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl at three-quarter angle. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet full body: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl standing with wings folded. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized proportions. Clean white background, full body turnaround, centered, studio lighting."
+
+  backgrounds:
+    - name: "Valley"
+      description: "Prehistoric valley with lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke, winding river. Warm pastel palette."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley at sunrise. Lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke in distance, winding river reflecting pink-orange sky. Volumetric light rays, morning mist. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley in neutral daylight. Lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke, winding river under bright blue sky with puffy clouds. Warm pastel palette. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley at night. Same lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke. Hundreds of fireflies glowing warmly, starry sky above. Blue hour lighting. Deep focus. No characters."
+
+    - name: "FernForest"
+      description: "Tall colorful fern canopy, dappled sunlight, oversized mushrooms (red/white, blue, purple), giant flowers along paths. Cozy jungle feel."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS path winding through tall colorful fern forest. Dappled sunlight filtering through canopy, oversized mushrooms (red with white spots, blue, purple) along the path, giant flowers. Cozy jungle feel. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS clearing inside fern forest with oversized mushrooms (red/white, blue, purple) as focal point. Dappled sunlight, giant flowers, colorful ferns surrounding the clearing. Cozy jungle feel. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS looking up at fern forest canopy from ground level. Tall colorful ferns creating natural cathedral ceiling, dappled sunlight streaming through leaves, giant flowers visible. Cozy jungle feel. No characters."
+
+    - name: "SunnyClearing"
+      description: "Open grass area, colorful plants/flowers around edges, bright blue sky, puffy clouds."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS full sunny clearing. Open grass area surrounded by colorful plants and flowers around edges. Bright blue sky with puffy white clouds above. Warm midday lighting. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS ground level view of sunny clearing. Colorful flowers and soft grass in foreground, bright blue sky with puffy clouds above. Warm midday lighting. Shallow depth of field. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS sunny clearing with sky emphasis. Open grass area in lower third, colorful plants/flowers around edges. Enormous bright blue sky with puffy white clouds fills upper two-thirds. Warm midday lighting. No characters."
+
+    - name: "WaterfallPool"
+      description: "Small waterfall into turquoise pool, smooth rocks, colorful plants, rainbow mist, sparkle particles."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS full waterfall cascading into turquoise pool. Smooth rounded rocks around edges, colorful plants and flowers surrounding the pool, rainbow mist rising from waterfall base, sparkle particles in air. Warm afternoon light. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS turquoise pool at water level. Smooth rocks at water edge, waterfall in background, colorful plants reflected in calm water surface. Rainbow mist, sparkle particles. Warm afternoon light. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS surroundings of waterfall pool area. Turquoise pool and small waterfall as center, lush colorful plants, smooth rocks, rainbow mist, sparkle particles throughout. Warm afternoon light. Deep focus. No characters."
+
+    - name: "SunsetHill"
+      description: "Small grassy hill overlooking valley, panoramic view, enormous open sky."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS small grassy hill at golden hour. Soft green grass, panoramic view of prehistoric valley below. Enormous sky with orange-pink-purple sunset gradient. Warm golden light. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS tiny grassy hill in lower portion, enormous sky filling most of frame. Big dramatic sunset with orange-pink-purple gradient. Valley silhouetted below. Warm golden light. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS hilltop grass detail. Soft green grass on small hill summit, colorful wildflowers, panoramic valley visible in background. Golden hour side lighting. Shallow depth of field. No characters."
+
+scenes:
+  - id: 1
+    title: "Morning in the Valley"
+    time: "0:00-0:15"
+    background: "Valley"
+    lighting: "Sunrise golden hour"
+    shots:
+      - id: 1
+        time: "0:00-0:05"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes. EWS, slow dolly push. @Valley at sunrise — morning mist drifting low over lush rounded plants, volumetric light rays streaming through tall ferns, pink-orange sky gradient above tiny friendly volcanoes with white smoke. Winding river reflects warm sunrise colors. Deep focus, cinematic composition."
+        elements_needed: ["Valley"]
+      - id: 2
+        time: "0:05-0:10"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @Valley as environment reference. MS on @Topa sleeping curled up on a big leaf in @Valley. A warm sunbeam slowly reaches his face. He scrunches his nose, yawns wide showing tiny tongue, opens his big round brown eyes, stretches his short chubby legs one by one. Shallow depth of field, beautiful bokeh background of sunrise-lit valley plants and flowers. Warm golden rim light."
+        elements_needed: ["Valley", "Topa"]
+      - id: 3
+        time: "0:10-0:15"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @Valley as environment reference. CU low-angle shot. @Topa stands up on his short chubby legs, shakes himself vigorously — his small orange frill wiggles comically. He looks directly at camera with excited big round brown eyes, beams with pure joy, spreads his front paws wide in a celebratory gesture. Golden rim light glow outlining his bright-green body. Sunrise @Valley background soft-focused behind him."
+        elements_needed: ["Valley", "Topa"]
+
+  - id: 2
+    title: "Breakfast"
+    time: "0:15-0:30"
+    background: "FernForest"
+    lighting: "Morning dappled sunlight"
+    shots:
+      - id: 1
+        time: "0:15-0:20"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @FernForest as environment reference. MS tracking shot following @Topa as he waddles through @FernForest with his short chubby legs, stopping to sniff colorful giant flowers. He stops suddenly — his tummy rumbles loudly (visible belly vibration). He puts his front paws on his round belly with a surprised expression, then giggles. Dappled sunlight filtering through fern canopy, oversized mushrooms visible along the path."
+        elements_needed: ["FernForest", "Topa"]
+      - id: 2
+        time: "0:20-0:25"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @FernForest as environment reference. MS to WS dolly pull. @Topa discovers a GIANT bright-green leaf, four times his kitten size, with sparkle particles floating around it in @FernForest. Classic Pixar surprise reaction — his big round brown eyes go huge, jaw drops open, he bounces up and down with excitement. Rack focus transition from his amazed face to the enormous sparkling leaf. Dappled sunlight, colorful ferns and mushrooms in background."
+        elements_needed: ["FernForest", "Topa"]
+      - id: 3
+        time: "0:25-0:30"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @FernForest as environment reference. MCU high-angle looking down at @Topa as he takes a big bite of the giant leaf — satisfying crunch. Green juice splatters on his pink cheeks. He chews with his big round brown eyes closed, blissful smile spreading across his face. Does a happy wiggle dance, his round-tipped tail wags side to side. Dappled sunlight in @FernForest, warm tones."
+        elements_needed: ["FernForest", "Topa"]
+
+  - id: 3
+    title: "A New Friend"
+    time: "0:30-0:45"
+    background: "SunnyClearing"
+    lighting: "Bright midday"
+    shots:
+      - id: 1
+        time: "0:30-0:35"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunnyClearing as environment reference. WS with tilt up. @Topa stands in @SunnyClearing, open grass area with colorful flowers. A shadow glides over him — he looks up confused. @Pusha spirals down from the bright blue sky in playful circles, leaving a sparkle dust trail behind her fluffy purple wings. Bright midday sunlight, puffy white clouds."
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+      - id: 2
+        time: "0:35-0:40"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunnyClearing as environment reference. MS two-shot in @SunnyClearing. @Pusha lands with a little hop, folds her fluffy wings, tilts her head to one side. Her big round blue eyes blink curiously. She bounces excitedly and extends one wing as a friendly wave. @Topa blinks his big round brown eyes, then smiles shyly, pink cheeks flushing slightly. Bright midday light, colorful plants around clearing edges."
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+      - id: 3
+        time: "0:40-0:45"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunnyClearing as environment reference. CU to MCU dolly-out. @Topa's face lights up — his big round brown eyes sparkle with star reflections in pupils. He nods rapidly, his small orange frill bounces with each nod. Both @Topa and @Pusha burst into happy laughter, jumping together in @SunnyClearing. Sparkle particles swirl between them. Bright midday light."
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+
+  - id: 4
+    title: "Hide and Seek"
+    time: "0:45-1:00"
+    background: "FernForest"
+    lighting: "Bright midday"
+    shots:
+      - id: 1
+        time: "0:45-0:50"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @FernForest as environment reference. MS static shot in @FernForest. @Pusha covers her big round blue eyes with her fluffy purple wings, bobs her head three times counting. @Topa giggles and runs off in a comical waddle on his short chubby legs, heading behind the oversized mushrooms. Camera stays on @Pusha. Dappled sunlight, colorful ferns."
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+      - id: 2
+        time: "0:50-0:55"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @FernForest as environment reference. WS, slow truck right in @FernForest. @Topa hides behind a big red mushroom with white spots — but his bright-green round-tipped tail sticks out obviously from behind it. @Pusha spots the tail, grins with her pink beak, and tiptoes toward him on her little feet. Deep focus for visual comedy. Dappled sunlight through fern canopy."
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+      - id: 3
+        time: "0:55-1:00"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @FernForest as environment reference. MS two-shot with quick snap push-in at the moment of discovery in @FernForest. @Pusha peeks around the big red mushroom. @Topa has his big round brown eyes squeezed shut, thinking he is invisible. @Pusha taps him gently with her fluffy wing. He opens his eyes wide in surprise. A beat of silence. Both burst into laughter, falling over each other playfully. Dappled sunlight."
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+
+  - id: 5
+    title: "The Waterfall"
+    time: "1:00-1:15"
+    background: "FernForest/WaterfallPool"
+    lighting: "Warm afternoon"
+    shots:
+      - id: 1
+        time: "1:00-1:05"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @FernForest as environment reference. MS tracking shot through @FernForest flower-lined path. @Pusha rides on @Topa's back as he waddles along. They both hear the sound of water — @Pusha's tuft perks up, she points forward excitedly with her fluffy wing. Giant flowers line the path, warm afternoon dappled sunlight."
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+      - id: 2
+        time: "1:05-1:10"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @WaterfallPool as environment reference. OTS to boom-up reveal shot. Camera rises from behind @Topa and @Pusha to reveal @WaterfallPool — a small waterfall cascading into a turquoise pool, rainbow mist rising, sparkle particles floating in warm afternoon light. Both characters freeze in awe, mouths open wide. Rack focus transition from characters to the magnificent waterfall. Smooth rounded rocks, colorful plants surrounding the pool."
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+      - id: 3
+        time: "1:10-1:15"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @WaterfallPool as environment reference. MS low-angle from water level at @WaterfallPool. @Topa jumps into the turquoise pool — big splash with water droplets flying everywhere! @Pusha flutters above the pool dodging the droplets, laughing with her pink beak open. @Topa surfaces, shakes his head — his small orange frill drips water comically. Lens water droplet effect on camera. Rainbow mist, sparkle particles, warm afternoon light."
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+  - id: 6
+    title: "The Butterflies"
+    time: "1:15-1:30"
+    background: "WaterfallPool"
+    lighting: "Late golden hour"
+    shots:
+      - id: 1
+        time: "1:15-1:23"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @WaterfallPool as environment reference. WS, slow crane up at @WaterfallPool. Both @Topa and @Pusha sit by the turquoise pool with their feet in the water. Dozens of glowing colorful butterflies emerge from the surrounding flowers and swirl in a magical spiral around them. They both look up in wonder, big eyes reflecting the butterfly glow. Dynamic colored lighting from butterfly glow plays across their faces. Late golden hour warm light, rainbow mist from waterfall."
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+      - id: 2
+        time: "1:23-1:30"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @WaterfallPool as environment reference. CU to ECU very slow push-in at @WaterfallPool. A single blue glowing butterfly gently lands on @Topa's nose. He goes cross-eyed looking at it, his mouth forms a tiny 'o' of pure wonder. @Pusha visible at frame edge suppresses a giggle, covering her pink beak with her wing. The butterfly slowly opens and closes its luminous wings. @Topa holds perfectly still, completely mesmerized. Late golden hour, warm glow, bokeh background."
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+  - id: 7
+    title: "Sunset Goodbye"
+    time: "1:30-1:45"
+    background: "SunsetHill/Valley"
+    lighting: "Full golden hour"
+    shots:
+      - id: 1
+        time: "1:30-1:35"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunsetHill as environment reference. WS static shot. @Topa and @Pusha as small figures sitting together on the grassy hilltop, positioned in the lower third of frame. Enormous sunset sky fills the upper two-thirds — orange to pink to purple gradient. @Valley silhouetted below the hill with tiny volcanoes and winding river. Their tails almost touch. Full golden hour light bathes everything in warm glow."
+        elements_needed: ["SunsetHill", "Valley", "Topa", "Pusha"]
+      - id: 2
+        time: "1:35-1:40"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunsetHill as environment reference. MS two-shot on @SunsetHill. @Pusha spreads her fluffy purple wings wide — ready to fly home. @Topa looks sad, his big round brown eyes drooping. @Pusha points at the setting sun with her wing, makes a circle gesture meaning 'tomorrow.' @Topa brightens up, nods with his orange frill bouncing. They do a tiny high-five — his green paw meets her purple wing tip, a sparkle flash at the point of contact. Golden hour warm light."
+        elements_needed: ["SunsetHill", "Topa", "Pusha"]
+      - id: 3
+        time: "1:40-1:45"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. Use @SunsetHill as environment reference. WS with tilt up from @SunsetHill. @Pusha flies up into the sunset sky, does one graceful loop, waves her fluffy wing. @Topa waves from the grassy hilltop, his round-tipped tail wagging. @Pusha becomes a small purple silhouette against the glowing orange-pink sky. Rack focus from @Topa in foreground to @Pusha flying away. Golden hour light, @Valley panorama below."
+        elements_needed: ["SunsetHill", "Valley", "Topa", "Pusha"]
+
+  - id: 8
+    title: "Good Night"
+    time: "1:45-2:00"
+    background: "Valley"
+    lighting: "Blue hour / night"
+    shots:
+      - id: 1
+        time: "1:45-1:50"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @Valley as environment reference. MS dolly-out. Same @Valley as Scene 1 but now under a deep blue night sky. Stars twinkle into existence one by one, warm golden fireflies float up gently from the grass. @Topa walks sleepily through the valley, yawning mid-step with his big round brown eyes half-closed. Lush rounded plants and oversized flowers softly lit by moonlight and firefly glow."
+        elements_needed: ["Valley", "Topa"]
+      - id: 2
+        time: "1:50-1:55"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @Valley as environment reference. CU high-angle looking down. @Topa reaches his big leaf — the same one from Scene 1 in @Valley. He circles it once like a puppy finding his bed, then curls up into a cozy ball, wraps his round-tipped tail around himself. His big round brown eyes slowly close. A peaceful smile spreads across his face. A tiny happy sigh. Warm golden fireflies drift around him as beautiful bokeh. Night sky, moonlight."
+        elements_needed: ["Valley", "Topa"]
+      - id: 3
+        time: "1:55-2:00"
+        prompt: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes. Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. Use @Valley as environment reference. CU to EWS dolly-out combined with crane up, mirroring Scene 1 Shot 1 in reverse. Sleeping @Topa curled on his leaf becomes tiny in the vast night @Valley. Same prehistoric landscape as the opening shot — lush rounded plants, oversized colorful flowers, tiny friendly volcanoes — completing a full circle. Hundreds of warm golden fireflies rise from the grass, stars fill the deep blue sky. 'THE END' text fades in gently with twinkling star particles around the letters. Music box melody fades to peaceful silence."
+        elements_needed: ["Valley", "Topa"]

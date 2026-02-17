@@ -1,0 +1,502 @@
+global:
+  model: "kling-3.0/video"
+  mode: "pro"
+  duration: 5
+  aspect_ratio: "16:9"
+  style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes."
+  continuity_characters: "Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes. 3D Pixar-style, soft shapes, warm pastels, no harsh shadows."
+  continuity_backgrounds: "Use @[ElementName] as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes."
+  negative_prompt: "Realistic/photorealistic style, dark shadows, harsh lighting, scary, monsters, aggressive teeth, extra fingers, disfigured, blurry, low res, morphing faces, jerky motion, flickering, adult proportions, sharp angular shapes, speech bubbles, text overlays, subtitles, mouth shapes forming words, background inconsistency, environment morphing between shots."
+
+elements:
+  characters:
+    - name: "Topa"
+      description: "Small bright-green baby triceratops. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized. Rounded 3D Pixar-style."
+      reference_prompts:
+        - "Character sheet front view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops facing camera. Big round brown eyes, pink cheeks, small orange frill on head. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet side view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops in perfect side profile. Big round brown eye visible, pink cheek, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet 3/4 view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops at three-quarter angle. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet full body: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small bright-green baby triceratops standing, all four legs visible. Big round brown eyes, pink cheeks, small orange frill. Short chubby legs, round-tipped tail. Kitten-sized proportions. Clean white background, full body turnaround, centered, studio lighting."
+
+    - name: "Pusha"
+      description: "Small fluffy purple pterodactyl. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized. Rounded 3D Pixar-style."
+      reference_prompts:
+        - "Character sheet front view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl facing camera. Big round blue eyes, pink beak, fluffy wings spread slightly, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet side view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl in perfect side profile. Big round blue eye visible, pink beak, fluffy wing, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet 3/4 view: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl at three-quarter angle. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized proportions. Clean white background, full body, centered, studio lighting."
+        - "Character sheet full body: 3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. Small fluffy purple pterodactyl standing with wings folded. Big round blue eyes, pink beak, fluffy wings, small tuft on head. Sparrow-sized proportions. Clean white background, full body turnaround, centered, studio lighting."
+
+  backgrounds:
+    - name: "Valley"
+      description: "Prehistoric valley with lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke, winding river. Warm pastel palette."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley at sunrise. Lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke in distance, winding river reflecting pink-orange sky. Volumetric light rays, morning mist. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley in neutral daylight. Lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke, winding river under bright blue sky with puffy clouds. Warm pastel palette. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS prehistoric valley at night. Same lush rounded plants, oversized colorful flowers, tiny friendly volcanoes with white smoke. Hundreds of fireflies glowing warmly, starry sky above. Blue hour lighting. Deep focus. No characters."
+
+    - name: "FernForest"
+      description: "Tall colorful fern canopy, dappled sunlight, oversized mushrooms (red/white, blue, purple), giant flowers along paths. Cozy jungle feel."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS path winding through tall colorful fern forest. Dappled sunlight filtering through canopy, oversized mushrooms (red with white spots, blue, purple) along the path, giant flowers. Cozy jungle feel. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS clearing inside fern forest with oversized mushrooms (red/white, blue, purple) as focal point. Dappled sunlight, giant flowers, colorful ferns surrounding the clearing. Cozy jungle feel. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS looking up at fern forest canopy from ground level. Tall colorful ferns creating natural cathedral ceiling, dappled sunlight streaming through leaves, giant flowers visible. Cozy jungle feel. No characters."
+
+    - name: "SunnyClearing"
+      description: "Open grass area, colorful plants/flowers around edges, bright blue sky, puffy clouds."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS full sunny clearing. Open grass area surrounded by colorful plants and flowers around edges. Bright blue sky with puffy white clouds above. Warm midday lighting. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS ground level view of sunny clearing. Colorful flowers and soft grass in foreground, bright blue sky with puffy clouds above. Warm midday lighting. Shallow depth of field. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS sunny clearing with sky emphasis. Open grass area in lower third, colorful plants/flowers around edges. Enormous bright blue sky with puffy white clouds fills upper two-thirds. Warm midday lighting. No characters."
+
+    - name: "WaterfallPool"
+      description: "Small waterfall into turquoise pool, smooth rocks, colorful plants, rainbow mist, sparkle particles."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS full waterfall cascading into turquoise pool. Smooth rounded rocks around edges, colorful plants and flowers surrounding the pool, rainbow mist rising from waterfall base, sparkle particles in air. Warm afternoon light. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS turquoise pool at water level. Smooth rocks at water edge, waterfall in background, colorful plants reflected in calm water surface. Rainbow mist, sparkle particles. Warm afternoon light. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS surroundings of waterfall pool area. Turquoise pool and small waterfall as center, lush colorful plants, smooth rocks, rainbow mist, sparkle particles throughout. Warm afternoon light. Deep focus. No characters."
+
+    - name: "SunsetHill"
+      description: "Small grassy hill overlooking valley, panoramic view, enormous open sky."
+      reference_prompts:
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. WS small grassy hill at golden hour. Soft green grass, panoramic view of prehistoric valley below. Enormous sky with orange-pink-purple sunset gradient. Warm golden light. Deep focus. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. EWS tiny grassy hill in lower portion, enormous sky filling most of frame. Big dramatic sunset with orange-pink-purple gradient. Valley silhouetted below. Warm golden light. No characters."
+        - "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors. MS hilltop grass detail. Soft green grass on small hill summit, colorful wildflowers, panoramic valley visible in background. Golden hour side lighting. Shallow depth of field. No characters."
+
+scenes:
+  - id: 1
+    title: "Morning in the Valley"
+    time: "0:00-0:15"
+    background: "Valley"
+    lighting: "Sunrise golden hour"
+    shots:
+      - id: 1
+        time: "0:00-0:05"
+        title: "Establishing the World"
+        camera: "Extreme wide shot (EWS), 16:9 cinematic composition. Static tripod, then very slow dolly push forward over 5 seconds."
+        focus: "Deep focus — everything sharp from foreground flowers to background volcanoes. Wide-angle lens feel to emphasize the scale of the valley."
+        audio: "Gentle xylophone melody begins softly. Soft bird chirping. Light morning breeze rustling leaves."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Extreme wide shot (EWS), 16:9 cinematic composition.
+          Static tripod, then very slow dolly push forward over 5 seconds.
+          Soft golden hour key light from camera right, warm color temperature. Volumetric light rays filtering through tall ferns. Soft pink-orange gradient sky as backlight. Gentle ambient fill light from below (bounce light from green ground).
+          Deep focus — everything sharp from foreground flowers to background volcanoes. Wide-angle lens feel to emphasize the scale of the valley.
+          The @Valley at sunrise. Lush green rounded plants and oversized colorful flowers in foreground. Tiny friendly volcanoes with soft puffs of white smoke in far background. A winding river reflects the pink sky. Soft morning mist hugs the ground. Environment matches @Valley reference exactly — same plant arrangement, same volcano positions, same river path.
+        elements_needed: ["Valley"]
+
+      - id: 2
+        time: "0:05-0:10"
+        title: "Topa Wakes Up"
+        camera: "Medium shot (MS) at eye-level with @Topa. Static tripod with subtle handheld micro-shake for warmth. No camera movement — let the character animate."
+        focus: "Shallow depth of field, 50mm lens feel. Tack sharp focus on @Topa. Background plants and flowers rendered as soft colorful bokeh circles."
+        audio: "Cute squeaky yawn sound effect. Soft leaf rustling as he moves."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS) at eye-level with @Topa.
+          Static tripod with subtle handheld micro-shake for warmth. No camera movement — let the character animate.
+          Soft key light from camera left (warm morning sunlight). A single volumetric light beam crosses frame and touches @Topa's face. Gentle ambient fill from the surrounding green plants. Soft rim light from behind outlining his frill.
+          Shallow depth of field, 50mm lens feel. Tack sharp focus on @Topa. Background plants and flowers rendered as soft colorful bokeh circles.
+          @Topa sleeps curled up on a big soft leaf in the @Valley. The surrounding plants match the @Valley foreground — same colorful flowers and rounded plants visible in bokeh. The sunlight beam slowly reaches his face. He scrunches his nose, yawns wide (showing tiny round teeth), opens his big brown eyes. He stretches his four little legs one by one.
+        elements_needed: ["Valley", "Topa"]
+
+      - id: 3
+        time: "0:10-0:15"
+        title: "Topa Greets the Day"
+        camera: "Close-up (CU) on @Topa's face and upper body. Low-angle — camera slightly below his eye level, making him look confident and cute. Slow dolly-in from medium close-up to close-up over 5 seconds. Slight crane up as @Topa stands, following his rise."
+        focus: "Shallow depth of field. Tack sharp focus on @Topa's eyes. His frill slightly soft. Background completely blurred into warm pastel bokeh."
+        audio: "Frill wiggle makes a soft cartoon spring sound. Birds respond with chirps. Bright xylophone accent note on his smile."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Close-up (CU) on @Topa's face and upper body. Low-angle — camera slightly below his eye level, making him look confident and cute.
+          Slow dolly-in from medium close-up to close-up over 5 seconds. Slight crane up as @Topa stands, following his rise.
+          Warm key light from camera right (morning sun). Strong rim light from behind, creating a golden glow outline around his frill and head. Fill light from camera left keeps his face readable. No harsh shadows — all edges soft.
+          Shallow depth of field. Tack sharp focus on @Topa's eyes. His frill slightly soft. Background completely blurred into warm pastel bokeh.
+          @Topa stands up on the leaf, shakes himself — his orange frill wiggles comically. He looks directly at camera with big excited brown eyes. He takes a deep happy breath and beams with a wide joyful smile, spreading his little front paws wide as if embracing the morning. Background is @Valley in warm pastel bokeh.
+        elements_needed: ["Valley", "Topa"]
+
+  - id: 2
+    title: "Breakfast"
+    time: "0:15-0:30"
+    background: "FernForest"
+    lighting: "Morning dappled sunlight"
+    shots:
+      - id: 1
+        time: "0:15-0:20"
+        title: "Topa is Hungry"
+        camera: "Medium shot (MS), eye-level tracking shot. Camera moves alongside @Topa as he walks left to right. Smooth lateral movement, steady pace matching his waddle."
+        focus: "Shallow depth of field, 50mm lens feel. Tack sharp focus on @Topa. Foreground fern fronds pass through frame slightly out of focus for parallax depth. Background plants soft."
+        audio: "Soft footstep sounds on grass. Funny cartoon tummy rumble. @Topa giggles — small, bubbly laugh. Background: gentle forest ambience with distant bird calls."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS), eye-level tracking shot.
+          Tracking shot — camera moves alongside @Topa as he walks left to right. Smooth lateral movement, steady pace matching his waddle.
+          Soft overhead key light filtering through tall fern canopy, creating dappled light patches on the ground. Warm color temperature. Green ambient bounce light from surrounding plants. Soft fill from camera side.
+          Shallow depth of field, 50mm lens feel. Tack sharp focus on @Topa. Foreground fern fronds pass through frame slightly out of focus for parallax depth. Background plants soft.
+          @Topa waddles through @FernForest — tall colorful ferns forming a canopy overhead, dappled sunlight patches on the soft grass path. Environment matches @FernForest reference exactly — same fern shapes, same path, same mushrooms visible in background. He sniffs flowers as he passes. He stops. His tummy makes a loud rumbling sound. He puts both tiny front paws on his round belly, looks down at it with surprise, then giggles.
+        elements_needed: ["FernForest", "Topa"]
+
+      - id: 2
+        time: "0:20-0:25"
+        title: "The Giant Leaf"
+        camera: "Start at medium shot, transition to wide shot as @Topa steps back to see the whole leaf. Low-angle to make the leaf look enormous. Slow dolly pull (dolly-out) as @Topa discovers the leaf — camera moves backward to reveal the scale of the leaf compared to tiny @Topa."
+        focus: "Rack focus — starts with tack sharp focus on @Topa's face (surprise expression), then focus pulls to the giant leaf in the background, then returns to @Topa. Deep focus at the end of the shot to show both."
+        audio: "Cartoon gasp sound effect. Magical sparkle chime sound. Brief silence for impact, then soft wonder music swell."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Start at medium shot (MS), transition to wide shot (WS) as @Topa steps back. Low-angle to make the leaf look enormous.
+          Slow dolly pull (dolly-out) as @Topa discovers the leaf — camera moves backward to reveal the scale of the leaf compared to tiny @Topa.
+          Bright key light from above and camera left — the leaf is brightly lit, almost glowing green. Light passes through the leaf creating a translucent glow effect. Sparkle effects (small particle lights) around the leaf edge. Warm ambient light surrounds.
+          Rack focus — starts with tack sharp focus on @Topa's face (surprise expression), then focus pulls to the giant leaf in the background, then returns to @Topa. Deep focus at the end of the shot to show both.
+          Still in @FernForest — same fern canopy above, same dappled light. A GIANT bright-green leaf stands in a small gap between the ferns, four times @Topa's size. Small sparkle particles float around it. @Topa's eyes grow huge — classic Pixar surprise expression. He gasps, jaw dropping, eyes wide as saucers. He bounces on his feet with excitement.
+        elements_needed: ["FernForest", "Topa"]
+
+      - id: 3
+        time: "0:25-0:30"
+        title: "Happy Eating"
+        camera: "Medium close-up (MCU), slightly high-angle — camera above looking down at @Topa eating, making him look small and adorable. Static tripod. Subtle slow push-in over the shot duration, ending on a tighter medium close-up."
+        focus: "Shallow depth of field. Tack sharp focus on @Topa's face and the leaf. Background is a smooth soft green bokeh — the @FernForest ferns blurred into gentle shapes."
+        audio: "Loud cartoon crunch sound synced to bite. Happy chewing sounds. Bouncy cheerful xylophone music kicks in with his dance. Tail wag makes a soft swish-swish."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium close-up (MCU), slightly high-angle — camera above looking down at @Topa eating, making him look small and adorable.
+          Static tripod. Subtle slow push-in over the shot duration, ending on a tighter medium close-up.
+          Warm dappled key light from above (sunlight through leaves). Soft green ambient fill. Rim light from behind @Topa highlighting the edges of his frill as he bounces.
+          Shallow depth of field. Tack sharp focus on @Topa's face and the leaf. Background is a smooth soft green bokeh — the @FernForest ferns blurred into gentle shapes.
+          @Topa takes a big enthusiastic bite of the giant leaf — satisfying crunch. Green leaf juice on his cheeks. He chews with closed eyes, smiling blissfully. Then does a happy wiggle dance — his whole body bounces, tail wags side to side. @FernForest ferns visible as soft green bokeh behind him.
+        elements_needed: ["FernForest", "Topa"]
+
+  - id: 3
+    title: "A New Friend"
+    time: "0:30-0:45"
+    background: "SunnyClearing"
+    lighting: "Bright midday"
+    shots:
+      - id: 1
+        time: "0:30-0:35"
+        title: "Shadow from Above"
+        camera: "Wide shot (WS), @Topa in center lower third. High-angle establishing shot — camera above and in front. Static wide shot, then slow tilt up following @Topa's gaze toward the sky. Camera tilts from ground-level framing to sky-inclusive framing."
+        focus: "Deep focus — both @Topa on the ground and the sky visible and sharp. Wide-angle lens to capture the full clearing and sky in one frame."
+        audio: "Soft whooshing wind sound as shadow passes. @Pusha's giggle echoing from above — getting louder as she descends. Playful flute melody enters."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunnyClearing as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Wide shot (WS), @Topa in center lower third. High-angle establishing shot.
+          Static wide shot, then slow tilt up following @Topa's gaze toward the sky. Camera tilts from ground-level framing to sky-inclusive framing.
+          Bright midday-style soft key light from directly above. A moving shadow passes across @Topa and the ground — lighting briefly dims on him, then returns. Bright blue sky with soft white clouds as backlight above.
+          Deep focus — both @Topa on the ground and the sky visible and sharp. Wide-angle lens to capture the full clearing and sky in one frame.
+          @Topa stands in @SunnyClearing — the bright open grass area surrounded by colorful rounded plants and flowers, matching the @SunnyClearing reference exactly. Same plant arrangement around the edges, same bright blue sky with puffy clouds. A small shadow glides over him. He looks up, confused — tilts his head. A tiny fluffy @Pusha spirals down from the sky in playful circles, giggling, leaving a slight trail of sparkle dust.
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+
+      - id: 2
+        time: "0:35-0:40"
+        title: "Meeting"
+        camera: "Medium two-shot (MS) — both characters in frame. Eye-level with @Topa (slightly low-angle on @Pusha since she's airborne, then eye-level as she lands). Static tripod. @Pusha lands into frame from above — the camera stays still, letting her movement create the dynamics."
+        focus: "Medium depth of field — both characters tack sharp. Background slightly soft with colorful flower bokeh — the @SunnyClearing flowers blurred into soft shapes. 50mm lens feel for natural proportions."
+        audio: "Soft landing thud. Her wing-fold makes a gentle feathery ruffle sound. Cheerful flute trill on her wave. Soft curious xylophone note on @Topa's reaction."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunnyClearing as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium two-shot (MS) — both characters in frame. Eye-level with @Topa.
+          Static tripod. @Pusha lands into frame from above — the camera stays still, letting her movement create the dynamics.
+          Soft key light from camera left. Warm afternoon ambient fill. Both characters lit evenly — no one in shadow. Soft ground bounce light illuminates their faces from below. Light rim highlight on @Pusha's fluffy wings.
+          Medium depth of field — both characters tack sharp. Background slightly soft with colorful flower bokeh — the @SunnyClearing flowers blurred into soft shapes. 50mm lens feel for natural proportions.
+          @SunnyClearing around them — same grass, same flowers at the edges. @Pusha lands softly in front of @Topa with a little hop. She folds her tiny fluffy wings, tilts her head, and looks at him with big round blue eyes. She bounces on her feet excitedly, then extends one wing forward like a friendly wave. @Topa blinks, then smiles shyly.
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+
+      - id: 3
+        time: "0:40-0:45"
+        title: "Friendship Begins"
+        camera: "Close-up (CU) on @Topa's face, then widening to medium close-up to include both characters. Start close-up on @Topa. Slow dolly-out to reveal @Pusha beside him as he responds. Slight crane up as the energy rises."
+        focus: "Shallow depth of field on @Topa's face initially. As camera pulls out, depth of field deepens to include both characters sharp. Background stays as warm soft bokeh — @SunnyClearing rendered as warm pastel blur."
+        audio: "Both laugh together — bubbly overlapping giggles. Joyful ukulele chord swell. Tiny magical chime for the sparkle effect. Bouncy happy rhythm starts."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunnyClearing as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Close-up (CU) on @Topa's face, then widening to medium close-up (MCU) to include both characters.
+          Start close-up on @Topa. Slow dolly-out to reveal @Pusha beside him as he responds. Slight crane up as the energy rises.
+          Warm key light from camera right. Increased brightness in the frame — the scene literally gets brighter as friendship forms. Soft golden rim light behind both characters. Fill light from camera left to keep all expressions readable.
+          Shallow depth of field on @Topa's face initially. As camera pulls out, depth of field deepens to include both characters sharp. Background stays as warm soft bokeh — @SunnyClearing rendered as warm pastel blur.
+          @Topa's face lights up — classic Pixar joy expression. Eyes sparkle (tiny star reflections in pupils). He nods rapidly, making his frill bounce. Both characters look at each other and burst into happy laughter, jumping up and down together. Small sparkle particles appear between them. @SunnyClearing background in soft warm bokeh.
+        elements_needed: ["SunnyClearing", "Topa", "Pusha"]
+
+  - id: 4
+    title: "Hide and Seek"
+    time: "0:45-1:00"
+    background: "FernForest"
+    lighting: "Bright midday"
+    shots:
+      - id: 1
+        time: "0:45-0:50"
+        title: "Pusha Counts"
+        camera: "Medium shot (MS), centered composition. Both characters in frame, then @Topa runs out of frame. Static tripod. When @Topa runs, camera stays on @Pusha — do NOT follow him. This creates anticipation."
+        focus: "Medium depth of field — @Pusha sharp in center. When @Topa runs, he goes slightly soft as he exits frame. Background at medium softness — @FernForest ferns and mushrooms visible but not prominent. 50mm lens feel."
+        audio: "Three soft xylophone notes (one per head-bob — counting rhythm). @Topa's rapid tiny footsteps pattering away. His muffled giggle fading. Playful pizzicato string music — hide-and-seek theme."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS), centered composition. Both characters in frame, then @Topa runs out of frame.
+          Static tripod. When @Topa runs, camera stays on @Pusha — do NOT follow him. This creates anticipation.
+          Bright cheerful midday light. Soft key light from above and camera right. Even ambient fill — no strong shadows. Colorful mushrooms and flowers in background provide color accents.
+          Medium depth of field — @Pusha sharp in center. When @Topa runs, he goes slightly soft as he exits frame. Background at medium softness — @FernForest ferns and mushrooms visible but not prominent. 50mm lens feel.
+          In @FernForest — same fern canopy, same mushrooms, same spatial layout as Scene 2. The familiar forest now lit with bright midday light. @Pusha covers her eyes with her fluffy wings. She bobs her head three times (counting silently). @Topa giggles and runs off screen to the right — his chubby legs moving fast in a comical waddle, heading toward a big red mushroom visible in the @FernForest background.
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+
+      - id: 2
+        time: "0:50-0:55"
+        title: "The Worst Hiding Spot"
+        camera: "Wide shot (WS), symmetric composition. The big red mushroom in center frame. @Topa's green tail clearly sticking out from behind it. Slow truck right as @Pusha tiptoes into frame from the left side. Camera moves with her at her pace — very slow, sneaky lateral movement."
+        focus: "Deep focus — everything sharp. Wide-angle lens to show the full comedy of the scene: the mushroom, the obvious tail, and @Pusha approaching. This is a visual gag — deep focus makes the comedy readable."
+        audio: "Sneaky tiptoe cartoon sound (pluck-pluck-pluck). @Pusha suppresses a giggle. Playful woodwind melody continues — suspenseful but cute."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Wide shot (WS), symmetric composition. The big red mushroom in center frame.
+          Slow truck right as @Pusha tiptoes into frame from the left side. Camera moves with her at her pace — very slow, sneaky lateral movement.
+          Soft key light from camera left. The mushroom casts a gentle shadow. @Topa's bright green tail is lit by a rim light from behind the mushroom — intentionally visible and highlighted. Ambient warm fill overall.
+          Deep focus — everything sharp. Wide-angle lens to show the full comedy of the scene: the mushroom, the obvious tail, and @Pusha approaching. This is a visual gag — deep focus makes the comedy readable.
+          Still in @FernForest — same fern shapes, same canopy, same environment as previous shots. @Topa hides behind a big round red mushroom with white spots (one of the mushrooms from the @FernForest reference). His bright green tail sticks out obviously from the right side. @Pusha opens her eyes, looks around with exaggerated head turns, spots the tail. She grins and begins tiptoeing toward the mushroom.
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+
+      - id: 3
+        time: "0:55-1:00"
+        title: "Found You!"
+        camera: "Medium two-shot, slight low-angle from the ground looking up at both characters by the mushroom. Static shot, then quick snap push-in (fast dolly-in over 1 second) at the moment of discovery for comedic impact."
+        focus: "Shallow depth of field. Tack sharp focus on both characters' faces. The mushroom is slightly soft behind them — it's now a background element. The fast push-in compresses the depth."
+        audio: "Soft tap sound on the wing-touch. Brief comic silence (0.5s). Then both characters laugh loudly together — overlapping giggles. Comedic cymbal crash on the reveal. Music swells into full happy theme."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium two-shot, slight low-angle from the ground looking up at both characters by the mushroom.
+          Static shot, then quick snap push-in (fast dolly-in over 1 second) at the moment of discovery for comedic impact.
+          Bright cheerful light from above. Key light from camera right illuminates both faces evenly. The mushroom provides a colorful red backdrop. Warm ambient fill everywhere.
+          Shallow depth of field. Tack sharp focus on both characters' faces. The mushroom is slightly soft behind them. The fast push-in compresses the depth.
+          @FernForest around them — familiar fern canopy visible above. @Pusha peeks around the mushroom. @Topa has his eyes squeezed tightly shut — he truly believes he is invisible. @Pusha taps him gently with her wing. @Topa opens one eye, then both eyes wide. Beat of silence. Then both burst into laughter together, falling over each other.
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+
+  - id: 5
+    title: "The Waterfall"
+    time: "1:00-1:15"
+    background: "FernForest/WaterfallPool"
+    lighting: "Warm afternoon"
+    shots:
+      - id: 1
+        time: "1:00-1:05"
+        title: "Walking Together"
+        camera: "Medium shot (MS), two-shot. @Pusha sits on top of @Topa's back as he walks. Wide tracking shot — camera moves alongside them at their pace, left to right. Smooth dolly on a lateral track. Slight slow crane up toward the end as they hear water."
+        focus: "Medium depth of field, 50mm lens. Both characters tack sharp. Foreground flowers pass through frame in soft focus for parallax. Background path ahead slightly soft."
+        audio: "Soft footsteps on grass. Growing sound of rushing water. Gentle adventure ukulele melody. Birdsong and rustling leaves. @Pusha chirps with curiosity — a short excited squeak."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @FernForest as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS), two-shot. @Pusha sits on top of @Topa's back as he walks.
+          Wide tracking shot — camera moves alongside them at their pace, left to right. Smooth dolly on a lateral track. Slight slow crane up toward the end as they hear water.
+          Warm afternoon key light from camera right and above. Dappled light through oversized colorful flowers on both sides of the path (like a flower tunnel). Colored light splashes from the flowers — pink, yellow, blue tints on the characters. Rim light from behind for depth separation.
+          Medium depth of field, 50mm lens. Both characters tack sharp. Foreground flowers pass through frame in soft focus for parallax. Background path ahead slightly soft.
+          @Topa walks along a path in @FernForest — the familiar fern canopy above, but the path is now lined with giant colorful flowers. This is a new area of the same forest, transitioning toward the waterfall. @Pusha rides on his back, looking around happily. They both hear a sound — water splashing ahead. @Pusha's ears perk up. She points forward with her wing, bouncing excitedly on @Topa's back.
+        elements_needed: ["FernForest", "Topa", "Pusha"]
+
+      - id: 2
+        time: "1:05-1:10"
+        title: "The Reveal"
+        camera: "Start on medium shot of characters from behind (over-the-shoulder). Then slow crane up and tilt up to reveal the waterfall in a dramatic pan-to-reveal shot. Slow boom up combined with tilt up — camera rises from behind the characters and tilts to reveal the waterfall above them. Classic cinematic reveal movement over 5 seconds."
+        focus: "Rack focus — starts tack sharp on the characters in foreground. As camera booms up and reveals the waterfall, focus pulls to the waterfall. Characters go slightly soft below. The rainbow mist has a natural soft glow. Ending: deep focus to show the full scene."
+        audio: "Synchronized soft gasp from both characters (non-verbal — pure wonder sound). Lush waterfall rushing sound. Magical harp glissando for the rainbow reveal. Sparkle chime effects. Music becomes grand and wonder-filled."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @WaterfallPool as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Start on medium shot (MS) of characters from behind (over-the-shoulder). Then slow crane up and tilt up to reveal the waterfall in a dramatic pan-to-reveal shot.
+          Slow boom up combined with tilt up — camera rises from behind the characters and tilts to reveal the waterfall above them. Classic cinematic reveal movement over 5 seconds.
+          Dramatic lighting shift. Characters in warm afternoon light at the bottom. The waterfall is backlit by bright sunlight — strong backlight creating a glowing halo around the falling water. Rainbow refraction in the waterfall mist — prismatic light scattering. Volumetric light rays visible through the mist. Sparkle particles floating in the air.
+          Rack focus — starts tack sharp on the characters in foreground. As camera booms up and reveals the waterfall, focus pulls to the waterfall. Characters go slightly soft below. The rainbow mist has a natural soft glow. Ending: deep focus to show the full scene.
+          Camera reveals @WaterfallPool — the beautiful small waterfall cascading into a crystal-clear turquoise pool, matching the @WaterfallPool reference exactly. Same rock arrangement, same surrounding plants, same waterfall shape. Rainbow mist floats in the air where sunlight hits the spray. Sparkles dance in the water. Both characters look up in awe — mouths open, eyes wide, frozen in wonder.
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+      - id: 3
+        time: "1:10-1:15"
+        title: "Splash!"
+        camera: "Medium shot (MS), slightly low-angle from pool level, looking up at @Topa jumping in and @Pusha flying above. Static low-angle from water surface level. Camera gets splashed — subtle lens water droplet effect for immersion."
+        focus: "Tack sharp focus on @Topa and the splash zone. Water droplets in slow motion are individually sharp in the foreground. @Pusha above is at medium sharpness. Background waterfall is soft dreamy bokeh. 50mm lens feel."
+        audio: "Big cartoon splash sound. Water droplets spattering. @Pusha laughing above. @Topa shaking off — wet flapping sound. Both giggling. Playful percussive music accent on the splash."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @WaterfallPool as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS), slightly low-angle from pool level, looking up at @Topa jumping in and @Pusha flying above.
+          Static low-angle from water surface level. Camera gets splashed — subtle lens water droplet effect for immersion.
+          Bright key light from above (midday sun). Water reflections create dancing caustic light patterns on @Topa's body and the surrounding rocks. Strong rim light through water droplets mid-splash — each droplet catches the light. @Pusha lit by bright ambient light from above.
+          Tack sharp focus on @Topa and the splash zone. Water droplets in slow motion are individually sharp in the foreground. @Pusha above is at medium sharpness. Background waterfall is soft dreamy bokeh. 50mm lens feel.
+          Same @WaterfallPool — same rocks, same turquoise water, same waterfall in background. @Topa jumps into the shallow pool with a big splash — water flies everywhere in a dramatic arc. @Pusha flutters above, dodging droplets and laughing. @Topa surfaces, shakes water off his head — droplets fly in every direction. His frill drips water comically.
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+  - id: 6
+    title: "The Butterflies"
+    time: "1:15-1:30"
+    background: "WaterfallPool"
+    lighting: "Late golden hour"
+    shots:
+      - id: 1
+        time: "1:15-1:23"
+        title: "The Magic Appears"
+        camera: "Wide shot (WS) establishing both characters by the pool, then the butterflies fill the frame. Static wide shot for 3 seconds (characters resting), then very slow crane up as butterflies emerge — camera rises to capture the full magical spiral of butterflies around them. Smooth, dreamy upward movement."
+        focus: "Start with deep focus on the resting characters. As butterflies emerge, shift to shallow depth of field — closest butterflies in foreground are soft large bokeh shapes, characters and mid-range butterflies are tack sharp, far butterflies are soft glowing dots. Creates a dreamy layered look."
+        audio: "Soft dreamy harp arpeggios. Gentle fluttering wing sounds from dozens of butterflies. Both characters gasp softly. No dialogue — pure magical atmosphere. Subtle wind chime accents."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @WaterfallPool as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Wide shot (WS) establishing both characters by the pool, then the butterflies fill the frame.
+          Static wide shot for 3 seconds, then very slow crane up as butterflies emerge — camera rises to capture the full magical spiral of butterflies around them. Smooth, dreamy upward movement.
+          Late afternoon golden hour light — warm orange-pink key light from camera left (low sun angle). Long warm shadows on the ground. The butterflies GLOW — each one is a tiny practical light source emitting soft colored light (pink, blue, yellow, green). Dynamic moving lighting on the characters' faces — colorful light dances across them. Warm ambient fill. Soft volumetric haze in the air catching butterfly glow.
+          Start with deep focus on the resting characters. As butterflies emerge, shift to shallow depth of field — closest butterflies in foreground are soft large bokeh shapes, characters and mid-range butterflies are tack sharp, far butterflies are soft glowing dots. Creates a dreamy layered look.
+          Same @WaterfallPool as Scene 5 — same rocks, same pool, same waterfall — but now in late afternoon golden hour light. The environment is identical, only the lighting has changed to golden-warm. @Topa and @Pusha sit side by side by the pool, feet in water, resting peacefully. Suddenly, dozens of glowing colorful butterflies emerge from the surrounding flowers. They swirl upward in a magical spiral around the two friends. @Topa and @Pusha look up in wonder, mouths open, eyes reflecting the colorful glow.
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+      - id: 2
+        time: "1:23-1:30"
+        title: "The Butterfly Lands"
+        camera: "Close-up (CU) on @Topa's face. The butterfly on his nose is in extreme close-up territory. Very slow push-in from close-up to extreme close-up over 7 seconds. Barely perceptible movement — almost static. Intimate and tender."
+        focus: "Very shallow depth of field. Tack sharp focus on the butterfly and @Topa's eyes. His frill is slightly soft. @Pusha in background is beautifully soft bokeh. The butterfly's wings are razor sharp — you can see delicate patterns. Gentle glowing bokeh from other butterflies in background."
+        audio: "Delicate butterfly wing flutter. @Pusha's muffled soft giggle. Single gentle music box note. Ambient: distant waterfall (from @WaterfallPool), evening crickets beginning. Soft, warm held string note for the tender moment."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @WaterfallPool as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Close-up (CU) on @Topa's face. The butterfly on his nose is in extreme close-up territory.
+          Very slow push-in from close-up to extreme close-up over 7 seconds. Barely perceptible movement — almost static. Intimate and tender.
+          Warm golden hour key light from camera left, low angle. The butterfly on @Topa's nose glows soft blue — it acts as a tiny key light illuminating the bridge of his nose and his eyes from below. Soft warm rim light behind his head from the sunset. @Pusha visible at frame edge, lit by ambient warm fill. Everything warm, golden, peaceful.
+          Very shallow depth of field. Tack sharp focus on the butterfly and @Topa's eyes. His frill is slightly soft. @Pusha in background is beautifully soft bokeh. The butterfly's wings are razor sharp — you can see delicate patterns. Gentle glowing bokeh from other butterflies in background.
+          @WaterfallPool in heavy golden bokeh behind them. A single bright blue glowing butterfly gently lands on @Topa's nose. He goes cross-eyed looking at it — his eyes slowly converge. His mouth forms a tiny "o" of wonder. @Pusha is visible at the edge of frame, covering her mouth, suppressing a giggle. The butterfly slowly opens and closes its wings. @Topa holds perfectly still, mesmerized, barely breathing.
+        elements_needed: ["WaterfallPool", "Topa", "Pusha"]
+
+  - id: 7
+    title: "Sunset Goodbye"
+    time: "1:30-1:45"
+    background: "SunsetHill/Valley"
+    lighting: "Full golden hour"
+    shots:
+      - id: 1
+        time: "1:30-1:35"
+        title: "Watching the Sunset"
+        camera: "Wide shot (WS). Both characters as small silhouettes on a hill in the lower third. The enormous colorful sky fills the upper two-thirds — classic Pixar emotional composition. Static tripod. Absolutely no movement. Let the sky and the stillness do the emotional work."
+        focus: "Deep focus — everything sharp from the grass in foreground to the clouds at infinity. Wide-angle lens to capture the enormous scale of the sky versus the tiny characters. This is a landscape shot with characters — composition prioritizes the emotional scope."
+        audio: "Gentle acoustic guitar melody — simple, warm, emotional. Soft evening breeze. Distant birdsong fading. No dialogue — pure visual storytelling moment."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunsetHill as environment reference. Use @Valley as distant background reference.
+          Wide shot (WS). Both characters as small silhouettes on a hill in the lower third. The enormous colorful sky fills the upper two-thirds — classic Pixar emotional composition.
+          Static tripod. Absolutely no movement. Let the sky and the stillness do the emotional work. The beauty of the image IS the shot.
+          Full golden hour sunset — the sky is the light source. Intense warm backlight from the setting sun directly behind the characters, creating soft silhouette edges with golden rim light outlining their bodies. The sky is a gradient: deep orange at horizon, through pink, to soft purple-blue above. Soft warm ambient fill from the glowing sky illuminates their front sides just enough to see expressions. Long dramatic shadows stretching toward camera.
+          Deep focus — everything sharp from the grass in foreground to the clouds at infinity. Wide-angle lens to capture the enormous scale of the sky versus the tiny characters.
+          @SunsetHill — the familiar small grassy hill from the @SunsetHill reference, overlooking the @Valley below. In the distance: the same tiny friendly volcanoes from @Valley puff gentle smoke, silhouetted against the sunset sky. The valley layout matches @Valley reference — same river, same plant shapes — all in sunset silhouette. @Topa and @Pusha sit side by side on top of the hill. Their tails almost touch.
+        elements_needed: ["SunsetHill", "Valley", "Topa", "Pusha"]
+
+      - id: 2
+        time: "1:35-1:40"
+        title: "The Promise"
+        camera: "Medium two-shot (MS), eye-level. Both characters facing each other in profile. Static tripod with very subtle slow push-in — barely noticeable, just enough to gently increase intimacy."
+        focus: "Medium depth of field. Both characters tack sharp. Background sunset sky is smooth colorful gradient — slightly soft but still beautiful. 50mm lens, natural intimate perspective."
+        audio: "Soft high-five pat sound. Tiny magical sparkle chime. Guitar melody continues warmly. A gentle rising note on @Topa's brightening expression."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunsetHill as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium two-shot (MS), eye-level. Both characters facing each other in profile.
+          Static tripod with very subtle slow push-in — barely noticeable, just enough to gently increase intimacy.
+          Warm golden key light from behind and camera right (setting sun). Strong warm rim light on both characters — they glow. Soft ambient fill from the orange sky illuminates their faces. @Pusha's fluffy wings catch the light and look translucent and warm.
+          Medium depth of field. Both characters tack sharp. Background sunset sky is smooth colorful gradient — slightly soft but still beautiful. 50mm lens, natural intimate perspective.
+          On @SunsetHill — the same grass, the same hilltop. @Pusha stands and gently spreads her wings, ready to fly home. She looks at @Topa with a soft warm smile. @Topa tilts his head, looking a little sad. @Pusha nods reassuringly and points at the sun, then makes a circle gesture with her wing (tomorrow). @Topa brightens up, nods happily, his frill bouncing once. They do a tiny high-five — his front paw meets her wing tip. A small sparkle appears at the point of contact.
+        elements_needed: ["SunsetHill", "Topa", "Pusha"]
+
+      - id: 3
+        time: "1:40-1:45"
+        title: "Flying Away"
+        camera: "Wide shot (WS), @Topa in lower left, @Pusha flying up into the upper right — diagonal composition creating dynamic movement through the frame. Slow tilt up following @Pusha's flight path. Camera tilts from ground level up toward the glowing sky as she flies higher. Gentle movement tracking her ascent."
+        focus: "Rack focus — starts tack sharp on @Topa waving. Slowly pulls focus to @Pusha as she flies higher, @Topa gradually going soft below. Ends with @Pusha sharp against the golden sky with @Topa as a warm soft green shape below. Beautiful depth transition."
+        audio: "Wing flapping sounds, getting softer as she ascends. Gentle whoosh for the loop. Guitar melody resolves to a warm final chord. Evening cricket sounds growing."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes. @Pusha always purple, pink beak, blue eyes.
+          Use @SunsetHill as environment reference. Use @Valley as distant background reference.
+          Wide shot (WS), @Topa in lower left, @Pusha flying up into the upper right — diagonal composition creating dynamic movement through the frame.
+          Slow tilt up following @Pusha's flight path. Camera tilts from ground level up toward the glowing sky as she flies higher. Gentle movement tracking her ascent.
+          Strong warm backlight from sunset — @Pusha becomes a small glowing purple silhouette with golden rim light against the bright orange-pink sky. @Topa on the ground is side-lit by the last warm light. Volumetric golden light rays visible in the atmosphere.
+          Rack focus — starts tack sharp on @Topa waving. Slowly pulls focus to @Pusha as she flies higher, @Topa gradually going soft below. Ends with @Pusha sharp against the golden sky with @Topa as a warm soft green shape below. Beautiful depth transition.
+          @SunsetHill with @Valley spread out below — the same valley layout as Scene 1, the same volcanoes, but now in deep sunset colors. @Pusha flaps up into the sunset sky, does one playful loop, and waves a tiny wing. @Topa stands below on the hilltop watching, waving his front paw back and forth. His tail wags gently. @Pusha becomes a small silhouette against the glowing sky.
+        elements_needed: ["SunsetHill", "Valley", "Topa", "Pusha"]
+
+  - id: 8
+    title: "Good Night"
+    time: "1:45-2:00"
+    background: "Valley"
+    lighting: "Blue hour / night"
+    shots:
+      - id: 1
+        time: "1:45-1:50"
+        title: "Stars Appear"
+        camera: "Medium shot (MS), @Topa walking toward camera at eye-level. Slow dolly-out — camera gently pulls backward as @Topa walks toward it. Creates a floating, dreamy feeling. Very slow, lullaby pace."
+        focus: "Medium depth of field, 50mm lens. @Topa tack sharp. Fireflies in foreground are soft warm circles of bokeh floating through frame. Stars in background are tiny sharp points. Dreamy quality overall."
+        audio: "Music box lullaby melody begins — simple, gentle, slow. Soft cricket chirping. Firefly buzzes — tiny, soft. @Topa yawns — long, squeaky, adorable. Very quiet ambient: night breeze, distant water."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Medium shot (MS), @Topa walking toward camera at eye-level.
+          Slow dolly-out — camera gently pulls backward as @Topa walks toward it. Creates a floating, dreamy feeling. Very slow, lullaby pace.
+          Transition to blue hour / early night. Cool blue ambient light overall with warm remnants of orange on the horizon. Stars appear as tiny warm practical lights — each star is a small glowing point adding sparkle. Fireflies emerge as moving warm yellow-green practical lights, gently illuminating @Topa's face in passing flickers. Soft blue key light from above (moonlight beginning). Warm fill from fireflies.
+          Medium depth of field, 50mm lens. @Topa tack sharp. Fireflies in foreground are soft warm circles of bokeh floating through frame. Stars in background are tiny sharp points. Dreamy quality overall.
+          The @Valley at night — the same valley from Scene 1 (same plants, same distant volcanoes, same river path), but now under a deep blue night sky. The environment is recognizably the same place — full circle from morning to night. Stars appear one by one — twinkling softly. Fireflies float up from the grass, glowing yellow-green. @Topa walks slowly toward his sleeping leaf, yawning mid-step. His eyes are half-closed. His steps are slow and sleepy.
+        elements_needed: ["Valley", "Topa"]
+
+      - id: 2
+        time: "1:50-1:55"
+        title: "Curling Up"
+        camera: "Close-up (CU) on @Topa settling into sleep. Slightly high-angle — camera looking down tenderly, like a parent watching a child sleep. Very slow crane down combined with very slow push-in — camera gently descends and approaches @Topa as he curls up. Intimate, protective feeling. Almost imperceptible movement."
+        focus: "Very shallow depth of field. Tack sharp focus on @Topa's face — his closed eyes, pink cheeks, peaceful smile. His tail that he hugs is slightly soft. Fireflies surrounding him are beautiful warm bokeh circles. The leaf beneath is soft. Extreme intimacy and tenderness through focus."
+        audio: "Soft contented sigh. His breathing slows — gentle, rhythmic. Music box melody continues softly. A single firefly buzzes very close, then moves away."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Close-up (CU) on @Topa settling into sleep. Slightly high-angle — camera looking down tenderly, like a parent watching a child sleep.
+          Very slow crane down combined with very slow push-in — camera gently descends and approaches @Topa as he curls up. Intimate, protective feeling. Almost imperceptible movement.
+          Soft cool blue moonlight as key light from above and camera left. Warm yellow-green fill from surrounding fireflies — creates gentle warm accents on his green skin. Single soft white rim light from behind (moonlight edge). The big leaf he sleeps on has a faint warm green glow. All shadows are very soft — no darkness feels threatening.
+          Very shallow depth of field. Tack sharp focus on @Topa's face — his closed eyes, pink cheeks, peaceful smile. His tail that he hugs is slightly soft. Fireflies surrounding him are beautiful warm bokeh circles. The leaf beneath is soft.
+          @Topa reaches his big soft leaf — the same leaf from Scene 1, Shot 2, in the same spot in the @Valley. He circles it once (like a puppy), then curls up into a ball. He wraps his tiny tail around himself and hugs it. His eyes slowly close. A peaceful, content smile spreads across his face. He lets out a tiny happy sigh and drifts to sleep.
+        elements_needed: ["Valley", "Topa"]
+
+      - id: 3
+        time: "1:55-2:00"
+        title: "The End"
+        camera: "Start on medium shot of sleeping @Topa, then dolly-out to extreme wide shot (EWS) of the entire valley at night. Slow dolly-out combined with slow crane up — camera pulls back and rises simultaneously, revealing the full nighttime valley. The movement mirrors the opening shot of Scene 1 in reverse — bookending the film. Very smooth, 5-second continuous pullback."
+        focus: "Start shallow depth of field on sleeping @Topa. As camera pulls back, depth of field progressively deepens until reaching deep focus at the extreme wide shot — the entire valley and starry sky are sharp. Fireflies transition from soft foreground bokeh to sharp midground dots as the depth changes. Final frame: everything in focus, peaceful panorama."
+        audio: "Music box lullaby reaches its final gentle notes. All sounds slowly fade: crickets, water, breeze. Final music box note rings and slowly fades to silence. Last sound: one single distant firefly buzz, then silence."
+        prompt: >-
+          3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes.
+          Same faces, proportions, colors. @Topa always bright-green, orange frill, brown eyes.
+          Use @Valley as environment reference. Same plant shapes, terrain, colors, spatial layout. Only lighting changes.
+          Start on medium shot (MS) of sleeping @Topa, then dolly-out to extreme wide shot (EWS) of the entire valley at night.
+          Slow dolly-out combined with slow crane up — camera pulls back and rises simultaneously, revealing the full nighttime valley. The movement mirrors the opening shot of Scene 1 in reverse — bookending the film. Very smooth, 5-second continuous pullback.
+          Full nighttime palette. Soft blue moonlight as overall ambient light. Hundreds of fireflies scattered across the valley as tiny warm practical lights. Stars fill the sky — bright but gentle. The moon (not shown directly) casts a soft silver key light from above. The sleeping leaf area has a slightly warmer glow than surroundings — a safe, cozy pocket of warm light in the blue night.
+          Start shallow depth of field on sleeping @Topa. As camera pulls back, depth of field progressively deepens until reaching deep focus at the extreme wide shot — the entire valley and starry sky are sharp. Fireflies transition from soft foreground bokeh to sharp midground dots as the depth changes. Final frame: everything in focus, peaceful panorama.
+          Camera slowly reveals the @Valley at night — the SAME valley from Scene 1 Shot 1. Same plant arrangement, same volcano positions, same river path — but now bathed in soft blue moonlight instead of golden sunrise. This visual echo bookends the entire film. Hundreds of glowing fireflies drift like stars on earth, the sky full of twinkling stars. Sleeping @Topa becomes a tiny peaceful shape in the vast gentle landscape. Text gently fades in at center screen: "THE END" in soft white rounded letters with tiny animated stars twinkling around the text.
+        elements_needed: ["Valley", "Topa"]
