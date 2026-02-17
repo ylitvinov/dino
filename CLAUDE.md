@@ -16,7 +16,7 @@ pip install -r requirements.txt
 python -m pipeline.runner run-all -s scenario/scenario.yaml
 
 # Individual steps
-python -m pipeline.runner generate-elements -s scenario/scenario.yaml
+python -m pipeline.runner upload-elements -s scenario/scenario.yaml
 python -m pipeline.runner generate-scene -s scenario/scenario.yaml 1   # scene by id
 python -m pipeline.runner download -s scenario/scenario.yaml
 python -m pipeline.runner status -s scenario/scenario.yaml
@@ -32,7 +32,7 @@ No test suite exists yet.
 
 ## Architecture
 
-**Three-phase pipeline**: generate element reference images -> generate video shots -> download outputs.
+**Three-phase pipeline**: upload element images -> generate video shots -> download outputs.
 
 All generation is async (KIE.ai returns task IDs, pipeline polls for completion). State is persisted after every task, enabling resume on interruption.
 
@@ -54,16 +54,16 @@ output/
 ### Data flow
 
 1. `scenario.yaml` defines elements (characters + backgrounds) with reference prompts, and 8 scenes with shot-level prompts using `@ElementName` syntax
-2. `generate_elements` creates reference images via KIE image API, stores **CDN URLs** in `output/elements_status.json` (shared)
-3. `generate_shots` reads those CDN URLs from shared status, passes them as `kling_elements` array in video generation requests; writes shots to `output/<scenario_name>/`
-4. Element CDN URLs are the critical link between phases — they must be preserved in `elements_status.json`
+2. `upload_elements` uploads local images from `output/elements/{Name}/` to KIE.ai file storage, saves returned **file URLs** in `output/elements_status.json` (shared). URLs expire after 3 days.
+3. `generate_shots` reads those URLs from shared status, passes them as `kling_elements` array in video generation requests; writes shots to `output/<scenario_name>/`
+4. Element file URLs are the critical link between phases — they must be preserved in `elements_status.json`. Re-upload if expired.
 
 ### Key modules
 
-- **`client.py`** — async KIE.ai HTTP client (`KieClient`). Handles both nested and flat API response formats. Retry with exponential backoff on 429/5xx. Context manager pattern.
-- **`generate_elements.py`** — generates element reference images. Skips elements whose folder already has images. Saves as `{Name}{N}.png` in `output/elements/{Name}/`.
+- **`client.py`** — async KIE.ai HTTP client (`KieClient`). Handles both nested and flat API response formats. Retry with exponential backoff on 429/5xx. Context manager pattern. Includes `upload_file()` for KIE file storage.
+- **`upload_elements.py`** — uploads local element images to KIE.ai file storage. Skips elements that already have URLs in status. Saves file URLs to `elements_status.json`.
 - **`generate_shots.py`** — generates video shots per scene. CLI command `generate-scene` takes scene id as argument. Tracks progress in `status.json`.
-- **`scenario_parser.py`** — maps `scenario.yaml` to dataclasses in `models.py`. Note: `generate_elements.py` also loads raw YAML separately to access `reference_prompts` that aren't in the parsed model.
+- **`scenario_parser.py`** — maps `scenario.yaml` to dataclasses in `models.py`.
 - **`runner.py`** — Click CLI. Each command imports its dependencies lazily to keep `--help` fast.
 
 ### API details (KIE.ai)
@@ -72,6 +72,7 @@ output/
 - Auth: Bearer token (plain API key, no JWT)
 - Create task: `POST /api/v1/jobs/createTask` with model `kling-3.0/video` or `kling-3.0/image`
 - Poll task: `GET /api/v1/jobs/{task_id}`
+- File upload: `POST https://kieai.redpandaai.co/api/file-stream-upload` (multipart/form-data). Files expire after 3 days.
 - Elements are passed inline per-request via `kling_elements` array (not persistent server-side)
 - Task statuses: `pending` -> `processing` -> `completed` | `failed`
 
@@ -86,3 +87,4 @@ Language in scenario files and comments is mixed English/Russian.
 ## Reference Docs
 
 - [Kling 3.0 Video Generation Guide](docs/kling3-guide.md) — prompt structure, tips, negative prompts, multi-shot, audio, known limitations
+- [KIE.ai Kling 3.0 API Reference](docs/kie-kling3-api.md) — endpoints, elements, file upload API, request/response formats

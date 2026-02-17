@@ -14,9 +14,12 @@ from typing import Any
 
 import httpx
 
+from rich.console import Console
+
 from pipeline.models import Element, TaskStatus
 
 logger = logging.getLogger(__name__)
+_console = Console()
 
 _DEFAULT_TIMEOUT = 60.0
 _DOWNLOAD_TIMEOUT = 300.0
@@ -29,6 +32,10 @@ class KieApiError(Exception):
         self.status_code = status_code
         self.body = body
         super().__init__(message)
+
+
+class DryRunInterrupt(Exception):
+    """Raised instead of making an HTTP call in dry-run mode."""
 
 
 class KieClient:
@@ -48,9 +55,11 @@ class KieClient:
         api_key: str,
         base_url: str = "https://api.kie.ai",
         timeout: float = _DEFAULT_TIMEOUT,
+        dry_run: bool = False,
     ) -> None:
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
+        self.dry_run = dry_run
         self._client = httpx.AsyncClient(
             base_url=self.base_url,
             headers={
@@ -86,6 +95,12 @@ class KieClient:
                 "KIE request %s %s payload:\n%s",
                 method, url, json.dumps(kwargs["json"], indent=2, ensure_ascii=False),
             )
+        if self.dry_run:
+            _console.print(f"[cyan bold]── {method} {self.base_url}{url}[/cyan bold]")
+            if "json" in kwargs:
+                _console.print_json(json.dumps(kwargs["json"], ensure_ascii=False))
+            _console.print()
+            raise DryRunInterrupt()
         try:
             response = await self._client.request(method, url, **kwargs)
             response.raise_for_status()
@@ -466,3 +481,55 @@ class KieClient:
 
         logger.info("Downloaded: %s (%.1f KB)", output, output.stat().st_size / 1024)
         return output
+
+    _UPLOAD_BASE_URL = "https://kieai.redpandaai.co"
+
+    async def upload_file(self, file_path: str | Path) -> str:
+        """Upload a local file to KIE.ai and return the file URL.
+
+        Uses the file-stream-upload endpoint. Files expire after 3 days.
+
+        Args:
+            file_path: Local path to the file to upload.
+
+        Returns:
+            The remote file URL for use in API requests.
+
+        Raises:
+            KieApiError: On upload errors.
+        """
+        path = Path(file_path)
+        if not path.exists():
+            raise KieApiError(f"File not found: {path}")
+
+        logger.info("Uploading %s (%.1f KB)", path, path.stat().st_size / 1024)
+
+        try:
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(60.0, connect=10.0),
+            ) as ul_client:
+                with open(path, "rb") as f:
+                    response = await ul_client.post(
+                        f"{self._UPLOAD_BASE_URL}/api/file-stream-upload",
+                        headers={"Authorization": f"Bearer {self.api_key}"},
+                        files={"file": (path.name, f)},
+                        data={"uploadPath": "elements"},
+                    )
+                response.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise KieApiError(f"Upload failed for {path}: {exc}") from exc
+
+        data = response.json()
+        if not data.get("success") and data.get("code") != 200:
+            raise KieApiError(
+                f"Upload API error: {data.get('message', data)}",
+                body=data,
+            )
+
+        inner = data.get("data", {})
+        file_url = inner.get("fileUrl") or inner.get("downloadUrl")
+        if not file_url:
+            raise KieApiError(f"No file URL in upload response: {data}", body=data)
+
+        logger.info("Uploaded %s -> %s", path.name, file_url)
+        return file_url

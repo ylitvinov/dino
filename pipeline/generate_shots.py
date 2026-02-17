@@ -17,7 +17,7 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 
 from pipeline.auth import get_api_key, load_config, resolve_output_paths
-from pipeline.client import KieClient, KieApiError
+from pipeline.client import KieClient, KieApiError, DryRunInterrupt
 from pipeline.models import Element
 from pipeline.scenario_parser import load_scenario
 
@@ -277,29 +277,7 @@ async def generate_shots(
         f"for {total_scenes} scene(s)...[/bold]\n"
     )
 
-    if dry_run:
-        for stask in scene_tasks:
-            total_parts = sum(1 for t in scene_tasks if t.scene_id == stask.scene_id)
-            skey = _scene_status_key(stask.scene_id, stask.part, total_parts)
-            fname = _scene_filename(stask.scene_id, stask.part, total_parts)
-            total_dur = sum(s["duration"] for s in stask.shots)
-            console.print(f"[cyan]── Scene {skey} -> {fname}[/cyan]")
-            console.print(f"   Shots: {len(stask.shots)}, Total duration: {total_dur}s")
-            console.print(f"   Mode: {mode}, Aspect: {aspect_ratio}, CFG: {cfg_scale}")
-            if stask.elements:
-                elem_summary = ", ".join(
-                    f"{e.name} ({len(e.image_urls)} imgs)" for e in stask.elements
-                )
-                console.print(f"   Elements: {elem_summary}")
-            if stask.negative_prompt:
-                console.print(f"   Negative: {stask.negative_prompt[:80]}...")
-            for i, shot in enumerate(stask.shots):
-                console.print(f"   Shot {i+1} ({shot['duration']}s): {shot['prompt'][:120]}...")
-            console.print()
-        console.print("[bold yellow]Dry run complete. No API calls were made.[/bold yellow]")
-        return
-
-    async with KieClient(api_key=api_key, base_url=config["api"]["base_url"]) as client:
+    async with KieClient(api_key=api_key, base_url=config["api"]["base_url"], dry_run=dry_run) as client:
         # Phase 1: Submit multi-shot tasks
         submitted: list[tuple[str, str, str]] = []  # (status_key, task_id, filename)
 
@@ -349,6 +327,10 @@ async def generate_shots(
 
                     await asyncio.sleep(0.5)
 
+                except DryRunInterrupt:
+                    progress.update(submit_bar, advance=1)
+                    continue
+
                 except (KieApiError, ValueError) as exc:
                     console.print(f"  [red]Failed to submit scene {skey}: {exc}[/red]")
                     status["scenes"][skey] = {
@@ -357,6 +339,10 @@ async def generate_shots(
                         "error": str(exc),
                     }
                     _save_status(status_path, status)
+
+            if dry_run:
+                console.print("[bold yellow]Dry run complete. No API calls were made.[/bold yellow]")
+                return
 
             # Phase 2: Poll all submitted tasks
             poll_bar = progress.add_task(

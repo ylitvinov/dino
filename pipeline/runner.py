@@ -77,18 +77,18 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
     _setup_logging(verbose)
 
 
-@cli.command("generate-elements")
+@cli.command("upload-elements")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
 @click.pass_context
-def cmd_generate_elements(ctx: click.Context, scenario: str) -> None:
-    """Generate reference images for all elements."""
-    from pipeline.generate_elements import generate_elements
+def cmd_upload_elements(ctx: click.Context, scenario: str) -> None:
+    """Upload local element images to KIE.ai and save URLs to status."""
+    from pipeline.upload_elements import upload_elements
 
     config_path = ctx.obj["config"]
-    console.print("[bold]Starting element generation...[/bold]")
+    console.print("[bold]Starting element upload...[/bold]")
 
     try:
-        asyncio.run(generate_elements(scenario_path=scenario, config_path=config_path))
+        asyncio.run(upload_elements(scenario_path=scenario, config_path=config_path))
     except FileNotFoundError as exc:
         console.print(f"[red]Error: {exc}[/red]")
         sys.exit(1)
@@ -279,20 +279,20 @@ def cmd_status(ctx: click.Context, scenario: str | None) -> None:
 @click.option("--dry-run", is_flag=True, help="Log what would be generated without calling API (video only)")
 @click.pass_context
 def cmd_run_all(ctx: click.Context, scenario: str, dry_run: bool) -> None:
-    """Run the full pipeline: elements -> shots -> download."""
-    from pipeline.generate_elements import generate_elements
+    """Run the full pipeline: upload elements -> shots -> download."""
+    from pipeline.upload_elements import upload_elements
     from pipeline.generate_shots import generate_shots
     from pipeline.downloader import download_all
 
     config_path = ctx.obj["config"]
 
     try:
-        # Step 1: Generate element reference images
-        console.rule("[bold blue]Step 1: Generate Element Reference Images[/bold blue]")
+        # Step 1: Upload element images
+        console.rule("[bold blue]Step 1: Upload Element Images[/bold blue]")
         if dry_run:
             console.print("[dim]Skipped in dry-run mode[/dim]")
         else:
-            asyncio.run(generate_elements(scenario_path=scenario, config_path=config_path))
+            asyncio.run(upload_elements(scenario_path=scenario, config_path=config_path))
 
         # Step 2: Generate scenes
         console.rule("[bold blue]Step 2: Generate Scenes[/bold blue]")
