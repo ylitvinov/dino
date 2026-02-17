@@ -125,35 +125,15 @@ async def generate_elements(
 
         # Collect all images that need generation
         for elem_name, elem_data_raw in flat_elements.items():
-            elem_status = status["elements"].get(elem_name, {})
-            if elem_status.get("completed", False):
-                console.print(f"  [dim]Skipping {elem_name} (already completed in status.json)[/dim]")
+            # Skip if folder exists and has images
+            elem_dir = elements_dir / elem_name
+            if elem_dir.is_dir() and any(elem_dir.glob("*.png")):
+                console.print(f"  [dim]Skipping {elem_name} (images found in {elem_dir})[/dim]")
                 continue
 
             prompts = _get_reference_prompts(elem_data_raw)
 
-            # Check if all expected image files already exist on disk
-            elem_dir = elements_dir / elem_name
-            all_exist_on_disk = all(
-                (elem_dir / f"view_{i}.png").exists()
-                for i in range(len(prompts))
-            )
-            if all_exist_on_disk and len(prompts) > 0:
-                console.print(f"  [dim]Skipping {elem_name} (all {len(prompts)} images exist on disk in {elem_dir})[/dim]")
-                continue
-
-            completed_views = elem_status.get("views", {})
-
             for i, prompt in enumerate(prompts):
-                view_key = f"view_{i}"
-                # Skip if completed in status.json
-                if view_key in completed_views and completed_views[view_key].get("url"):
-                    console.print(f"  [dim]Skipping {elem_name}/{view_key} (URL in status.json)[/dim]")
-                    continue
-                # Skip if file exists on disk
-                if (elements_dir / elem_name / f"{view_key}.png").exists():
-                    console.print(f"  [dim]Skipping {elem_name}/{view_key} (file exists on disk)[/dim]")
-                    continue
                 full_prompt = f"{style_prefix} {prompt}".strip() if style_prefix else prompt
                 tasks_to_submit.append((elem_name, full_prompt, i))
                 total_images += 1
@@ -223,7 +203,8 @@ async def generate_elements(
                     if result.is_success and result.output_url:
                         # Download the image locally
                         elem_dir = elements_dir / elem_name
-                        local_path = elem_dir / f"{view_key}.png"
+                        file_name = f"{elem_name}{view_idx + 1}.png"
+                        local_path = elem_dir / file_name
                         await client.download_file(result.output_url, local_path)
 
                         # Store CDN URL for later use in video generation

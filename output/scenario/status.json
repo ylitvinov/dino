@@ -1,0 +1,44 @@
+{
+  "shots": {
+    "1__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "2__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "3__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "4__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "5__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "6__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "7__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    },
+    "8__": {
+      "status": "submit_failed",
+      "completed": false,
+      "error": "API error (code=429): {'code': 429, 'msg': 'Your call frequency is too high. Please try again later.', 'data': None}"
+    }
+  }
+}
