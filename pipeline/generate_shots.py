@@ -93,6 +93,7 @@ def _shot_key(scene_id: str, shot_id: str) -> str:
 async def generate_shots(
     scenario_path: str,
     config_path: str | None = None,
+    scene_ids: list[int] | None = None,
 ) -> None:
     """Generate videos for all shots defined in the scenario.
 
@@ -143,6 +144,8 @@ async def generate_shots(
 
     total_shots = 0
     for scene in scenario.scenes:
+        if scene_ids is not None and int(scene.id) not in scene_ids:
+            continue
         for shot in scene.shots:
             total_shots += 1
             skey = _shot_key(scene.id, shot.shot_id)
@@ -177,6 +180,14 @@ async def generate_shots(
                         description=elem_name,
                         image_urls=urls,
                     ))
+
+            # Strip @ElementName references for elements without images
+            # so the API doesn't expect kling_elements entries
+            for elem in shot_elements:
+                if not elem.image_urls:
+                    full_prompt = full_prompt.replace(f"@{elem.name}", elem.name)
+            # Only keep elements that have images
+            shot_elements = [e for e in shot_elements if e.image_urls]
 
             negative = shot.negative_prompt or global_negative
 

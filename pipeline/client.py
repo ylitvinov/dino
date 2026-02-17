@@ -234,6 +234,8 @@ class KieClient:
                 "mode": mode,
                 "aspect_ratio": aspect_ratio,
                 "cfg_scale": cfg_scale,
+                "multi_shots": False,
+                "sound": True,
             },
             "config": {
                 "webhook_config": {

@@ -2,7 +2,8 @@
 
 Usage:
     python -m pipeline.runner generate-elements --scenario scenario/scenario.yaml
-    python -m pipeline.runner generate-shots --scenario scenario/scenario.yaml
+    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml
+    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml --scene 1
     python -m pipeline.runner download
     python -m pipeline.runner status
     python -m pipeline.runner run-all --scenario scenario/scenario.yaml
@@ -98,18 +99,19 @@ def cmd_generate_elements(ctx: click.Context, scenario: str) -> None:
         sys.exit(130)
 
 
-@cli.command("generate-shots")
+@cli.command("generate-scene")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
+@click.argument("scene", type=int)
 @click.pass_context
-def cmd_generate_shots(ctx: click.Context, scenario: str) -> None:
-    """Generate videos for all shots."""
+def cmd_generate_scene(ctx: click.Context, scenario: str, scene: int) -> None:
+    """Generate videos for a specific scene. Usage: generate-scene -s scenario.yaml 1"""
     from pipeline.generate_shots import generate_shots
 
     config_path = ctx.obj["config"]
-    console.print("[bold]Starting shot generation...[/bold]")
+    console.print(f"[bold]Starting generation for scene {scene}...[/bold]")
 
     try:
-        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path))
+        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, scene_ids=[scene]))
     except FileNotFoundError as exc:
         console.print(f"[red]Error: {exc}[/red]")
         sys.exit(1)
@@ -249,8 +251,8 @@ def cmd_run_all(ctx: click.Context, scenario: str) -> None:
         console.rule("[bold blue]Step 1: Generate Element Reference Images[/bold blue]")
         asyncio.run(generate_elements(scenario_path=scenario, config_path=config_path))
 
-        # Step 2: Generate shot videos
-        console.rule("[bold blue]Step 2: Generate Shot Videos[/bold blue]")
+        # Step 2: Generate scenes
+        console.rule("[bold blue]Step 2: Generate Scenes[/bold blue]")
         asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path))
 
         # Step 3: Download any remaining files

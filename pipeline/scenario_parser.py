@@ -118,7 +118,7 @@ def load_scenario(path: str | Path) -> Scenario:
 
             shot = Shot(
                 scene_id=scene_id,
-                shot_id=shot_data.get("shot_id", ""),
+                shot_id=str(shot_data.get("id", "")),
                 time=shot_data.get("time", ""),
                 prompt=shot_data.get("prompt", ""),
                 elements_needed=shot_data.get("elements_needed", []),

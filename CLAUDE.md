@@ -17,12 +17,12 @@ python -m pipeline.runner run-all -s scenario/scenario.yaml
 
 # Individual steps
 python -m pipeline.runner generate-elements -s scenario/scenario.yaml
-python -m pipeline.runner generate-shots -s scenario/scenario.yaml
+python -m pipeline.runner generate-scene -s scenario/scenario.yaml 1   # scene by id
 python -m pipeline.runner download -s scenario/scenario.yaml
 python -m pipeline.runner status -s scenario/scenario.yaml
 
 # Verbose/debug mode
-python -m pipeline.runner -v generate-shots -s scenario/scenario.yaml
+python -m pipeline.runner -v generate-scene -s scenario/scenario.yaml 1
 
 # Custom config
 python -m pipeline.runner -c my-config.yaml run-all -s scenario/scenario.yaml
@@ -40,11 +40,15 @@ All generation is async (KIE.ai returns task IDs, pipeline polls for completion)
 
 ```
 output/
-  elements/           # shared across all scenarios
-  elements_status.json # shared element CDN URLs
-  <scenario_name>/    # per-scenario (derived from input filename stem)
+  elements/              # shared across all scenarios
+    Topa/Topa1.png       # element images in named subdirectories
+    Pusha/Pusha1.png
+    Valley/Valley1.png
+    ...
+  elements_status.json   # shared element CDN URLs
+  <scenario_name>/       # per-scenario (derived from input filename stem)
     shots/
-    status.json       # per-scenario shot status
+    status.json          # per-scenario shot status
 ```
 
 ### Data flow
@@ -57,7 +61,8 @@ output/
 ### Key modules
 
 - **`client.py`** — async KIE.ai HTTP client (`KieClient`). Handles both nested and flat API response formats. Retry with exponential backoff on 429/5xx. Context manager pattern.
-- **`generate_elements.py`** / **`generate_shots.py`** — the two main pipeline phases. Both read raw YAML + parsed scenario, track progress per-item in `status.json`.
+- **`generate_elements.py`** — generates element reference images. Skips elements whose folder already has images. Saves as `{Name}{N}.png` in `output/elements/{Name}/`.
+- **`generate_shots.py`** — generates video shots per scene. CLI command `generate-scene` takes scene id as argument. Tracks progress in `status.json`.
 - **`scenario_parser.py`** — maps `scenario.yaml` to dataclasses in `models.py`. Note: `generate_elements.py` also loads raw YAML separately to access `reference_prompts` that aren't in the parsed model.
 - **`runner.py`** — Click CLI. Each command imports its dependencies lazily to keep `--help` fast.
 
