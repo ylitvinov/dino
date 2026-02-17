@@ -87,14 +87,12 @@ class SceneTask:
     part: int  # 0-based chunk index (0 if no chunking needed)
     shots: list[dict] = field(default_factory=list)  # [{"prompt": str, "duration": int}]
     elements: list[Element] = field(default_factory=list)
-    negative_prompt: str = ""
 
 
 def _chunk_scene_shots(
     scene_id: str,
     shots: list[dict],
     elements: list[Element],
-    negative_prompt: str,
 ) -> list[SceneTask]:
     """Split scene shots into chunks that fit multi-shot limits."""
     chunks: list[SceneTask] = []
@@ -113,7 +111,6 @@ def _chunk_scene_shots(
                 part=part,
                 shots=current_shots,
                 elements=list(elements),
-                negative_prompt=negative_prompt,
             ))
             part += 1
             current_shots = []
@@ -127,7 +124,6 @@ def _chunk_scene_shots(
             part=part,
             shots=current_shots,
             elements=list(elements),
-            negative_prompt=negative_prompt,
         ))
 
     return chunks
@@ -176,8 +172,6 @@ async def generate_shots(
     max_wait = config["polling"]["max_wait_seconds"]
     mode = config["generation"]["mode"]
     aspect_ratio = config["generation"]["aspect_ratio"]
-    cfg_scale = config["generation"].get("cfg_scale", 0.5)
-    global_negative = scenario.global_config.get("negative_prompt", "")
     style_prefix = scenario.global_config.get("style_prefix", "")
 
     status = _load_status(status_path)
@@ -246,15 +240,9 @@ async def generate_shots(
 
         # Only keep elements that have images
         scene_elements = [e for e in scene_elements_map.values() if e.image_urls]
-        negative = global_negative
-        # Use first shot's negative if set (scene-level override)
-        for shot in scene.shots:
-            if shot.negative_prompt:
-                negative = shot.negative_prompt
-                break
 
         # Chunk if needed
-        chunks = _chunk_scene_shots(scene.id, shot_dicts, scene_elements, negative)
+        chunks = _chunk_scene_shots(scene.id, shot_dicts, scene_elements)
         scene_tasks.extend(chunks)
 
     if not scene_tasks:
@@ -291,11 +279,9 @@ async def generate_shots(
                 try:
                     task_id = await client.create_multi_shot_task(
                         shots=stask.shots,
-                        negative_prompt=stask.negative_prompt,
                         elements=stask.elements if stask.elements else None,
                         mode=mode,
                         aspect_ratio=aspect_ratio,
-                        cfg_scale=cfg_scale,
                     )
                     submitted.append((skey, task_id, fname))
 

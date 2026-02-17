@@ -55,7 +55,6 @@ def load_scenario(path: str | Path) -> Scenario:
     # -- Global config (top-level fields) --
     global_config = {
         "style_prefix": raw.get("style_prefix", ""),
-        "negative_prompt": raw.get("negative_prompt", ""),
     }
 
     # -- Elements (kling_elements at top level) --
@@ -89,7 +88,6 @@ def load_scenario(path: str | Path) -> Scenario:
                 scene_id=scene_id,
                 prompt=shot_data.get("prompt", ""),
                 duration=int(shot_data.get("duration", 5)),
-                negative_prompt=shot_data.get("negative_prompt", ""),
             )
             shots.append(shot)
 

@@ -27,12 +27,10 @@ class Shot:
         scene_id: ID of the parent scene.
         prompt: The generation prompt for this shot.
         duration: Duration in seconds (5 or 10).
-        negative_prompt: Things to avoid in generation.
     """
     scene_id: str
     prompt: str
     duration: int = 5
-    negative_prompt: str = ""
 
 
 @dataclass

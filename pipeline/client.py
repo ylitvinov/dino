@@ -91,15 +91,10 @@ class KieClient:
     ) -> httpx.Response:
         """Execute an HTTP request."""
         if "json" in kwargs:
-            logger.debug(
-                "KIE request %s %s payload:\n%s",
-                method, url, json.dumps(kwargs["json"], indent=2, ensure_ascii=False),
-            )
-        if self.dry_run:
             _console.print(f"[cyan bold]── {method} {self.base_url}{url}[/cyan bold]")
-            if "json" in kwargs:
-                _console.print_json(json.dumps(kwargs["json"], ensure_ascii=False))
+            _console.print_json(json.dumps(kwargs["json"], ensure_ascii=False))
             _console.print()
+        if self.dry_run:
             raise DryRunInterrupt()
         try:
             response = await self._client.request(method, url, **kwargs)
@@ -198,23 +193,19 @@ class KieClient:
     async def create_video_task(
         self,
         prompt: str,
-        negative_prompt: str = "",
         elements: list[Element] | None = None,
         duration: int = 5,
         mode: str = "pro",
         aspect_ratio: str = "16:9",
-        cfg_scale: float = 0.5,
     ) -> str:
         """Create a Kling 3.0 video generation task.
 
         Args:
             prompt: The video generation prompt.
-            negative_prompt: Things to avoid in the generated video.
             elements: Optional list of Element objects with reference images.
             duration: Video duration in seconds (5 or 10).
             mode: Generation mode ("std" or "pro").
             aspect_ratio: Output aspect ratio.
-            cfg_scale: Classifier-free guidance scale.
 
         Returns:
             The task_id string for polling.
@@ -223,6 +214,7 @@ class KieClient:
             KieApiError: On API errors.
         """
         kling_elements = []
+        image_urls = []
         if elements:
             for el in elements:
                 if el.image_urls:
@@ -231,22 +223,24 @@ class KieClient:
                         "description": el.description or el.name,
                         "element_input_urls": el.image_urls,
                     })
+                    if not image_urls:
+                        image_urls.append(el.image_urls[0])
 
         body: dict[str, Any] = {
-            "model": "kling-3.0",
+            "model": "kling-3.0/video",
             "input": {
                 "prompt": prompt,
-                "negative_prompt": negative_prompt,
+                "sound": True,
                 "duration": str(duration),
-                "mode": mode,
                 "aspect_ratio": aspect_ratio,
-                "cfg_scale": cfg_scale,
+                "mode": mode,
                 "multi_shots": False,
             },
         }
 
         if kling_elements:
             body["input"]["kling_elements"] = kling_elements
+            body["input"]["image_urls"] = image_urls
 
         logger.info("Creating video task: prompt=%r, elements=%d", prompt[:80], len(kling_elements))
         response = await self._request("POST", "/api/v1/jobs/createTask", json=body)
@@ -265,11 +259,9 @@ class KieClient:
     async def create_multi_shot_task(
         self,
         shots: list[dict],
-        negative_prompt: str = "",
         elements: list[Element] | None = None,
         mode: str = "pro",
         aspect_ratio: str = "16:9",
-        cfg_scale: float = 0.5,
     ) -> str:
         """Create a Kling 3.0 multi-shot video generation task.
 
@@ -277,11 +269,9 @@ class KieClient:
 
         Args:
             shots: List of {"prompt": str, "duration": int} dicts.
-            negative_prompt: Things to avoid in the generated video.
             elements: Optional list of Element objects with reference images.
             mode: Generation mode ("std" or "pro").
             aspect_ratio: Output aspect ratio.
-            cfg_scale: Classifier-free guidance scale.
 
         Returns:
             The task_id string for polling.
@@ -297,6 +287,7 @@ class KieClient:
             raise ValueError(f"Multi-shot supports max 15s total, got {total_duration}s")
 
         kling_elements = []
+        image_urls = []
         if elements:
             for el in elements:
                 if el.image_urls:
@@ -305,6 +296,8 @@ class KieClient:
                         "description": el.description or el.name,
                         "element_input_urls": el.image_urls,
                     })
+                    if not image_urls:
+                        image_urls.append(el.image_urls[0])
 
         multi_prompt = [
             {"prompt": s["prompt"], "duration": s["duration"]}
@@ -312,20 +305,20 @@ class KieClient:
         ]
 
         body: dict[str, Any] = {
-            "model": "kling-3.0",
+            "model": "kling-3.0/video",
             "input": {
+                "sound": True,
+                "duration": str(total_duration),
+                "aspect_ratio": aspect_ratio,
+                "mode": mode,
                 "multi_shots": True,
                 "multi_prompt": multi_prompt,
-                "negative_prompt": negative_prompt,
-                "duration": str(total_duration),
-                "mode": mode,
-                "aspect_ratio": aspect_ratio,
-                "cfg_scale": cfg_scale,
             },
         }
 
         if kling_elements:
             body["input"]["kling_elements"] = kling_elements
+            body["input"]["image_urls"] = image_urls
 
         logger.info(
             "Creating multi-shot task: %d shots, %ds total, elements=%d",

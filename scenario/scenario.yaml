@@ -1,5 +1,4 @@
 style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes."
-negative_prompt: "Realistic/photorealistic style, dark shadows, harsh lighting, scary, monsters, aggressive teeth, extra fingers, disfigured, blurry, low res, morphing faces, jerky motion, flickering, adult proportions, sharp angular shapes, speech bubbles, text overlays, subtitles, mouth shapes forming words, background inconsistency, environment morphing between shots."
 
 kling_elements:
   - name: "Topa"

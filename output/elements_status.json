@@ -1,3 +1,64 @@
 {
-  "elements": {}
+  "elements": {
+    "Topa": {
+      "views": {
+        "view_0": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365844405-tg7v5jgq7p.png",
+          "local_path": "output/elements/Topa/Topa1.png"
+        },
+        "view_1": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365847364-vbqmz2oixsh.png",
+          "local_path": "output/elements/Topa/Topa2.png"
+        },
+        "view_2": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365849651-6u1kf0t5zj5.png",
+          "local_path": "output/elements/Topa/Topa3.png"
+        },
+        "view_3": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365851979-1jl7cgzwcvx.png",
+          "local_path": "output/elements/Topa/Topa4.png"
+        }
+      },
+      "completed": true
+    },
+    "Pusha": {
+      "views": {
+        "view_0": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365855389-wddhktt7lo.png",
+          "local_path": "output/elements/Pusha/Pusha1.png"
+        },
+        "view_1": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365858015-2xg2tgr1pml.png",
+          "local_path": "output/elements/Pusha/Pusha2.png"
+        },
+        "view_2": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365861096-pnopplhd7rs.png",
+          "local_path": "output/elements/Pusha/Pusha3.png"
+        },
+        "view_3": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365863250-d6x11ic0yy.png",
+          "local_path": "output/elements/Pusha/Pusha4.png"
+        }
+      },
+      "completed": true
+    },
+    "Valley": {
+      "views": {
+        "view_0": {
+          "status": "completed",
+          "url": "https://tempfile.redpandaai.co/kieai/608626/elements/1771365866030-mvxtgkzby7a.png",
+          "local_path": "output/elements/Valley/Valley1.png"
+        }
+      },
+      "completed": true
+    }
+  }
 }
