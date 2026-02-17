@@ -213,10 +213,19 @@ async def generate_shots(
             console.print(f"  [dim]Skipping scene {scene.id} (already completed)[/dim]")
             continue
 
+        # Build elements for this scene from kling_elements names
+        scene_elements_map: dict[str, Element] = {}
+        for elem_name in scene.kling_elements:
+            urls = _collect_element_urls(elem_name, elements_status)
+            elem_def = scenario.elements.get(elem_name)
+            scene_elements_map[elem_name] = Element(
+                name=elem_name,
+                description=elem_def.description if elem_def else elem_name,
+                image_urls=urls,
+            )
+
         # Build per-shot data
         shot_dicts: list[dict] = []
-        scene_elements_map: dict[str, Element] = {}  # deduplicated
-
         for shot in scene.shots:
             full_prompt = _build_shot_prompt(
                 shot_prompt=shot.prompt,
@@ -224,25 +233,6 @@ async def generate_shots(
                 scene_background=scene.background,
                 scene_lighting=scene.lighting,
             )
-
-            # Collect elements for this shot
-            for elem_name in shot.elements_needed:
-                if elem_name in scene_elements_map:
-                    continue
-                urls = _collect_element_urls(elem_name, elements_status)
-                elem_def = scenario.elements.get(elem_name)
-                if elem_def:
-                    scene_elements_map[elem_name] = Element(
-                        name=elem_def.name,
-                        description=elem_def.description,
-                        image_urls=urls,
-                    )
-                elif urls:
-                    scene_elements_map[elem_name] = Element(
-                        name=elem_name,
-                        description=elem_name,
-                        image_urls=urls,
-                    )
 
             # Strip @ElementName for elements without images
             for ename, elem in scene_elements_map.items():

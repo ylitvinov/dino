@@ -11,53 +11,45 @@ class Element:
 
     Attributes:
         name: Unique identifier for this element.
-        description: Textual description used in image generation prompts.
+        description: Textual description sent to API as kling_elements[].description.
         image_urls: List of reference image URLs (CDN URLs from KIE.ai).
     """
     name: str
-    description: str
+    description: str = ""
     image_urls: list[str] = field(default_factory=list)
 
 
 @dataclass
 class Shot:
-    """A single shot within a scene.
+    """A single shot within a scene (maps to one entry in multi_prompt).
 
     Attributes:
         scene_id: ID of the parent scene.
-        shot_id: Unique ID of this shot within the scene.
-        time: Timecode or time description (e.g. "00:05-00:10").
         prompt: The generation prompt for this shot.
-        elements_needed: Names of elements required in this shot.
         duration: Duration in seconds (5 or 10).
         negative_prompt: Things to avoid in generation.
     """
     scene_id: str
-    shot_id: str
-    time: str
     prompt: str
-    elements_needed: list[str] = field(default_factory=list)
     duration: int = 5
     negative_prompt: str = ""
 
 
 @dataclass
 class Scene:
-    """A scene containing multiple shots.
+    """A scene containing multiple shots (maps to one API request).
 
     Attributes:
         id: Unique scene identifier.
-        title: Human-readable scene title.
-        time: Time range for this scene.
-        background: Background description for continuity.
-        lighting: Lighting description for continuity.
+        background: Background description injected into prompts.
+        lighting: Lighting description injected into prompts.
+        kling_elements: Names of elements needed for this scene.
         shots: Ordered list of shots in this scene.
     """
     id: str
-    title: str
-    time: str
-    background: str
-    lighting: str
+    background: str = ""
+    lighting: str = ""
+    kling_elements: list[str] = field(default_factory=list)
     shots: list[Shot] = field(default_factory=list)
 
 
@@ -66,8 +58,8 @@ class Scenario:
     """Top-level scenario containing all generation parameters.
 
     Attributes:
-        global_config: Global settings (style_prefix, negative_prompt, etc.).
-        elements: Dict of element name -> Element.
+        global_config: Global settings (style_prefix, negative_prompt).
+        elements: Dict of element name -> Element (populated from status file).
         scenes: Ordered list of scenes.
     """
     global_config: dict = field(default_factory=dict)

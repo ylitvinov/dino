@@ -16,39 +16,21 @@ from pipeline.models import Element, Scene, Scenario, Shot
 def load_scenario(path: str | Path) -> Scenario:
     """Load a scenario from a YAML file.
 
-    Expected YAML structure::
+    Expected YAML structure (mirrors KIE.ai API payload)::
 
-        global_config:
-          style_prefix: "3D animation style, Pixar quality, ..."
-          negative_prompt: "blurry, distorted, ..."
-
-        elements:
-          dino:
-            description: "A cute green dinosaur with big eyes..."
-            type: character
-            reference_prompts:
-              - "front view: A cute green dinosaur..."
-              - "side view: A cute green dinosaur..."
-          background_park:
-            description: "A sunny park with green grass..."
-            type: background
-            reference_prompts:
-              - "Wide establishing shot of a sunny park..."
+        style_prefix: "3D animation style, Pixar quality, ..."
+        negative_prompt: "blurry, distorted, ..."
 
         scenes:
-          - id: scene_01
-            title: "Opening"
-            time: "00:00-00:15"
-            background: "Sunny park with playground"
-            lighting: "Bright daylight, soft shadows"
-            shots:
-              - shot_id: shot_01
-                time: "00:00-00:05"
-                prompt: "Camera slowly pans across the park..."
-                elements_needed:
-                  - dino
+          - id: 1
+            background: "Sunny park"
+            lighting: "Bright daylight"
+            kling_elements: ["Topa", "Valley"]
+            multi_prompt:
+              - prompt: "Camera slowly pans across the park..."
                 duration: 5
-                negative_prompt: ""
+              - prompt: "Close-up of character..."
+                duration: 5
 
     Args:
         path: Path to the scenario YAML file.
@@ -70,36 +52,23 @@ def load_scenario(path: str | Path) -> Scenario:
     if not isinstance(raw, dict):
         raise ValueError(f"Scenario file must be a YAML mapping, got {type(raw).__name__}")
 
-    # -- Global config --
-    global_config = raw.get("global_config", {})
+    # -- Global config (top-level fields) --
+    global_config = {
+        "style_prefix": raw.get("style_prefix", ""),
+        "negative_prompt": raw.get("negative_prompt", ""),
+    }
 
-    # -- Elements --
-    # Supports both flat format (elements: {Name: {...}})
-    # and grouped format (elements: {characters: [...], backgrounds: [...]})
+    # -- Elements (kling_elements at top level) --
     elements: dict[str, Element] = {}
-    raw_elements = raw.get("elements", {})
-    if isinstance(raw_elements, dict):
-        for key, value in raw_elements.items():
-            if isinstance(value, list):
-                # Grouped format: characters: [{name: "Topa", ...}, ...]
-                for elem_data in value:
-                    if not isinstance(elem_data, dict):
-                        raise ValueError(f"Element in '{key}' must be a mapping")
-                    name = elem_data.get("name", key)
-                    elements[name] = Element(
-                        name=name,
-                        description=elem_data.get("description", ""),
-                        image_urls=elem_data.get("image_urls", []),
-                    )
-            elif isinstance(value, dict):
-                # Flat format: ElementName: {description: ...}
-                elements[key] = Element(
-                    name=key,
-                    description=value.get("description", ""),
-                    image_urls=value.get("image_urls", []),
-                )
-            else:
-                raise ValueError(f"Element '{key}' must be a mapping or list")
+    for elem_data in raw.get("kling_elements", []):
+        if isinstance(elem_data, dict):
+            name = elem_data.get("name", "")
+            elements[name] = Element(
+                name=name,
+                description=elem_data.get("description", name),
+            )
+        elif isinstance(elem_data, str):
+            elements[elem_data] = Element(name=elem_data, description=elem_data)
 
     # -- Scenes --
     scenes: list[Scene] = []
@@ -112,16 +81,13 @@ def load_scenario(path: str | Path) -> Scenario:
             raise ValueError("Each scene must have an 'id' field")
 
         shots: list[Shot] = []
-        for shot_data in scene_data.get("shots", []):
+        for shot_data in scene_data.get("multi_prompt", []):
             if not isinstance(shot_data, dict):
                 raise ValueError(f"Each shot must be a mapping in scene '{scene_id}'")
 
             shot = Shot(
                 scene_id=scene_id,
-                shot_id=str(shot_data.get("id", "")),
-                time=shot_data.get("time", ""),
                 prompt=shot_data.get("prompt", ""),
-                elements_needed=shot_data.get("elements_needed", []),
                 duration=int(shot_data.get("duration", 5)),
                 negative_prompt=shot_data.get("negative_prompt", ""),
             )
@@ -129,10 +95,9 @@ def load_scenario(path: str | Path) -> Scenario:
 
         scene = Scene(
             id=scene_id,
-            title=scene_data.get("title", ""),
-            time=scene_data.get("time", ""),
             background=scene_data.get("background", ""),
             lighting=scene_data.get("lighting", ""),
+            kling_elements=scene_data.get("kling_elements", []),
             shots=shots,
         )
         scenes.append(scene)

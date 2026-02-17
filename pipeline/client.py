@@ -228,13 +228,12 @@ class KieClient:
                 if el.image_urls:
                     kling_elements.append({
                         "name": el.name,
-                        "description": el.description,
+                        "description": el.description or el.name,
                         "element_input_urls": el.image_urls,
                     })
 
         body: dict[str, Any] = {
-            "model": "kling-3.0/video",
-            "task_type": "video_generation",
+            "model": "kling-3.0",
             "input": {
                 "prompt": prompt,
                 "negative_prompt": negative_prompt,
@@ -243,13 +242,6 @@ class KieClient:
                 "aspect_ratio": aspect_ratio,
                 "cfg_scale": cfg_scale,
                 "multi_shots": False,
-                "sound": False,
-            },
-            "config": {
-                "webhook_config": {
-                    "endpoint": "",
-                    "secret": "",
-                },
             },
         }
 
@@ -310,7 +302,7 @@ class KieClient:
                 if el.image_urls:
                     kling_elements.append({
                         "name": el.name,
-                        "description": el.description,
+                        "description": el.description or el.name,
                         "element_input_urls": el.image_urls,
                     })
 
@@ -320,8 +312,7 @@ class KieClient:
         ]
 
         body: dict[str, Any] = {
-            "model": "kling-3.0/video",
-            "task_type": "video_generation",
+            "model": "kling-3.0",
             "input": {
                 "multi_shots": True,
                 "multi_prompt": multi_prompt,
@@ -330,13 +321,6 @@ class KieClient:
                 "mode": mode,
                 "aspect_ratio": aspect_ratio,
                 "cfg_scale": cfg_scale,
-                "sound": True,
-            },
-            "config": {
-                "webhook_config": {
-                    "endpoint": "",
-                    "secret": "",
-                },
             },
         }
 
