@@ -1,15 +1,12 @@
-# CLAUDE.md
+# Kling Video Pipeline
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Project Overview
-
-Automated video generation pipeline for a children's animated short ("Topa and Pusha: The Best Day") using KIE.ai's Kling 3.0 API. The pipeline generates reference images for characters/backgrounds (Elements), then generates 23 video shots across 8 scenes, with resume support. Elements are shared across scenarios in `output/elements/`; shots are scoped per scenario in `output/<scenario_name>/`.
+Automated video generation pipeline for a children's animated short ("Topa and Pusha: The Best Day") using KIE.ai's Kling 3.0 API. Generates reference images for characters/backgrounds (Elements), then generates 23 video shots across 8 scenes, with resume support.
 
 ## Commands
 
+All commands run from `kling/` directory.
+
 ```bash
-# Install dependencies
 pip install -r requirements.txt
 
 # Full pipeline (elements -> shots -> download)
@@ -48,7 +45,7 @@ output/
   elements_status.json   # shared element CDN URLs
   <scenario_name>/       # per-scenario (derived from input filename stem)
     shots/
-    status.json          # per-scenario shot status
+    scene_status.json    # per-scenario shot status
 ```
 
 ### Data flow
@@ -62,7 +59,7 @@ output/
 
 - **`client.py`** — async KIE.ai HTTP client (`KieClient`). Handles both nested and flat API response formats. Retry with exponential backoff on 429/5xx. Context manager pattern. Includes `upload_file()` for KIE file storage.
 - **`upload_elements.py`** — uploads local element images to KIE.ai file storage. Skips elements that already have URLs in status. Saves file URLs to `elements_status.json`.
-- **`generate_shots.py`** — generates video shots per scene. CLI command `generate-scene` takes scene id as argument. Tracks progress in `status.json`.
+- **`generate_shots.py`** — generates video shots per scene. CLI command `generate-scene` takes scene id as argument. Tracks progress in `scene_status.json`.
 - **`scenario_parser.py`** — maps `scenario.yaml` to dataclasses in `models.py`.
 - **`runner.py`** — Click CLI. Each command imports its dependencies lazily to keep `--help` fast.
 

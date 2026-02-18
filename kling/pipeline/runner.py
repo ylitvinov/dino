@@ -96,7 +96,7 @@ def cmd_upload_elements(ctx: click.Context, scenario: str) -> None:
         console.print(f"[red]Configuration error: {exc}[/red]")
         sys.exit(1)
     except KeyboardInterrupt:
-        console.print("\n[yellow]Interrupted. Progress has been saved to status.json.[/yellow]")
+        console.print("\n[yellow]Interrupted. Progress has been saved to scene_status.json.[/yellow]")
         sys.exit(130)
 
 
@@ -121,7 +121,7 @@ def cmd_generate_scene(ctx: click.Context, scenario: str, dry_run: bool, scene: 
         console.print(f"[red]Configuration error: {exc}[/red]")
         sys.exit(1)
     except KeyboardInterrupt:
-        console.print("\n[yellow]Interrupted. Progress has been saved to status.json.[/yellow]")
+        console.print("\n[yellow]Interrupted. Progress has been saved to scene_status.json.[/yellow]")
         sys.exit(130)
 
 
@@ -274,6 +274,32 @@ def cmd_status(ctx: click.Context, scenario: str | None) -> None:
         console.print(f"  Scenes (multi-shot): {done_scenes}/{total_scenes} completed")
 
 
+@cli.command("assemble")
+@click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
+@click.option("--output", "-o", default=None, help="Output file path (default: output/<scenario>/final.mp4)")
+@click.pass_context
+def cmd_assemble(ctx: click.Context, scenario: str, output: str | None) -> None:
+    """Concatenate downloaded scene videos into a single final video."""
+    from pipeline.assembler import assemble_video
+
+    config_path = ctx.obj["config"]
+    console.print("[bold]Assembling final video...[/bold]")
+
+    try:
+        dest = assemble_video(
+            scenario_path=scenario,
+            config_path=config_path,
+            output_path=output,
+        )
+        console.print(f"[bold green]Done:[/bold green] {dest}")
+    except FileNotFoundError as exc:
+        console.print(f"[red]Error: {exc}[/red]")
+        sys.exit(1)
+    except (ValueError, RuntimeError) as exc:
+        console.print(f"[red]Error: {exc}[/red]")
+        sys.exit(1)
+
+
 @cli.command("run-all")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
 @click.option("--dry-run", is_flag=True, help="Log what would be generated without calling API (video only)")
@@ -314,7 +340,7 @@ def cmd_run_all(ctx: click.Context, scenario: str, dry_run: bool) -> None:
         console.print(f"[red]Configuration error: {exc}[/red]")
         sys.exit(1)
     except KeyboardInterrupt:
-        console.print("\n[yellow]Interrupted. Progress has been saved to status.json.[/yellow]")
+        console.print("\n[yellow]Interrupted. Progress has been saved to scene_status.json.[/yellow]")
         sys.exit(130)
 
 

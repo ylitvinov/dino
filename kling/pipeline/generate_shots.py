@@ -183,7 +183,7 @@ async def generate_shots(
     elem_status = elements_status.get("elements", {})
     if not elem_status:
         console.print(
-            "[yellow]Warning: No element images found in status.json. "
+            "[yellow]Warning: No element images found in elements_status.json. "
             "Run 'generate-elements' first for best results.[/yellow]"
         )
 
@@ -275,6 +275,18 @@ async def generate_shots(
                 total_parts = sum(1 for t in scene_tasks if t.scene_id == stask.scene_id)
                 skey = _scene_status_key(stask.scene_id, stask.part, total_parts)
                 fname = _scene_filename(stask.scene_id, stask.part, total_parts)
+
+                # Resume: reuse existing task_id if previously submitted
+                existing = status["scenes"].get(skey, {})
+                existing_task_id = existing.get("task_id")
+                existing_status = existing.get("status")
+                if existing_task_id and existing_status in ("submitted", "processing"):
+                    submitted.append((skey, existing_task_id, fname))
+                    progress.update(submit_bar, advance=1)
+                    console.print(
+                        f"  [cyan]Resuming scene {skey} (task {existing_task_id})[/cyan]"
+                    )
+                    continue
 
                 try:
                     task_id = await client.create_multi_shot_task(

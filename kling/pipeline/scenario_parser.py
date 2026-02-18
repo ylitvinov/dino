@@ -75,7 +75,7 @@ def load_scenario(path: str | Path) -> Scenario:
         if not isinstance(scene_data, dict):
             raise ValueError(f"Each scene must be a mapping, got {type(scene_data).__name__}")
 
-        scene_id = scene_data.get("id", "")
+        scene_id = str(scene_data.get("id", ""))
         if not scene_id:
             raise ValueError("Each scene must have an 'id' field")
 

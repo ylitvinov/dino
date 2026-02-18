@@ -87,10 +87,10 @@ def resolve_output_paths(config: dict, scenario_path: str | None = None) -> dict
     if scenario_path:
         stem = Path(scenario_path).stem
         shots_dir = base_dir / stem / "shots"
-        status_file = base_dir / stem / "status.json"
+        status_file = base_dir / stem / "scene_status.json"
     else:
         shots_dir = base_dir / "shots"
-        status_file = base_dir / "status.json"
+        status_file = base_dir / "scene_status.json"
 
     return {
         "elements_dir": elements_dir,
