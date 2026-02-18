@@ -1,105 +1,199 @@
-# Kling 3.0 — Complete Video Generation Guide
+# Kling 3.0 — Video Generation Guide
 
 ## Key Features
 
 ### Resolution & Duration
-- **Native 4K** (3840x2160) at **60 fps** — broadcast and print-ready quality
-- **Up to 15 seconds** of video with flexible duration (3–15s) instead of fixed presets
-- Major improvement over Kling 2.6
+- **Native 4K** (3840x2160) at **60 fps**
+- **3–15 seconds** per generation, flexible duration
+- Two modes: `std` (standard) and `pro` (higher resolution)
 
 ### Multi-Shot Generation
-- Up to **6 distinct camera cuts** in a single generation
-- Per-shot control: duration, framing, camera movement
+- Up to **6 distinct shots** in a single generation
+- Per-shot control: `prompt` + `duration` (1–12 sec each)
 - Model understands cinematic language: profile shot, macro close-up, tracking shot, POV, shot-reverse-shot
-- Smooth transitions with narrative continuity
 
-### Native Audio & Dialogue
-- Character **speech generation** directly in video
-- **5 languages** supported: English, Chinese, Japanese, Korean, Spanish
-- Up to **3-person dialogue** with accurate lip-sync
-- Per-character control of tone, emotion, and accent
+### Element References
+- Reference characters/backgrounds via `@ElementName` syntax in prompts
+- Elements = 2–4 reference images (JPG/PNG, min 300x300px, max 10MB each)
+- Elements are passed per-request via `kling_elements` array (not stored server-side)
+- File URLs expire after 3 days — re-upload if expired
+
+### Native Audio
+- Character speech in 5 languages (EN, CN, JP, KR, ES)
+- Up to 3-person dialogue with lip-sync
+- Sound effects enabled by default in multi-shot mode
 
 ### Start/End Frame Control
-- Specify **start and end frames** — model generates smooth interpolation
-- Improved scene continuity compared to 2.6
-
-### Character Consistency
-- Face identity preserved through turns, expression changes, and scene transitions
-- Multi-image references: supply multiple images for tighter style/identity lock
+- Specify start and/or end frame images for smooth interpolation
+- Multi-shot mode supports first frame only
 
 ---
 
-## Prompt Structure (The Key to Quality)
+## Scenario YAML Format
 
-Think like a **director**, not a describer:
+Our pipeline uses `scenario.yaml` to define elements and scenes. The pipeline reads this file, uploads element images, and sends multi-shot requests to KIE.ai.
+
+### Top-level structure
+
+```yaml
+style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes..."
+
+kling_elements:
+  - name: "Topa"
+    description: "Bright-green baby triceratops, big brown eyes, orange frill."
+  - name: "Pusha"
+    description: "Fluffy purple baby pterodactyl, big blue eyes, pink beak."
+  - name: "Valley"
+    description: "Prehistoric valley, colorful flowers, friendly volcanoes, river."
+
+scenes:
+  - id: 1
+    background: "Valley"
+    lighting: "Sunrise golden hour"
+    kling_elements: ["Valley", "Topa"]
+    multi_prompt:
+      - prompt: "EWS, slow dolly push. @Valley at sunrise — morning mist..."
+        duration: 5
+      - prompt: "MS on @Topa sleeping curled on a big leaf..."
+        duration: 5
+```
+
+### Fields
+
+| Field | Level | Description |
+|-------|-------|-------------|
+| `style_prefix` | top | Prepended to every shot prompt. Defines visual style. |
+| `kling_elements` | top | Character/background definitions with `name` and `description`. Reference images live in `output/elements/{Name}/`. |
+| `scenes[].id` | scene | Scene number (used in CLI: `generate-scene -s scenario.yaml 1`). |
+| `scenes[].background` | scene | Background element name. |
+| `scenes[].lighting` | scene | Lighting description for the scene. |
+| `scenes[].kling_elements` | scene | Which elements this scene references (names from top-level list). Only these elements are sent to the API for this scene. |
+| `scenes[].multi_prompt` | scene | Array of shots. Each shot = `prompt` + `duration`. |
+| `multi_prompt[].prompt` | shot | Shot prompt text. Use `@Name` to reference elements. Max 500 chars. |
+| `multi_prompt[].duration` | shot | Shot duration in seconds (1–12). |
+
+### How it maps to the API
+
+The pipeline converts each scene into a single multi-shot API request:
 
 ```
-[Scene/Context] + [Character & Appearance] + [Action Timeline] +
-[Camera Movement] + [Audio & Atmosphere] + [Technical Specs]
+scene.multi_prompt        -> input.multi_prompt (array of {prompt, duration})
+scene.kling_elements      -> input.kling_elements (with uploaded file URLs)
+style_prefix + shot.prompt -> each multi_prompt[].prompt
 ```
 
-> A well-structured 200-word prompt will massively outperform a vague 20-word one.
+Multi-shot mode is always enabled (`multi_shots: true`). Sound is on by default.
 
-### Example Prompt
+---
+
+## Shot Prompt Structure
+
+Each shot prompt follows this pattern:
+
 ```
-A dimly lit jazz club in 1960s New York.
+[Camera] [Action/Subject with @Element refs] [Technical details]
+```
 
-[Character A: A middle-aged Black man in a dark suit, deep baritone voice]:
-"You always come back to this place." He sets down a glass of whiskey slowly.
+### Camera abbreviations
 
-Camera slowly dollies forward from a wide shot to a medium close-up.
-Ambient jazz piano plays softly. Warm amber lighting with cigarette smoke haze.
+Use standard abbreviations at the start of each prompt:
+
+| Abbreviation | Meaning |
+|-------------|---------|
+| `EWS` | Extreme wide shot |
+| `WS` | Wide shot |
+| `MS` | Medium shot |
+| `CU` | Close-up |
+| `ECU` | Extreme close-up |
+
+### Element references
+
+Use `@ElementName` inline wherever the element appears in the action:
+
+```yaml
+- prompt: "MS on @Topa sleeping curled on a big leaf. Warm sunbeam reaches his face."
+```
+
+The `@Name` must match a name from the scene's `kling_elements` list.
+
+### Example shot prompts
+
+**Establishing shot (no character):**
+```yaml
+- prompt: "EWS, slow dolly push. @Valley at sunrise — morning mist drifting low, volumetric light rays through ferns, pink-orange sky. Winding river reflects warm colors. Deep focus, cinematic composition."
+  duration: 5
+```
+
+**Character action:**
+```yaml
+- prompt: "MS on @Topa sleeping curled on a big leaf. Warm sunbeam reaches his face. He scrunches nose, yawns wide showing tiny tongue, opens big brown eyes, stretches chubby legs one by one. Shallow DOF, bokeh background, golden rim light."
+  duration: 5
+```
+
+**Close-up with emotion:**
+```yaml
+- prompt: "CU low angle. @Topa stands, shakes vigorously — orange frill wiggles comically. Looks at camera with excited eyes, beams with joy, spreads front paws wide. Golden rim light outlines bright-green body. Soft-focused @Valley behind."
+  duration: 5
 ```
 
 ---
 
 ## Tips & Best Practices
 
-### 1. Describe Shots, Not Clips
-Instead of a single long paragraph, **explicitly describe each shot** as part of a sequence. Label shots and describe framing, subject, and motion for each. This produces smoother transitions and intentional narrative flow.
+### 1. Describe Each Shot as a Director
+Start with camera type/movement, then subject and action, then atmosphere/technical. Keep each prompt focused on one clear moment.
 
-### 2. Anchor Characters Early
-Define key characters **at the very beginning** of the prompt and use **identical descriptions** across all shots. This locks appearance traits, objects, and environment stability.
-
-### 3. Be Precise About Motion
+### 2. Be Precise About Motion
 - Describe both **subject actions** and **camera behavior**
-- Use cinematic terms: `dolly push`, `whip-pan`, `crash zoom`, `tracking shot`, `shoulder-cam drift`, `snap focus`
+- Cinematic terms: `dolly push`, `whip-pan`, `crash zoom`, `tracking shot`, `slow dolly push`
 - Camera movement should be **motivated**: follow a character, reveal information, emphasize emotion
 
-### 4. Use Negative Prompts
-The model defaults to "optimistic" outputs (smiling faces). For serious/gritty atmosphere, negative prompts are essential:
+### 3. Anchor Characters via Elements
+Don't re-describe characters in every prompt. The `@ElementName` reference + uploaded images handle identity. Focus the prompt on **what the character does**, not what they look like. You can mention distinctive features (e.g. "orange frill wiggles") for emphasis.
 
+### 4. Use Temporal Sequencing Within Shots
+For 5-second shots, describe 2–3 beats of action in order:
+```
+He scrunches nose, yawns wide showing tiny tongue, opens big brown eyes, stretches chubby legs one by one.
+```
+
+### 5. Include Lighting and Depth Cues
+Technical details at the end of the prompt improve quality:
+- `Shallow DOF, bokeh background`
+- `Golden rim light`
+- `Deep focus, cinematic composition`
+- `Volumetric light rays`
+
+### 6. Use Negative Prompts When Needed
+For controlling unwanted artifacts (configured at API level, not in scenario YAML):
 ```
 Negative: smiling, laughing, cartoonish, bright colors, low resolution,
 morphing, blurry text, disfigured hands, extra fingers, flickering textures,
 morphing clothes, overly vibrant colors, unbalanced layout, dark tone
 ```
 
-### 5. Structure Dialogue Clearly
-- Use unique labels: `[Speaker: Man]`, `[Character A: ...]`
-- Bind each line of dialogue to a specific action
-- Use temporal linking words: "Immediately," "Then," "Pause"
-- This prevents the model from confusing speakers in lip-sync
+### 7. Duration Planning
+- **3–5 sec**: single action, single camera move
+- **5–8 sec**: 2–3 action beats, camera can shift
+- **8–12 sec**: full mini-sequence, setup -> action -> reaction
+- Total scene duration = sum of shot durations. Keep under 15 sec per API request.
 
-### 6. Image-to-Video
-- The input image acts as an **anchor**, not just a starting frame
-- Prompt should describe **scene evolution** from that image
-- Model preserves text, signage, and visual details from the source image well
-
-### 7. Long Generations (10–15 sec)
-- Describe **progression**: how action develops, how camera reacts
-- Break into "beats": setup -> development -> moment's climax
-- Leverage multi-beat performances with scene transitions
+### 8. Style Prefix
+The `style_prefix` is prepended automatically to every prompt. Put global visual style here — it should NOT contain action or camera directions:
+```yaml
+style_prefix: "3D cartoon for toddlers, Pixar-style, soft rounded shapes, warm pastel colors, big expressive eyes."
+```
 
 ---
 
 ## Known Limitations
 
 - **Color grading** can drift between cuts in multi-shot mode
-- **Voice cloning** and character cloning are experimental — identity may drift
-- **VFX editing** capabilities are limited
-- **Lip-sync** works but isn't perfect — other tools may be more precise
-- For serious production, best used as a **front-end generator** within a broader toolkit
+- **Character consistency** relies on element reference images — provide 2–4 diverse angles
+- **500 char limit** per shot prompt — be concise
+- **File URLs expire** after 3 days — re-upload elements if pipeline resumes after a pause
+- **Lip-sync** works but isn't perfect
+- **Max 6 shots** per multi-shot request — split longer scenes into multiple API calls
 
 ---
 
@@ -107,10 +201,9 @@ morphing clothes, overly vibrant colors, unbalanced layout, dark tone
 
 | Mode | Description |
 |------|-------------|
-| **Text-to-Video** | Generate video from a text prompt |
-| **Image-to-Video** | Animate a static image |
-| **Storyboard Mode** | Per-shot control with individual shot settings |
-| **Multi-Shot** | Up to 6 shots with automatic transitions |
+| **Text-to-Video** | Generate video from a text prompt (single-shot) |
+| **Image-to-Video** | Animate a static image (first/last frame) |
+| **Multi-Shot** | Up to 6 shots with per-shot prompts and durations (our default) |
 
 ---
 
