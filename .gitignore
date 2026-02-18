@@ -17,5 +17,3 @@ venv/
 Thumbs.db
 
 # Generated output
-output/
-**/output/
