@@ -2,6 +2,10 @@
 
 Automated video generation pipeline for a children's animated short ("Topa and Pusha: The Best Day") using KIE.ai's Kling 3.0 API. Generates reference images for characters/backgrounds (Elements), then generates 23 video shots across 8 scenes, with resume support.
 
+## Rules
+
+- **NEVER run the pipeline** (`python -m pipeline.runner ...`) — the user runs it manually. Only edit code, check status output, and review logs.
+
 ## Commands
 
 All commands run from `kling/` directory.
