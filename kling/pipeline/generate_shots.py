@@ -190,6 +190,17 @@ async def generate_shots(
     # Build scene tasks
     scene_tasks: list[SceneTask] = []
     total_scenes = 0
+    available_scene_ids = {int(s.id) for s in scenario.scenes}
+
+    if scene_ids is not None:
+        unknown = [s for s in scene_ids if s not in available_scene_ids]
+        if unknown:
+            label = ", ".join(str(s) for s in unknown)
+            available = ", ".join(str(s) for s in sorted(available_scene_ids))
+            console.print(
+                f"  [red]Scene(s) {label} not found in scenario. "
+                f"Available: {available}[/red]"
+            )
 
     for scene in scenario.scenes:
         if scene_ids is not None and int(scene.id) not in scene_ids:
@@ -250,8 +261,8 @@ async def generate_shots(
         return
 
     console.print(
-        f"\n[bold]{'[DRY RUN] Would generate' if dry_run else 'Generating'} "
-        f"{len(scene_tasks)} multi-shot task(s) "
+        f"\n[bold]{'[DRY RUN] Would submit' if dry_run else 'Processing'} "
+        f"{len(scene_tasks)} scene task(s) "
         f"for {total_scenes} scene(s)...[/bold]\n"
     )
 
@@ -267,7 +278,7 @@ async def generate_shots(
             console=console,
         ) as progress:
             submit_bar = progress.add_task(
-                "Submitting multi-shot tasks...", total=len(scene_tasks)
+                "Processing scenes...", total=len(scene_tasks)
             )
 
             for stask in scene_tasks:
@@ -284,7 +295,7 @@ async def generate_shots(
                     submitted.append((skey, existing_task_id, fname))
                     progress.update(submit_bar, advance=1)
                     console.print(
-                        f"  [cyan]Resuming scene {skey} (task {existing_task_id})[/cyan]"
+                        f"  [cyan]Scene {skey}: already submitted (task {existing_task_id}), will check status[/cyan]"
                     )
                     continue
 
@@ -332,42 +343,45 @@ async def generate_shots(
                 console.print("[bold yellow]Dry run complete. No API calls were made.[/bold yellow]")
                 return
 
-            # Phase 2: Check status of all submitted tasks (no waiting)
-            for skey, task_id, fname in submitted:
-                try:
-                    result = await client.get_task_status(task_id)
+        # Phase 2: Check status of all submitted tasks (no waiting)
+        # Outside Progress block so logging doesn't interfere with the progress bar.
+        console.print(f"\n[bold]Checking status of {len(submitted)} task(s)...[/bold]\n")
+        for skey, task_id, fname in submitted:
+            try:
+                result = await client.get_task_status(task_id)
 
-                    if result.is_success and result.output_url:
-                        local_path = shots_dir / fname
-                        await client.download_file(result.output_url, local_path)
+                if result.is_success and result.output_url:
+                    console.print(f"  [cyan]Scene {skey}: ready, downloading...[/cyan]")
+                    local_path = shots_dir / fname
+                    await client.download_file(result.output_url, local_path)
 
-                        status["scenes"][skey].update({
-                            "status": "completed",
-                            "completed": True,
-                            "url": result.output_url,
-                            "local_path": str(local_path),
-                        })
-                        console.print(f"  [green]Scene {skey} completed -> {local_path}[/green]")
-                    elif result.is_done:
-                        error_msg = result.error or "Unknown error"
-                        status["scenes"][skey].update({
-                            "status": "failed",
-                            "completed": False,
-                            "error": error_msg,
-                        })
-                        console.print(f"  [red]Scene {skey} failed: {error_msg}[/red]")
-                    else:
-                        console.print(f"  [yellow]Scene {skey} still {result.status} (task {task_id})[/yellow]")
-
-                except KieApiError as exc:
+                    status["scenes"][skey].update({
+                        "status": "completed",
+                        "completed": True,
+                        "url": result.output_url,
+                        "local_path": str(local_path),
+                    })
+                    console.print(f"  [green]Scene {skey}: saved -> {local_path}[/green]")
+                elif result.is_done:
+                    error_msg = result.error or "Unknown error"
                     status["scenes"][skey].update({
                         "status": "failed",
                         "completed": False,
-                        "error": str(exc),
+                        "error": error_msg,
                     })
-                    console.print(f"  [red]Scene {skey} error: {exc}[/red]")
+                    console.print(f"  [red]Scene {skey}: failed — {error_msg}[/red]")
+                else:
+                    console.print(f"  [yellow]Scene {skey}: still {result.status}, re-run later to check[/yellow]")
 
-                _save_status(status_path, status)
+            except KieApiError as exc:
+                status["scenes"][skey].update({
+                    "status": "failed",
+                    "completed": False,
+                    "error": str(exc),
+                })
+                console.print(f"  [red]Scene {skey}: API error — {exc}[/red]")
+
+            _save_status(status_path, status)
 
     # Summary
     completed = sum(1 for s in status["scenes"].values() if s.get("completed"))

@@ -14,10 +14,10 @@
     },
     "2": {
       "task_id": "96def5172034a53521d9ce08f68e42f4",
-      "status": "submitted",
-      "completed": false,
-      "url": null,
-      "local_path": null,
+      "status": "completed",
+      "completed": true,
+      "url": "https://tempfile.aiquickdraw.com/h/96def5172034a53521d9ce08f68e42f4_1771466453.mp4",
+      "local_path": "output/dino/shots/scene_2.mp4",
       "shot_count": 3,
       "elements": [
         "Valley",
@@ -38,10 +38,10 @@
     },
     "4": {
       "task_id": "33a0a34f484177f290ff888814d6cb40",
-      "status": "submitted",
-      "completed": false,
-      "url": null,
-      "local_path": null,
+      "status": "completed",
+      "completed": true,
+      "url": "https://tempfile.aiquickdraw.com/h/33a0a34f484177f290ff888814d6cb40_1771465153.mp4",
+      "local_path": "output/dino/shots/scene_4.mp4",
       "shot_count": 2,
       "elements": [
         "Valley",
