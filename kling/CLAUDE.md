@@ -13,27 +13,29 @@ All commands run from `kling/` directory.
 ```bash
 pip install -r requirements.txt
 
-# Full pipeline (elements -> shots -> download)
-python -m pipeline.runner run-all -s scenario/scenario.yaml
+# Full pipeline (elements -> shots -> assemble)
+python -m pipeline.runner run-all -s dino/dino.yaml
 
 # Individual steps
-python -m pipeline.runner upload-elements -s scenario/scenario.yaml
-python -m pipeline.runner generate-scene -s scenario/scenario.yaml 1   # scene by id
-python -m pipeline.runner download -s scenario/scenario.yaml
-python -m pipeline.runner status -s scenario/scenario.yaml
+python -m pipeline.runner upload-elements -s dino/dino.yaml
+python -m pipeline.runner generate-scene -s dino/dino.yaml 1        # one scene (also downloads video)
+python -m pipeline.runner generate-scene -s dino/dino.yaml 1 3 5   # multiple scenes
+python -m pipeline.runner assemble -s dino/dino.yaml          # склейка → output/<dino>/final.mp4
+python -m pipeline.runner assemble -s dino/dino.yaml -o out.mp4  # склейка в указанный файл
+python -m pipeline.runner status -s dino/dino.yaml
 
 # Verbose/debug mode
-python -m pipeline.runner -v generate-scene -s scenario/scenario.yaml 1
+python -m pipeline.runner -v generate-scene -s dino/dino.yaml 1
 
 # Custom config
-python -m pipeline.runner -c my-config.yaml run-all -s scenario/scenario.yaml
+python -m pipeline.runner -c my-config.yaml run-all -s dino/dino.yaml
 ```
 
 No test suite exists yet.
 
 ## Architecture
 
-**Three-phase pipeline**: upload element images -> generate video shots -> download outputs.
+**Three-phase pipeline**: upload element images -> generate video shots (with auto-download) -> assemble final video.
 
 All generation is async (KIE.ai returns task IDs, pipeline polls for completion). State is persisted after every task, enabling resume on interruption.
 
@@ -56,8 +58,9 @@ output/
 
 1. `scenario.yaml` defines elements (characters + backgrounds) with reference prompts, and 8 scenes with shot-level prompts using `@ElementName` syntax
 2. `upload_elements` uploads local images from `output/elements/{Name}/` to KIE.ai file storage, saves returned **file URLs** in `output/elements_status.json` (shared). URLs expire after 3 days.
-3. `generate_shots` reads those URLs from shared status, passes them as `kling_elements` array in video generation requests; writes shots to `output/<scenario_name>/`
+3. `generate_shots` reads those URLs from shared status, passes them as `kling_elements` array in video generation requests; automatically downloads completed videos to `local_path` in `output/<scenario_name>/shots/`
 4. Element file URLs are the critical link between phases — they must be preserved in `elements_status.json`. Re-upload if expired.
+5. `assemble` reads `scene_status.json`, collects all scenes with `completed: true` and `local_path`, sorts by scene number, concatenates via `ffmpeg -f concat -c copy` (no re-encoding) → `final.mp4`. Requires **ffmpeg** on PATH (`brew install ffmpeg`).
 
 ### Key modules
 
@@ -65,6 +68,7 @@ output/
 - **`upload_elements.py`** — uploads local element images to KIE.ai file storage. Skips elements that already have URLs in status. Saves file URLs to `elements_status.json`.
 - **`generate_shots.py`** — generates video shots per scene. CLI command `generate-scene` takes scene id as argument. Tracks progress in `scene_status.json`.
 - **`scenario_parser.py`** — maps `scenario.yaml` to dataclasses in `models.py`.
+- **`assembler.py`** — final video stitching. Reads completed scene videos from `scene_status.json`, concatenates via ffmpeg concat demuxer. Sorts scenes numerically (handles `2_part0` patterns).
 - **`runner.py`** — Click CLI. Each command imports its dependencies lazily to keep `--help` fast.
 
 ### API details (KIE.ai)

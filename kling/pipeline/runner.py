@@ -2,8 +2,8 @@
 
 Usage:
     python -m pipeline.runner generate-elements --scenario scenario/scenario.yaml
-    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml
-    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml --scene 1
+    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml 1
+    python -m pipeline.runner generate-scene --scenario scenario/scenario.yaml 1 3 5
     python -m pipeline.runner download
     python -m pipeline.runner status
     python -m pipeline.runner run-all --scenario scenario/scenario.yaml
@@ -103,17 +103,18 @@ def cmd_upload_elements(ctx: click.Context, scenario: str) -> None:
 @cli.command("generate-scene")
 @click.option("--scenario", "-s", required=True, help="Path to scenario YAML file")
 @click.option("--dry-run", is_flag=True, help="Log what would be generated without calling API")
-@click.argument("scene", type=int)
+@click.argument("scenes", type=int, nargs=-1, required=True)
 @click.pass_context
-def cmd_generate_scene(ctx: click.Context, scenario: str, dry_run: bool, scene: int) -> None:
-    """Generate videos for a specific scene. Usage: generate-scene -s scenario.yaml 1"""
+def cmd_generate_scene(ctx: click.Context, scenario: str, dry_run: bool, scenes: tuple[int, ...]) -> None:
+    """Generate videos for one or more scenes. Usage: generate-scene -s scenario.yaml 1 3 5"""
     from pipeline.generate_shots import generate_shots
 
     config_path = ctx.obj["config"]
-    console.print(f"[bold]Starting generation for scene {scene}...[/bold]")
+    label = ", ".join(str(s) for s in scenes)
+    console.print(f"[bold]Starting generation for scene(s) {label}...[/bold]")
 
     try:
-        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, scene_ids=[scene], dry_run=dry_run))
+        asyncio.run(generate_shots(scenario_path=scenario, config_path=config_path, scene_ids=list(scenes), dry_run=dry_run))
     except FileNotFoundError as exc:
         console.print(f"[red]Error: {exc}[/red]")
         sys.exit(1)

@@ -332,18 +332,10 @@ async def generate_shots(
                 console.print("[bold yellow]Dry run complete. No API calls were made.[/bold yellow]")
                 return
 
-            # Phase 2: Poll all submitted tasks
-            poll_bar = progress.add_task(
-                "Waiting for video generation...", total=len(submitted)
-            )
-
+            # Phase 2: Check status of all submitted tasks (no waiting)
             for skey, task_id, fname in submitted:
                 try:
-                    result = await client.wait_for_task(
-                        task_id,
-                        poll_interval=poll_interval,
-                        max_wait=max_wait,
-                    )
+                    result = await client.get_task_status(task_id)
 
                     if result.is_success and result.output_url:
                         local_path = shots_dir / fname
@@ -356,7 +348,7 @@ async def generate_shots(
                             "local_path": str(local_path),
                         })
                         console.print(f"  [green]Scene {skey} completed -> {local_path}[/green]")
-                    else:
+                    elif result.is_done:
                         error_msg = result.error or "Unknown error"
                         status["scenes"][skey].update({
                             "status": "failed",
@@ -364,6 +356,8 @@ async def generate_shots(
                             "error": error_msg,
                         })
                         console.print(f"  [red]Scene {skey} failed: {error_msg}[/red]")
+                    else:
+                        console.print(f"  [yellow]Scene {skey} still {result.status} (task {task_id})[/yellow]")
 
                 except KieApiError as exc:
                     status["scenes"][skey].update({
@@ -374,12 +368,21 @@ async def generate_shots(
                     console.print(f"  [red]Scene {skey} error: {exc}[/red]")
 
                 _save_status(status_path, status)
-                progress.update(poll_bar, advance=1)
 
     # Summary
     completed = sum(1 for s in status["scenes"].values() if s.get("completed"))
     total = len(status["scenes"])
-    console.print(
-        f"\n[bold green]Scene generation complete: "
-        f"{completed}/{total} scene task(s) generated.[/bold green]"
-    )
+    failed = sum(1 for s in status["scenes"].values() if s.get("status") == "failed")
+    in_progress = total - completed - failed
+
+    if completed == total:
+        console.print(
+            f"\n[bold green]Scene generation complete: "
+            f"{completed}/{total} scene task(s) generated.[/bold green]"
+        )
+    else:
+        console.print(
+            f"\n[bold yellow]Scene generation in progress: "
+            f"{completed}/{total} completed, {in_progress} still processing, {failed} failed. "
+            f"Re-run to check status.[/bold yellow]"
+        )
