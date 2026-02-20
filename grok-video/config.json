@@ -1,0 +1,11 @@
+{
+  "initial_image": "start.png",
+  "resolution": "720p",
+  "duration": 6,
+  "crossfade": 0.5,
+  "clips": [
+    {"prompt": "A dinosaur walking through a lush prehistoric forest, cinematic lighting"},
+    {"prompt": "The dinosaur stops and looks up at the darkening sky"},
+    {"prompt": "A bright meteor streaks across the sky, the dinosaur watches in awe"}
+  ]
+}
