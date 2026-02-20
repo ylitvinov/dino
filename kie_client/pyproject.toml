@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kie-client"
+version = "0.1.0"
+description = "Async HTTP client for the KIE.ai API"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.25",
+    "rich>=13",
+]

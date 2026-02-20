@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from kie_client import TaskStatus  # noqa: F401 — re-exported
+
 
 @dataclass
 class QuoteLine:
@@ -77,22 +79,6 @@ class ClipInfo:
     status: str = "pending"  # pending | submitted | completed | failed
     error: str | None = None
 
-
-@dataclass
-class TaskStatus:
-    """Status of an async API task."""
-    task_id: str
-    status: str  # pending | processing | completed | failed
-    output_url: str | None = None
-    error: str | None = None
-
-    @property
-    def is_done(self) -> bool:
-        return self.status in ("completed", "failed")
-
-    @property
-    def is_success(self) -> bool:
-        return self.status == "completed" and self.output_url is not None
 
 
 @dataclass

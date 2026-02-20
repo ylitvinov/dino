@@ -4,19 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-
-@dataclass
-class Element:
-    """A visual element (character, object, background) used across shots.
-
-    Attributes:
-        name: Unique identifier for this element.
-        description: Textual description sent to API as kling_elements[].description.
-        image_urls: List of reference image URLs (CDN URLs from KIE.ai).
-    """
-    name: str
-    description: str = ""
-    image_urls: list[str] = field(default_factory=list)
+from kie_client import TaskStatus, Element  # noqa: F401 — re-exported
 
 
 @dataclass
@@ -63,29 +51,3 @@ class Scenario:
     global_config: dict = field(default_factory=dict)
     elements: dict[str, Element] = field(default_factory=dict)
     scenes: list[Scene] = field(default_factory=list)
-
-
-@dataclass
-class TaskStatus:
-    """Status of a KIE.ai generation task.
-
-    Attributes:
-        task_id: The unique task identifier from KIE.ai.
-        status: One of "pending", "processing", "completed", "failed".
-        output_url: URL to the generated output (video or image), if completed.
-        error: Error message if the task failed.
-    """
-    task_id: str
-    status: str
-    output_url: str | None = None
-    error: str | None = None
-
-    @property
-    def is_done(self) -> bool:
-        """Whether the task has reached a terminal state."""
-        return self.status in ("completed", "failed")
-
-    @property
-    def is_success(self) -> bool:
-        """Whether the task completed successfully."""
-        return self.status == "completed"
