@@ -1,14 +1,3 @@
-kling:
-  api_key: ""
-  base_url: "https://api.kie.ai"
-  poll_interval: 10
-  max_wait: 300
-  mode: "pro"
-
-openai:
-  api_key: ""
-  model: "gpt-4o"
-
 elevenlabs:
   api_key: ""
   voice_id: "JBFqnCBsd6RMkjVDRZzb"  # George
@@ -18,23 +7,7 @@ elevenlabs:
     similarity_boost: 0.75
     style: 0.4
 
-languages:
-  - code: "en"
-    name: "English"
-  - code: "ru"
-    name: "Russian"
-  - code: "es"
-    name: "Spanish"
-
-clips:
-  aspect_ratio: "9:16"
-  duration: 6
-  prompt_suffix: "slow cinematic motion, atmospheric, moody lighting"
-  images_dir: "images"
-  output_dir: "output/clips"
-  status_file: "output/clips_status.json"
-
-quotes_dir: "quotes"
+clips_dir: "clips"
 
 platforms:
   - youtube_shorts
@@ -42,8 +15,6 @@ platforms:
   - instagram_reels
 
 assembly:
-  output_dir: "output/quotes"
-  quotes_status_file: "output/quotes_status.json"
   clip_selection: "sequential"  # sequential | random | round_robin
   font: "/System/Library/Fonts/Helvetica.ttc"
   font_size: 48

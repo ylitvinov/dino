@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
+import base64
 import json
 import logging
 from pathlib import Path
 
 import httpx
 
-from pipeline.models import TranslatedQuote, VoiceoverResult, LineTimestamp, WordTimestamp
+from src.models import Quote, VoiceoverResult, LineTimestamp, WordTimestamp
 
 logger = logging.getLogger(__name__)
 
@@ -21,14 +22,7 @@ def _build_line_timestamps(
     char_starts: list[float],
     char_ends: list[float],
 ) -> list[LineTimestamp]:
-    """Map character-level timestamps to line-level and word-level.
-
-    The full text is all lines joined with spaces. We walk through characters
-    and match them back to lines based on offset.
-    """
-    full_text = " ".join(lines)
-
-    # Build word-level timestamps from characters
+    """Map character-level timestamps to line-level and word-level."""
     words: list[WordTimestamp] = []
     current_word = ""
     word_start: float | None = None
@@ -55,7 +49,6 @@ def _build_line_timestamps(
             end=char_ends[-1] if char_ends else word_start,
         ))
 
-    # Map words to lines
     line_timestamps: list[LineTimestamp] = []
     word_idx = 0
 
@@ -65,10 +58,7 @@ def _build_line_timestamps(
 
         if line_word_count == 0:
             line_timestamps.append(LineTimestamp(
-                text=line_text,
-                index=line_idx,
-                start=0.0,
-                end=0.0,
+                text=line_text, index=line_idx, start=0.0, end=0.0,
             ))
             continue
 
@@ -82,7 +72,6 @@ def _build_line_timestamps(
             line_start = line_words_ts[0].start
             line_end = line_words_ts[-1].end
         else:
-            # Fallback: estimate from previous line
             prev_end = line_timestamps[-1].end if line_timestamps else 0.0
             line_start = prev_end
             line_end = prev_end
@@ -99,30 +88,17 @@ def _build_line_timestamps(
 
 
 def generate_voiceover(
-    translated: TranslatedQuote,
+    quote: Quote,
     output_dir: Path,
     elevenlabs_config: dict,
 ) -> VoiceoverResult:
-    """Generate TTS audio with timestamps for a translated quote.
-
-    Calls ElevenLabs API with `with-timestamps` endpoint, parses
-    character-level alignment into word-level and line-level timestamps.
-
-    Args:
-        translated: The translated quote to voice.
-        output_dir: Directory to save audio and timestamps.
-        elevenlabs_config: Dict with 'api_key', 'voice_id', 'model_id', 'voice_settings'.
-
-    Returns:
-        VoiceoverResult with audio path and line timestamps.
-    """
+    """Generate TTS audio with timestamps for a quote."""
     api_key = elevenlabs_config["api_key"]
     voice_id = elevenlabs_config["voice_id"]
     model_id = elevenlabs_config.get("model_id", "eleven_multilingual_v2")
     voice_settings = elevenlabs_config.get("voice_settings", {})
 
-    # Join lines into single text with space separator
-    full_text = " ".join(translated.lines)
+    full_text = " ".join(quote.lines)
 
     url = f"{_ELEVENLABS_BASE}/v1/text-to-speech/{voice_id}/with-timestamps"
     headers = {
@@ -139,7 +115,7 @@ def generate_voiceover(
         },
     }
 
-    logger.info("Generating voiceover for %s/%s: %r", translated.quote_id, translated.language, full_text[:80])
+    logger.info("Generating voiceover for %s: %r", quote.id, full_text[:80])
 
     with httpx.Client(timeout=60.0) as client:
         response = client.post(url, headers=headers, json=body)
@@ -147,30 +123,25 @@ def generate_voiceover(
 
     data = response.json()
 
-    # Extract audio (base64)
-    import base64
     audio_b64 = data.get("audio_base64", "")
     if not audio_b64:
-        raise ValueError(f"No audio in ElevenLabs response for {translated.quote_id}/{translated.language}")
+        raise ValueError(f"No audio in ElevenLabs response for {quote.id}")
 
     audio_bytes = base64.b64decode(audio_b64)
     output_dir.mkdir(parents=True, exist_ok=True)
-    audio_path = output_dir / f"{translated.quote_id}_{translated.language}.mp3"
+    audio_path = output_dir / f"{quote.id}.mp3"
     with open(audio_path, "wb") as f:
         f.write(audio_bytes)
 
-    # Extract alignment from normalized_alignment
     alignment = data.get("normalized_alignment", data.get("alignment", {}))
     characters = alignment.get("characters", [])
     char_starts = alignment.get("character_start_times_seconds", [])
     char_ends = alignment.get("character_end_times_seconds", [])
 
-    # Build line timestamps
     line_timestamps = _build_line_timestamps(
-        translated.lines, characters, char_starts, char_ends,
+        quote.lines, characters, char_starts, char_ends,
     )
 
-    # Calculate total duration
     if char_ends:
         duration = max(char_ends)
     elif line_timestamps:
@@ -178,18 +149,14 @@ def generate_voiceover(
     else:
         duration = 0.0
 
-    # Save timestamps JSON
-    ts_path = output_dir / f"{translated.quote_id}_{translated.language}_timestamps.json"
+    ts_path = output_dir / f"{quote.id}_timestamps.json"
     ts_data = {
-        "quote_id": translated.quote_id,
-        "language": translated.language,
+        "quote_id": quote.id,
         "duration": duration,
         "lines": [
             {
-                "text": lt.text,
-                "index": lt.index,
-                "start": lt.start,
-                "end": lt.end,
+                "text": lt.text, "index": lt.index,
+                "start": lt.start, "end": lt.end,
                 "words": [
                     {"word": w.word, "start": w.start, "end": w.end}
                     for w in lt.words
@@ -201,14 +168,10 @@ def generate_voiceover(
     with open(ts_path, "w", encoding="utf-8") as f:
         json.dump(ts_data, f, indent=2, ensure_ascii=False)
 
-    logger.info(
-        "Voiceover saved: %s (%.1fs, %d lines)",
-        audio_path, duration, len(line_timestamps),
-    )
+    logger.info("Voiceover saved: %s (%.1fs, %d lines)", audio_path, duration, len(line_timestamps))
 
     return VoiceoverResult(
-        quote_id=translated.quote_id,
-        language=translated.language,
+        quote_id=quote.id,
         audio_path=str(audio_path),
         duration=duration,
         lines=line_timestamps,

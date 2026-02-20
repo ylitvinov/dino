@@ -5,19 +5,26 @@ Pipeline for generating short-form video content from text quotes.
 ## Quick start
 ```bash
 cd /Users/yurylitvinov/Projects-dino/typescript
-python -m pipeline status
-python -m pipeline generate_clips
-python -m pipeline produce
+python -m src status
+python -m src produce en
 ```
 
 ## Commands
-- `python -m pipeline generate_clips` — generate clip library from images/
-- `python -m pipeline translate [quote_ids...]` — translate quotes
-- `python -m pipeline voiceover [quote_ids...]` — generate TTS
-- `python -m pipeline assemble [quote_ids...]` — assemble videos
-- `python -m pipeline produce [quote_ids...]` — full pipeline
-- `python -m pipeline deploy_status [quote_ids...]` — show deploy status
-- `python -m pipeline status` — show pipeline status
+- `python -m src voiceover <lang> [quote_ids...]` — generate TTS
+- `python -m src assemble <lang> [quote_ids...]` — assemble videos
+- `python -m src produce <lang> [quote_ids...]` — full pipeline (voiceover + assemble)
+- `python -m src deploy_status <lang> [quote_ids...]` — show deploy status
+- `python -m src status [lang...]` — show pipeline status
+
+## Structure
+```
+en/                     # language directory
+  atticus_1.txt         # quote text (one line per quote line)
+  marcus_1.txt
+  status.json           # pipeline & deploy status
+  output/               # generated voiceovers & videos
+clips/                  # pre-generated .mp4 clips
+```
 
 ## Config
 All API keys and settings in `config.yaml`.
