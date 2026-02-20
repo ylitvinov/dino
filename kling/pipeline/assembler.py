@@ -62,19 +62,25 @@ def assemble_video(
 
     # Collect completed scenes with local files
     entries: list[tuple[str, str]] = []
-    skipped: list[str] = []
+    incomplete: list[str] = []
+    missing: list[str] = []
     for key, data in scenes.items():
         if not data.get("completed"):
-            skipped.append(key)
+            incomplete.append(key)
             continue
         local = data.get("local_path")
-        if not local or not Path(local).exists():
-            skipped.append(key)
+        if not local or not Path(local).resolve().exists():
+            missing.append(key)
             continue
         entries.append((key, local))
 
-    if skipped:
-        logger.warning("Skipping incomplete/missing scenes: %s", ", ".join(skipped))
+    if incomplete:
+        logger.warning("Skipping incomplete scenes: %s", ", ".join(incomplete))
+    if missing:
+        raise FileNotFoundError(
+            f"Completed scenes have missing video files: {', '.join(missing)}. "
+            "Check local_path values in scene_status.json."
+        )
 
     if not entries:
         raise ValueError("No completed scene videos found to assemble.")
@@ -99,7 +105,8 @@ def assemble_video(
     ) as tmp:
         for _, filepath in entries:
             # ffmpeg concat demuxer needs lines like: file '/absolute/path.mp4'
-            tmp.write(f"file '{filepath}'\n")
+            abs_path = str(Path(filepath).resolve())
+            tmp.write(f"file '{abs_path}'\n")
         concat_list = tmp.name
 
     try:
