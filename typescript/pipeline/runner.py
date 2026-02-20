@@ -1,13 +1,13 @@
 """CLI runner for the typescript pipeline.
 
 Usage:
-    python -m pipeline generate-clips
+    python -m pipeline generate_clips
     python -m pipeline translate [quote_ids...]
     python -m pipeline voiceover [quote_ids...]
     python -m pipeline assemble [quote_ids...]
     python -m pipeline produce [quote_ids...]
     python -m pipeline status
-    python -m pipeline deploy-status [quote_ids...]
+    python -m pipeline deploy_status [quote_ids...]
 """
 
 from __future__ import annotations
@@ -64,14 +64,14 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
 
 
 # ------------------------------------------------------------------
-# generate-clips
+# generate_clips
 # ------------------------------------------------------------------
 
-@cli.command("generate-clips")
+@cli.command("generate_clips")
 @click.pass_context
 def cmd_generate_clips(ctx: click.Context) -> None:
     """Generate video clips from images in the clip library."""
-    from pipeline.clip_generator import generate_clips
+    from pipeline.generate_clips import generate_clips
 
     config_path = ctx.obj["config"]
     console.print("[bold]Starting clip generation...[/bold]")
@@ -100,7 +100,7 @@ def cmd_translate(ctx: click.Context, quote_ids: tuple[str, ...]) -> None:
     """Translate quotes into configured languages. Saves .txt files into quote folders."""
     from pipeline.config import load_config, get_languages, get_quotes_dir
     from pipeline.quotes_parser import load_quotes, filter_quotes, get_translation
-    from pipeline.translator import translate_quote
+    from pipeline.translate import translate_quote
 
     config_path = ctx.obj["config"]
     config = load_config(config_path)
@@ -229,7 +229,7 @@ def cmd_assemble(ctx: click.Context, quote_ids: tuple[str, ...]) -> None:
         get_quotes_status_path, get_clips_dir, get_clips_status_path, get_quotes_dir,
     )
     from pipeline.quotes_parser import load_quotes, filter_quotes
-    from pipeline.assembler import assemble_quote
+    from pipeline.assemble import assemble_quote
     from pipeline.models import VoiceoverResult, LineTimestamp
 
     config_path = ctx.obj["config"]
@@ -332,10 +332,10 @@ def cmd_produce(ctx: click.Context, quote_ids: tuple[str, ...]) -> None:
 
 
 # ------------------------------------------------------------------
-# deploy-status
+# deploy_status
 # ------------------------------------------------------------------
 
-@cli.command("deploy-status")
+@cli.command("deploy_status")
 @click.argument("quote_ids", nargs=-1)
 @click.pass_context
 def cmd_deploy_status(ctx: click.Context, quote_ids: tuple[str, ...]) -> None:
