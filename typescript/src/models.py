@@ -34,6 +34,15 @@ class LineTimestamp:
 
 
 @dataclass
+class ClipTextZone:
+    """Safe rectangle for text overlay in 1080x1920 space."""
+    x: int
+    y: int
+    w: int
+    h: int
+
+
+@dataclass
 class VoiceoverResult:
     """Result of TTS generation for a quote."""
     quote_id: str

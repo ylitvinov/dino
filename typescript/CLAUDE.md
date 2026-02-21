@@ -10,8 +10,10 @@ python -m src produce en
 
 ## Commands
 - `python -m src tts <lang> [quote_ids...] [-f]` — generate TTS (`-f` to regenerate)
-- `python -m src assemble <lang> [quote_ids...] [-f]` — assemble videos (`-f` to reassemble)
+- `python -m src video <lang> [quote_ids...] [-f]` — build videos (`-f` to rebuild)
 - `python -m src produce <lang> [quote_ids...] [-f]` — full pipeline (`-f` to regenerate)
+- `python -m src clips_annotate [-f]` — auto-annotate clip text zones via Claude Vision
+- `python -m src clips_preview [--open]` — generate preview PNGs with zone overlays
 
 ## Structure
 ```

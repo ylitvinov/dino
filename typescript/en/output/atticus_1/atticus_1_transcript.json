@@ -1,6 +1,6 @@
 {
   "quote_id": "atticus_1",
-  "duration": 17.972,
+  "duration": 18.855,
   "lines": [
     {
       "text": "Every feeling that visits you",
@@ -16,11 +16,11 @@
         {
           "word": "feeling",
           "start": 0.43,
-          "end": 0.824
+          "end": 0.848
         },
         {
           "word": "that",
-          "start": 0.894,
+          "start": 0.906,
           "end": 1.057
         },
         {
@@ -38,297 +38,297 @@
     {
       "text": "is a guest in your house.",
       "index": 1,
-      "start": 1.939,
-      "end": 3.622,
+      "start": 1.974,
+      "end": 3.692,
       "words": [
         {
           "word": "is",
-          "start": 1.939,
-          "end": 2.101
+          "start": 1.974,
+          "end": 2.148
         },
         {
           "word": "a",
-          "start": 2.159,
-          "end": 2.183
+          "start": 2.206,
+          "end": 2.241
         },
         {
           "word": "guest",
-          "start": 2.241,
-          "end": 2.601
+          "start": 2.299,
+          "end": 2.67
         },
         {
           "word": "in",
-          "start": 2.67,
-          "end": 2.763
+          "start": 2.74,
+          "end": 2.821
         },
         {
           "word": "your",
-          "start": 2.821,
-          "end": 2.972
+          "start": 2.879,
+          "end": 3.019
         },
         {
           "word": "house.",
-          "start": 3.03,
-          "end": 3.622
+          "start": 3.077,
+          "end": 3.692
         }
       ]
     },
     {
       "text": "Sadness will knock.",
       "index": 2,
-      "start": 3.831,
-      "end": 5.19,
+      "start": 3.901,
+      "end": 5.306,
       "words": [
         {
           "word": "Sadness",
-          "start": 3.831,
-          "end": 4.458
+          "start": 3.901,
+          "end": 4.505
         },
         {
           "word": "will",
-          "start": 4.516,
-          "end": 4.69
+          "start": 4.563,
+          "end": 4.725
         },
         {
           "word": "knock.",
-          "start": 4.737,
-          "end": 5.19
+          "start": 4.772,
+          "end": 5.306
         }
       ]
     },
     {
       "text": "Fear will sit at your table.",
       "index": 3,
-      "start": 5.341,
-      "end": 7.175,
+      "start": 5.422,
+      "end": 7.419,
       "words": [
         {
           "word": "Fear",
-          "start": 5.341,
-          "end": 5.689
+          "start": 5.422,
+          "end": 5.759
         },
         {
           "word": "will",
-          "start": 5.77,
-          "end": 5.956
+          "start": 5.84,
+          "end": 6.026
         },
         {
           "word": "sit",
-          "start": 6.014,
-          "end": 6.223
-        },
-        {
-          "word": "at",
-          "start": 6.281,
+          "start": 6.095,
           "end": 6.374
         },
         {
+          "word": "at",
+          "start": 6.444,
+          "end": 6.571
+        },
+        {
           "word": "your",
-          "start": 6.42,
-          "end": 6.548
+          "start": 6.629,
+          "end": 6.757
         },
         {
           "word": "table.",
-          "start": 6.594,
-          "end": 7.175
+          "start": 6.815,
+          "end": 7.419
         }
       ]
     },
     {
       "text": "Loneliness will stay the night.",
       "index": 4,
-      "start": 7.291,
-      "end": 9.242,
+      "start": 7.535,
+      "end": 9.497,
       "words": [
         {
           "word": "Loneliness",
-          "start": 7.291,
-          "end": 7.999
+          "start": 7.535,
+          "end": 8.231
         },
         {
           "word": "will",
-          "start": 8.069,
-          "end": 8.255
+          "start": 8.301,
+          "end": 8.487
         },
         {
           "word": "stay",
-          "start": 8.313,
-          "end": 8.557
+          "start": 8.545,
+          "end": 8.766
         },
         {
           "word": "the",
-          "start": 8.615,
-          "end": 8.684
+          "start": 8.824,
+          "end": 8.893
         },
         {
           "word": "night.",
-          "start": 8.754,
-          "end": 9.242
+          "start": 8.963,
+          "end": 9.497
         }
       ]
     },
     {
       "text": "Don't push them out.",
       "index": 5,
-      "start": 9.288,
-      "end": 10.542,
+      "start": 9.567,
+      "end": 10.786,
       "words": [
         {
           "word": "Don't",
-          "start": 9.288,
-          "end": 9.543
+          "start": 9.567,
+          "end": 9.81
         },
         {
           "word": "push",
-          "start": 9.59,
-          "end": 9.834
+          "start": 9.857,
+          "end": 10.077
         },
         {
           "word": "them",
-          "start": 9.88,
-          "end": 10.031
+          "start": 10.124,
+          "end": 10.275
         },
         {
           "word": "out.",
-          "start": 10.089,
-          "end": 10.542
+          "start": 10.333,
+          "end": 10.786
         }
       ]
     },
     {
       "text": "Let them come. Let them speak.",
       "index": 6,
-      "start": 10.623,
-      "end": 12.632,
+      "start": 10.902,
+      "end": 13.073,
       "words": [
         {
           "word": "Let",
-          "start": 10.623,
-          "end": 10.809
+          "start": 10.902,
+          "end": 11.099
         },
         {
           "word": "them",
-          "start": 10.855,
-          "end": 11.006
+          "start": 11.146,
+          "end": 11.308
         },
         {
           "word": "come.",
-          "start": 11.076,
-          "end": 11.54
+          "start": 11.389,
+          "end": 11.877
         },
         {
           "word": "Let",
-          "start": 11.656,
-          "end": 11.842
+          "start": 11.993,
+          "end": 12.19
         },
         {
           "word": "them",
-          "start": 11.877,
-          "end": 12.028
+          "start": 12.237,
+          "end": 12.388
         },
         {
           "word": "speak.",
-          "start": 12.098,
-          "end": 12.632
+          "start": 12.469,
+          "end": 13.073
         }
       ]
     },
     {
       "text": "Because every guest",
       "index": 7,
-      "start": 12.655,
-      "end": 13.816,
+      "start": 13.119,
+      "end": 14.408,
       "words": [
         {
           "word": "Because",
-          "start": 12.655,
-          "end": 13.003
+          "start": 13.119,
+          "end": 13.491
         },
         {
           "word": "every",
-          "start": 13.05,
-          "end": 13.375
+          "start": 13.549,
+          "end": 13.909
         },
         {
           "word": "guest",
-          "start": 13.433,
-          "end": 13.816
+          "start": 13.978,
+          "end": 14.408
         }
       ]
     },
     {
       "text": "leaves a gift before they go.",
       "index": 8,
-      "start": 13.909,
-      "end": 15.836,
+      "start": 14.524,
+      "end": 16.498,
       "words": [
         {
           "word": "leaves",
-          "start": 13.909,
-          "end": 14.199
+          "start": 14.524,
+          "end": 14.814
         },
         {
           "word": "a",
-          "start": 14.245,
-          "end": 14.28
+          "start": 14.861,
+          "end": 14.896
         },
         {
           "word": "gift",
-          "start": 14.338,
-          "end": 14.745
+          "start": 14.954,
+          "end": 15.36
         },
         {
           "word": "before",
-          "start": 14.826,
-          "end": 15.174
+          "start": 15.441,
+          "end": 15.824
         },
         {
           "word": "they",
-          "start": 15.221,
-          "end": 15.348
+          "start": 15.871,
+          "end": 16.01
         },
         {
           "word": "go.",
-          "start": 15.406,
-          "end": 15.836
+          "start": 16.068,
+          "end": 16.498
         }
       ]
     },
     {
       "text": "Even the ones you didn't invite.",
       "index": 9,
-      "start": 15.952,
-      "end": 17.949,
+      "start": 16.614,
+      "end": 18.797,
       "words": [
         {
           "word": "Even",
-          "start": 15.952,
-          "end": 16.219
+          "start": 16.614,
+          "end": 16.881
         },
         {
           "word": "the",
-          "start": 16.266,
-          "end": 16.335
+          "start": 16.927,
+          "end": 17.009
         },
         {
           "word": "ones",
-          "start": 16.416,
-          "end": 16.788
+          "start": 17.09,
+          "end": 17.496
         },
         {
           "word": "you",
-          "start": 16.904,
-          "end": 17.02
+          "start": 17.647,
+          "end": 17.775
         },
         {
           "word": "didn't",
-          "start": 17.078,
-          "end": 17.345
+          "start": 17.845,
+          "end": 18.146
         },
         {
           "word": "invite.",
-          "start": 17.403,
-          "end": 17.949
+          "start": 18.216,
+          "end": 18.797
         }
       ]
     }

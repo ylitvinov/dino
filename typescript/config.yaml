@@ -8,6 +8,9 @@ elevenlabs:
   voices:
     en: "9OyNWpTuy2hpP6FKez2U"  # Andrea
 
+anthropic:
+  api_key: ""  # or set ANTHROPIC_API_KEY env
+
 clips_dir: "clips"
 
 platforms:
@@ -38,3 +41,4 @@ assembly:
   # Audio
   line_pause: 1.5             # silence inserted between lines (seconds)
   music_volume: 0.3           # background music level (0.0–1.0, relative to voice at 1.0)
+  outro_fade: 0.5             # fade-to-black duration at end (seconds, 0 to disable)
