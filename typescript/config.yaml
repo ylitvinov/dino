@@ -16,7 +16,6 @@ platforms:
   - instagram_reels
 
 assembly:
-  clip_selection: "sequential"  # sequential | random | round_robin
   font: "/System/Library/Fonts/Helvetica.ttc"
   font_size: 48
   font_color: "white"

@@ -107,7 +107,7 @@ def _assemble_inner(
     if not available_clips:
         raise ValueError(f"No clip .mp4 files found in {clips_dir}")
 
-    selected = _select_clips(available_clips, len(lines), config.get("clip_selection", "sequential"))
+    selected = _select_clips(available_clips, len(lines), seed=voiceover.quote_id)
 
     font = config.get("font", "/System/Library/Fonts/Helvetica.ttc")
     font_size = config.get("font_size", 48)
