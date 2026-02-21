@@ -184,7 +184,7 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
             lines=vo_lines,
         )
 
-        video_path = output_dir / f"{quote.id}.mp4"
+        video_path = output_dir / quote.id / f"{quote.id}_clip.mp4"
 
         try:
             assemble_quote(

@@ -98,7 +98,8 @@ def generate_voiceover(
     model_id = elevenlabs_config.get("model_id", "eleven_multilingual_v2")
     voice_settings = elevenlabs_config.get("voice_settings", {})
 
-    full_text = " ".join(quote.lines)
+    pause = " ... "
+    full_text = pause.join(quote.lines)
 
     url = f"{_ELEVENLABS_BASE}/v1/text-to-speech/{voice_id}/with-timestamps"
     headers = {
@@ -115,7 +116,8 @@ def generate_voiceover(
         },
     }
 
-    logger.info("Generating voiceover for %s: %r", quote.id, full_text[:80])
+    logger.info("Generating voiceover for %s", quote.id)
+    logger.info("Text sent to ElevenLabs:\n%s", full_text)
 
     with httpx.Client(timeout=60.0) as client:
         response = client.post(url, headers=headers, json=body)
@@ -128,8 +130,9 @@ def generate_voiceover(
         raise ValueError(f"No audio in ElevenLabs response for {quote.id}")
 
     audio_bytes = base64.b64decode(audio_b64)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    audio_path = output_dir / f"{quote.id}.mp3"
+    quote_dir = output_dir / quote.id
+    quote_dir.mkdir(parents=True, exist_ok=True)
+    audio_path = quote_dir / f"{quote.id}_voice.mp3"
     with open(audio_path, "wb") as f:
         f.write(audio_bytes)
 
@@ -149,7 +152,7 @@ def generate_voiceover(
     else:
         duration = 0.0
 
-    ts_path = output_dir / f"{quote.id}_timestamps.json"
+    ts_path = quote_dir / f"{quote.id}_transcript.json"
     ts_data = {
         "quote_id": quote.id,
         "duration": duration,
