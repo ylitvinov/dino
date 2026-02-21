@@ -1,7 +1,7 @@
 """CLI runner for the typescript pipeline.
 
 Usage:
-    python -m src voiceover <lang> [quote_ids...]
+    python -m src tts <lang> [quote_ids...]
     python -m src assemble <lang> [quote_ids...]
     python -m src produce <lang> [quote_ids...]
 """
@@ -55,10 +55,10 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
 
 
 # ------------------------------------------------------------------
-# voiceover
+# tts
 # ------------------------------------------------------------------
 
-@cli.command("voiceover")
+@cli.command("tts")
 @click.argument("lang")
 @click.argument("quote_ids", nargs=-1)
 @click.option("--force", "-f", is_flag=True, help="Regenerate even if transcript exists")
@@ -92,7 +92,7 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], for
 
         if not force:
             if transcript_path.exists():
-                console.print(f"  [dim]{quote.id}: skip (transcript exists)[/dim]")
+                console.print(f"  [dim]{quote.id}: skip (transcript exists) -> {audio_path}[/dim]")
                 continue
 
             if raw_path.exists() and audio_path.exists():
@@ -121,8 +121,9 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], for
 @cli.command("assemble")
 @click.argument("lang")
 @click.argument("quote_ids", nargs=-1)
+@click.option("--force", "-f", is_flag=True, help="Reassemble even if already done")
 @click.pass_context
-def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
+def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], force: bool) -> None:
     """Assemble final videos from clips + voiceover."""
     import json as _json
     from src.config import load_config, get_clips_dir
@@ -150,8 +151,9 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
     for quote in quotes:
         q_status = status.setdefault(quote.id, {})
 
-        if q_status.get("assembly", {}).get("status") == "completed":
-            console.print(f"  [dim]{quote.id}: already assembled[/dim]")
+        if not force and q_status.get("assembly", {}).get("status") == "completed":
+            existing = q_status["assembly"].get("video_path", "?")
+            console.print(f"  [dim]{quote.id}: already assembled -> {existing}[/dim]")
             continue
 
         transcript_path = output_dir / quote.id / f"{quote.id}_transcript.json"
@@ -218,7 +220,7 @@ def cmd_produce(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], force
     ctx.invoke(cmd_voiceover, lang=lang, quote_ids=quote_ids, force=force)
 
     console.rule("[bold blue]Step 2: Assemble[/bold blue]")
-    ctx.invoke(cmd_assemble, lang=lang, quote_ids=quote_ids)
+    ctx.invoke(cmd_assemble, lang=lang, quote_ids=quote_ids, force=force)
 
     console.rule("[bold green]Pipeline Complete[/bold green]")
 

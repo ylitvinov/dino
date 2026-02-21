@@ -41,16 +41,15 @@ def _wrap_text(text: str, max_chars: int) -> str:
     return "\n".join(lines)
 
 
-def _generate_y_positions(
-    count: int, seed: str, y_min: int = 400, y_max: int = 1500, max_step: int = 150,
+def _random_walk(
+    count: int, rng: random.Random, lo: int, hi: int, max_step: int,
 ) -> list[int]:
-    rng = random.Random(seed)
-    y = rng.randint(y_min, y_max)
+    val = rng.randint(lo, hi)
     positions = []
     for _ in range(count):
-        positions.append(y)
+        positions.append(val)
         delta = rng.randint(-max_step, max_step)
-        y = max(y_min, min(y_max, y + delta))
+        val = max(lo, min(hi, val + delta))
     return positions
 
 
@@ -69,6 +68,53 @@ def _select_clips(
     shuffled = available[:]
     rng.shuffle(shuffled)
     return [shuffled[i % len(shuffled)] for i in range(count)]
+
+
+def _create_paused_audio(
+    audio_path: str,
+    lines: list,
+    pause_duration: float,
+    tmp: Path,
+) -> Path:
+    """Insert silence between lines in the voiceover audio via FFmpeg."""
+    parts = []
+    inputs = []
+
+    for i in range(len(lines)):
+        start = 0.0 if i == 0 else lines[i].start
+        if i < len(lines) - 1:
+            trim = f"atrim={start}:{lines[i + 1].start}"
+        else:
+            trim = f"atrim=start={start}"
+
+        parts.append(f"[0:a]{trim},asetpts=PTS-STARTPTS[s{i}]")
+        inputs.append(f"[s{i}]")
+
+        if i < len(lines) - 1:
+            parts.append(
+                f"anullsrc=r=44100:cl=stereo,atrim=0:{pause_duration},asetpts=PTS-STARTPTS[p{i}]"
+            )
+            inputs.append(f"[p{i}]")
+
+    n = len(inputs)
+    parts.append(f"{''.join(inputs)}concat=n={n}:v=0:a=1[out]")
+
+    output = tmp / "voice_paused.mp3"
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", audio_path,
+        "-filter_complex", ";".join(parts),
+        "-map", "[out]",
+        "-c:a", "libmp3lame", "-b:a", "192k",
+        str(output),
+    ]
+
+    logger.info("Inserting %.1fs pauses between %d lines", pause_duration, len(lines))
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"FFmpeg audio pause failed: {result.stderr[-500:]}")
+
+    return output
 
 
 def _get_video_duration(path: Path) -> float:
@@ -122,6 +168,15 @@ def _assemble_inner(
 
     selected = _select_clips(available_clips, len(lines), seed=voiceover.quote_id)
 
+    line_pause = config.get("line_pause", 1.5)
+    if line_pause > 0 and len(lines) > 1:
+        paused_audio_path = _create_paused_audio(
+            voiceover.audio_path, lines, line_pause, tmp,
+        )
+        audio_for_mux = str(paused_audio_path)
+    else:
+        audio_for_mux = voiceover.audio_path
+
     font = config.get("font", "fonts/SpecialElite-Regular.ttf")
     font_size = config.get("font_size", 48)
     font_color = config.get("font_color", "white")
@@ -132,8 +187,12 @@ def _assemble_inner(
     y_min = config.get("text_y_min", 400)
     y_max = config.get("text_y_max", 1500)
     y_step = config.get("text_y_step", 150)
+    x_offset_max = config.get("text_x_offset_max", 100)
+    x_offset_step = config.get("text_x_offset_step", 80)
 
-    y_positions = _generate_y_positions(len(lines), voiceover.quote_id, y_min, y_max, y_step)
+    rng = random.Random(voiceover.quote_id)
+    y_positions = _random_walk(len(lines), rng, y_min, y_max, y_step)
+    x_offsets = _random_walk(len(lines), rng, -x_offset_max, x_offset_max, x_offset_step)
     resolution = config.get("resolution", "1080x1920")
     fps = config.get("fps", 30)
 
@@ -147,7 +206,7 @@ def _assemble_inner(
         clip_duration = _get_video_duration(clip_path)
 
         if i < len(lines) - 1:
-            line_duration = lines[i + 1].start - line.start
+            line_duration = lines[i + 1].start - line.start + line_pause
         else:
             line_duration = voiceover.duration - line.start
 
@@ -174,7 +233,7 @@ def _assemble_inner(
                 f":fontcolor={font_color}"
                 f":borderw={border_w}"
                 f":bordercolor={border_color}"
-                f":x=(w-tw)/2"
+                f":x=max(20\\, min(w-tw-20\\, (w-tw)/2+{x_offsets[i]}))"
                 f":y={y_positions[i]}"
             ),
         ]
@@ -221,11 +280,11 @@ def _assemble_inner(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if music_path and music_path.exists():
-        music_vol = config.get("music_volume", 0.15)
+        music_vol = config.get("music_volume", 0.3)
         cmd_mux = [
             "ffmpeg", "-y",
             "-i", str(concat_video),
-            "-i", str(voiceover.audio_path),
+            "-i", audio_for_mux,
             "-i", str(music_path),
             "-filter_complex",
             f"[1:a]volume=1.0[voice];[2:a]volume={music_vol}[music];[voice][music]amix=inputs=2:duration=first[aout]",
@@ -241,7 +300,7 @@ def _assemble_inner(
         cmd_mux = [
             "ffmpeg", "-y",
             "-i", str(concat_video),
-            "-i", str(voiceover.audio_path),
+            "-i", audio_for_mux,
             "-c:v", "copy",
             "-c:a", "aac",
             "-b:a", "192k",

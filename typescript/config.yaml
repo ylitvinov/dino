@@ -16,14 +16,25 @@ platforms:
   - instagram_reels
 
 assembly:
+  # Text overlay
   font: "fonts/SpecialElite-Regular.ttf"
   font_size: 48
   font_color: "white"
-  border_width: 2
+  border_width: 2              # text stroke width (px)
   border_color: "black"
+  max_chars_per_line: 30       # word-wrap threshold
+
+  # Text position — randomized per line via random walk, neighboring lines stay close
   text_y_min: 400
   text_y_max: 1500
   text_y_step: 150
-  max_chars_per_line: 30
-  resolution: "1080x1920"
+  text_x_offset_max: 100      # max horizontal shift from center (px)
+  text_x_offset_step: 80      # max horizontal drift between lines (px)
+
+  # Video
+  resolution: "1080x1920"     # WxH
   fps: 30
+
+  # Audio
+  line_pause: 1.5             # silence inserted between lines (seconds)
+  music_volume: 0.3           # background music level (0.0–1.0, relative to voice at 1.0)

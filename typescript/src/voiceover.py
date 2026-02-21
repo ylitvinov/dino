@@ -49,7 +49,7 @@ def _build_line_timestamps(
             end=char_ends[-1] if char_ends else word_start,
         ))
 
-    # Filter out pause separator words ("...")
+    # Filter out pause separator words
     words = [w for w in words if w.word != "..."]
 
     line_timestamps: list[LineTimestamp] = []
@@ -168,8 +168,7 @@ def generate_voiceover(
     model_id = elevenlabs_config.get("model_id", "eleven_multilingual_v2")
     voice_settings = elevenlabs_config.get("voice_settings", {})
 
-    pause = " ... "
-    full_text = pause.join(quote.lines)
+    full_text = " ".join(quote.lines)
 
     url = f"{_ELEVENLABS_BASE}/v1/text-to-speech/{voice_id}/with-timestamps"
     headers = {

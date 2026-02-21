@@ -1,367 +1,334 @@
 {
   "quote_id": "atticus_1",
-  "duration": 22.244,
+  "duration": 17.972,
   "lines": [
     {
-      "text": "She was made of wildflowers",
+      "text": "Every feeling that visits you",
       "index": 0,
-      "start": 0.209,
-      "end": 2.276,
+      "start": 0.035,
+      "end": 1.765,
       "words": [
         {
-          "word": "She",
-          "start": 0.209,
-          "end": 0.372
+          "word": "Every",
+          "start": 0.035,
+          "end": 0.348
         },
         {
-          "word": "was",
-          "start": 0.441,
-          "end": 0.569
+          "word": "feeling",
+          "start": 0.43,
+          "end": 0.824
         },
         {
-          "word": "made",
-          "start": 0.65,
-          "end": 0.94
+          "word": "that",
+          "start": 0.894,
+          "end": 1.057
         },
         {
-          "word": "of",
-          "start": 0.987,
-          "end": 1.08
-        },
-        {
-          "word": "wildflowers",
-          "start": 1.196,
-          "end": 2.276
-        }
-      ]
-    },
-    {
-      "text": "and late night conversations",
-      "index": 1,
-      "start": 2.415,
-      "end": 4.423,
-      "words": [
-        {
-          "word": "and",
-          "start": 2.415,
-          "end": 2.589
-        },
-        {
-          "word": "late",
-          "start": 2.705,
-          "end": 2.995
-        },
-        {
-          "word": "night",
-          "start": 3.053,
-          "end": 3.309
-        },
-        {
-          "word": "conversations",
-          "start": 3.367,
-          "end": 4.423
-        }
-      ]
-    },
-    {
-      "text": "and messy hair",
-      "index": 2,
-      "start": 4.539,
-      "end": 5.584,
-      "words": [
-        {
-          "word": "and",
-          "start": 4.539,
-          "end": 4.737
-        },
-        {
-          "word": "messy",
-          "start": 4.818,
-          "end": 5.178
-        },
-        {
-          "word": "hair",
-          "start": 5.248,
-          "end": 5.584
-        }
-      ]
-    },
-    {
-      "text": "and too much honesty.",
-      "index": 3,
-      "start": 5.747,
-      "end": 7.396,
-      "words": [
-        {
-          "word": "and",
-          "start": 5.747,
-          "end": 5.944
-        },
-        {
-          "word": "too",
-          "start": 6.014,
-          "end": 6.235
-        },
-        {
-          "word": "much",
-          "start": 6.316,
-          "end": 6.548
-        },
-        {
-          "word": "honesty.",
-          "start": 6.606,
-          "end": 7.396
-        }
-      ]
-    },
-    {
-      "text": "And the world tried to tame her.",
-      "index": 4,
-      "start": 7.523,
-      "end": 9.694,
-      "words": [
-        {
-          "word": "And",
-          "start": 7.523,
-          "end": 7.686
-        },
-        {
-          "word": "the",
-          "start": 7.744,
-          "end": 7.825
-        },
-        {
-          "word": "world",
-          "start": 7.895,
-          "end": 8.324
-        },
-        {
-          "word": "tried",
-          "start": 8.406,
-          "end": 8.8
-        },
-        {
-          "word": "to",
-          "start": 8.847,
-          "end": 8.916
-        },
-        {
-          "word": "tame",
-          "start": 8.986,
-          "end": 9.311
-        },
-        {
-          "word": "her.",
-          "start": 9.369,
-          "end": 9.694
-        }
-      ]
-    },
-    {
-      "text": "But she wasn't built to fit in boxes.",
-      "index": 5,
-      "start": 9.822,
-      "end": 12.678,
-      "words": [
-        {
-          "word": "But",
-          "start": 9.822,
-          "end": 9.985
-        },
-        {
-          "word": "she",
-          "start": 10.043,
-          "end": 10.159
-        },
-        {
-          "word": "wasn't",
-          "start": 10.24,
-          "end": 10.565
-        },
-        {
-          "word": "built",
-          "start": 10.635,
-          "end": 10.995
-        },
-        {
-          "word": "to",
-          "start": 11.064,
-          "end": 11.18
-        },
-        {
-          "word": "fit",
-          "start": 11.273,
-          "end": 11.552
-        },
-        {
-          "word": "in",
-          "start": 11.633,
-          "end": 11.738
-        },
-        {
-          "word": "boxes.",
-          "start": 11.819,
-          "end": 12.678
-        }
-      ]
-    },
-    {
-      "text": "Some souls are too wide",
-      "index": 6,
-      "start": 12.817,
-      "end": 14.791,
-      "words": [
-        {
-          "word": "Some",
-          "start": 12.817,
-          "end": 13.108
-        },
-        {
-          "word": "souls",
-          "start": 13.166,
-          "end": 13.653
-        },
-        {
-          "word": "are",
-          "start": 13.723,
-          "end": 13.909
-        },
-        {
-          "word": "too",
-          "start": 13.955,
-          "end": 14.187
-        },
-        {
-          "word": "wide",
-          "start": 14.28,
-          "end": 14.791
-        }
-      ]
-    },
-    {
-      "text": "for small places.",
-      "index": 7,
-      "start": 14.919,
-      "end": 16.381,
-      "words": [
-        {
-          "word": "for",
-          "start": 14.919,
-          "end": 15.093
-        },
-        {
-          "word": "small",
-          "start": 15.163,
-          "end": 15.487
-        },
-        {
-          "word": "places.",
-          "start": 15.557,
-          "end": 16.381
-        }
-      ]
-    },
-    {
-      "text": "If you feel like you're too much —",
-      "index": 8,
-      "start": 16.498,
-      "end": 18.448,
-      "words": [
-        {
-          "word": "If",
-          "start": 16.498,
-          "end": 16.637
+          "word": "visits",
+          "start": 1.115,
+          "end": 1.498
         },
         {
           "word": "you",
-          "start": 16.695,
-          "end": 16.776
-        },
-        {
-          "word": "feel",
-          "start": 16.892,
-          "end": 17.159
-        },
-        {
-          "word": "like",
-          "start": 17.217,
-          "end": 17.415
-        },
-        {
-          "word": "you're",
-          "start": 17.45,
-          "end": 17.624
-        },
-        {
-          "word": "too",
-          "start": 17.647,
-          "end": 17.809
-        },
-        {
-          "word": "much",
-          "start": 17.891,
-          "end": 18.251
-        },
-        {
-          "word": "--",
-          "start": 18.402,
-          "end": 18.448
+          "start": 1.567,
+          "end": 1.765
         }
       ]
     },
     {
-      "text": "you're not.",
-      "index": 9,
-      "start": 18.82,
-      "end": 19.609,
+      "text": "is a guest in your house.",
+      "index": 1,
+      "start": 1.939,
+      "end": 3.622,
       "words": [
         {
-          "word": "you're",
-          "start": 18.82,
-          "end": 19.04
+          "word": "is",
+          "start": 1.939,
+          "end": 2.101
         },
         {
-          "word": "not.",
-          "start": 19.087,
-          "end": 19.609
-        }
-      ]
-    },
-    {
-      "text": "You're just in the wrong room.",
-      "index": 10,
-      "start": 20.213,
-      "end": 22.047,
-      "words": [
-        {
-          "word": "You're",
-          "start": 20.213,
-          "end": 20.457
+          "word": "a",
+          "start": 2.159,
+          "end": 2.183
         },
         {
-          "word": "just",
-          "start": 20.503,
-          "end": 20.863
+          "word": "guest",
+          "start": 2.241,
+          "end": 2.601
         },
         {
           "word": "in",
-          "start": 20.933,
-          "end": 21.06
+          "start": 2.67,
+          "end": 2.763
+        },
+        {
+          "word": "your",
+          "start": 2.821,
+          "end": 2.972
+        },
+        {
+          "word": "house.",
+          "start": 3.03,
+          "end": 3.622
+        }
+      ]
+    },
+    {
+      "text": "Sadness will knock.",
+      "index": 2,
+      "start": 3.831,
+      "end": 5.19,
+      "words": [
+        {
+          "word": "Sadness",
+          "start": 3.831,
+          "end": 4.458
+        },
+        {
+          "word": "will",
+          "start": 4.516,
+          "end": 4.69
+        },
+        {
+          "word": "knock.",
+          "start": 4.737,
+          "end": 5.19
+        }
+      ]
+    },
+    {
+      "text": "Fear will sit at your table.",
+      "index": 3,
+      "start": 5.341,
+      "end": 7.175,
+      "words": [
+        {
+          "word": "Fear",
+          "start": 5.341,
+          "end": 5.689
+        },
+        {
+          "word": "will",
+          "start": 5.77,
+          "end": 5.956
+        },
+        {
+          "word": "sit",
+          "start": 6.014,
+          "end": 6.223
+        },
+        {
+          "word": "at",
+          "start": 6.281,
+          "end": 6.374
+        },
+        {
+          "word": "your",
+          "start": 6.42,
+          "end": 6.548
+        },
+        {
+          "word": "table.",
+          "start": 6.594,
+          "end": 7.175
+        }
+      ]
+    },
+    {
+      "text": "Loneliness will stay the night.",
+      "index": 4,
+      "start": 7.291,
+      "end": 9.242,
+      "words": [
+        {
+          "word": "Loneliness",
+          "start": 7.291,
+          "end": 7.999
+        },
+        {
+          "word": "will",
+          "start": 8.069,
+          "end": 8.255
+        },
+        {
+          "word": "stay",
+          "start": 8.313,
+          "end": 8.557
         },
         {
           "word": "the",
-          "start": 21.118,
-          "end": 21.188
+          "start": 8.615,
+          "end": 8.684
         },
         {
-          "word": "wrong",
-          "start": 21.234,
-          "end": 21.513
+          "word": "night.",
+          "start": 8.754,
+          "end": 9.242
+        }
+      ]
+    },
+    {
+      "text": "Don't push them out.",
+      "index": 5,
+      "start": 9.288,
+      "end": 10.542,
+      "words": [
+        {
+          "word": "Don't",
+          "start": 9.288,
+          "end": 9.543
         },
         {
-          "word": "room.",
-          "start": 21.594,
-          "end": 22.047
+          "word": "push",
+          "start": 9.59,
+          "end": 9.834
+        },
+        {
+          "word": "them",
+          "start": 9.88,
+          "end": 10.031
+        },
+        {
+          "word": "out.",
+          "start": 10.089,
+          "end": 10.542
+        }
+      ]
+    },
+    {
+      "text": "Let them come. Let them speak.",
+      "index": 6,
+      "start": 10.623,
+      "end": 12.632,
+      "words": [
+        {
+          "word": "Let",
+          "start": 10.623,
+          "end": 10.809
+        },
+        {
+          "word": "them",
+          "start": 10.855,
+          "end": 11.006
+        },
+        {
+          "word": "come.",
+          "start": 11.076,
+          "end": 11.54
+        },
+        {
+          "word": "Let",
+          "start": 11.656,
+          "end": 11.842
+        },
+        {
+          "word": "them",
+          "start": 11.877,
+          "end": 12.028
+        },
+        {
+          "word": "speak.",
+          "start": 12.098,
+          "end": 12.632
+        }
+      ]
+    },
+    {
+      "text": "Because every guest",
+      "index": 7,
+      "start": 12.655,
+      "end": 13.816,
+      "words": [
+        {
+          "word": "Because",
+          "start": 12.655,
+          "end": 13.003
+        },
+        {
+          "word": "every",
+          "start": 13.05,
+          "end": 13.375
+        },
+        {
+          "word": "guest",
+          "start": 13.433,
+          "end": 13.816
+        }
+      ]
+    },
+    {
+      "text": "leaves a gift before they go.",
+      "index": 8,
+      "start": 13.909,
+      "end": 15.836,
+      "words": [
+        {
+          "word": "leaves",
+          "start": 13.909,
+          "end": 14.199
+        },
+        {
+          "word": "a",
+          "start": 14.245,
+          "end": 14.28
+        },
+        {
+          "word": "gift",
+          "start": 14.338,
+          "end": 14.745
+        },
+        {
+          "word": "before",
+          "start": 14.826,
+          "end": 15.174
+        },
+        {
+          "word": "they",
+          "start": 15.221,
+          "end": 15.348
+        },
+        {
+          "word": "go.",
+          "start": 15.406,
+          "end": 15.836
+        }
+      ]
+    },
+    {
+      "text": "Even the ones you didn't invite.",
+      "index": 9,
+      "start": 15.952,
+      "end": 17.949,
+      "words": [
+        {
+          "word": "Even",
+          "start": 15.952,
+          "end": 16.219
+        },
+        {
+          "word": "the",
+          "start": 16.266,
+          "end": 16.335
+        },
+        {
+          "word": "ones",
+          "start": 16.416,
+          "end": 16.788
+        },
+        {
+          "word": "you",
+          "start": 16.904,
+          "end": 17.02
+        },
+        {
+          "word": "didn't",
+          "start": 17.078,
+          "end": 17.345
+        },
+        {
+          "word": "invite.",
+          "start": 17.403,
+          "end": 17.949
         }
       ]
     }
