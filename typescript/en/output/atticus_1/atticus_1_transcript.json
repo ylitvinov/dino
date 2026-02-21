@@ -1,0 +1,369 @@
+{
+  "quote_id": "atticus_1",
+  "duration": 20.154,
+  "lines": [
+    {
+      "text": "She was made of wildflowers",
+      "index": 0,
+      "start": 0.058,
+      "end": 1.428,
+      "words": [
+        {
+          "word": "She",
+          "start": 0.058,
+          "end": 0.163
+        },
+        {
+          "word": "was",
+          "start": 0.209,
+          "end": 0.302
+        },
+        {
+          "word": "made",
+          "start": 0.36,
+          "end": 0.534
+        },
+        {
+          "word": "of",
+          "start": 0.557,
+          "end": 0.615
+        },
+        {
+          "word": "wildflowers",
+          "start": 0.685,
+          "end": 1.428
+        }
+      ]
+    },
+    {
+      "text": "and late night conversations",
+      "index": 1,
+      "start": 1.73,
+      "end": 3.286,
+      "words": [
+        {
+          "word": "and",
+          "start": 1.73,
+          "end": 1.904
+        },
+        {
+          "word": "late",
+          "start": 1.985,
+          "end": 2.194
+        },
+        {
+          "word": "night",
+          "start": 2.241,
+          "end": 2.426
+        },
+        {
+          "word": "conversations",
+          "start": 2.473,
+          "end": 3.286
+        }
+      ]
+    },
+    {
+      "text": "and messy hair",
+      "index": 2,
+      "start": 3.529,
+      "end": 4.447,
+      "words": [
+        {
+          "word": "and",
+          "start": 3.529,
+          "end": 3.692
+        },
+        {
+          "word": "messy",
+          "start": 3.773,
+          "end": 4.087
+        },
+        {
+          "word": "hair",
+          "start": 4.156,
+          "end": 4.447
+        }
+      ]
+    },
+    {
+      "text": "and too much honesty.",
+      "index": 3,
+      "start": 4.783,
+      "end": 6.049,
+      "words": [
+        {
+          "word": "and",
+          "start": 4.783,
+          "end": 4.934
+        },
+        {
+          "word": "too",
+          "start": 4.992,
+          "end": 5.12
+        },
+        {
+          "word": "much",
+          "start": 5.178,
+          "end": 5.352
+        },
+        {
+          "word": "honesty.",
+          "start": 5.399,
+          "end": 6.049
+        }
+      ]
+    },
+    {
+      "text": "And the world tried to tame her.",
+      "index": 4,
+      "start": 6.757,
+      "end": 8.394,
+      "words": [
+        {
+          "word": "And",
+          "start": 6.757,
+          "end": 6.896
+        },
+        {
+          "word": "the",
+          "start": 6.943,
+          "end": 7.012
+        },
+        {
+          "word": "world",
+          "start": 7.059,
+          "end": 7.349
+        },
+        {
+          "word": "tried",
+          "start": 7.384,
+          "end": 7.639
+        },
+        {
+          "word": "to",
+          "start": 7.674,
+          "end": 7.732
+        },
+        {
+          "word": "tame",
+          "start": 7.802,
+          "end": 8.069
+        },
+        {
+          "word": "her.",
+          "start": 8.115,
+          "end": 8.394
+        }
+      ]
+    },
+    {
+      "text": "But she wasn't built to fit in boxes.",
+      "index": 5,
+      "start": 8.986,
+      "end": 11.099,
+      "words": [
+        {
+          "word": "But",
+          "start": 8.986,
+          "end": 9.137
+        },
+        {
+          "word": "she",
+          "start": 9.172,
+          "end": 9.265
+        },
+        {
+          "word": "wasn't",
+          "start": 9.323,
+          "end": 9.601
+        },
+        {
+          "word": "built",
+          "start": 9.659,
+          "end": 9.915
+        },
+        {
+          "word": "to",
+          "start": 9.961,
+          "end": 10.031
+        },
+        {
+          "word": "fit",
+          "start": 10.101,
+          "end": 10.275
+        },
+        {
+          "word": "in",
+          "start": 10.321,
+          "end": 10.391
+        },
+        {
+          "word": "boxes.",
+          "start": 10.461,
+          "end": 11.099
+        }
+      ]
+    },
+    {
+      "text": "Some souls are too wide",
+      "index": 6,
+      "start": 11.796,
+      "end": 13.259,
+      "words": [
+        {
+          "word": "Some",
+          "start": 11.796,
+          "end": 12.063
+        },
+        {
+          "word": "souls",
+          "start": 12.109,
+          "end": 12.423
+        },
+        {
+          "word": "are",
+          "start": 12.457,
+          "end": 12.55
+        },
+        {
+          "word": "too",
+          "start": 12.574,
+          "end": 12.725
+        },
+        {
+          "word": "wide",
+          "start": 12.794,
+          "end": 13.259
+        }
+      ]
+    },
+    {
+      "text": "for small places.",
+      "index": 7,
+      "start": 13.421,
+      "end": 14.57,
+      "words": [
+        {
+          "word": "for",
+          "start": 13.421,
+          "end": 13.56
+        },
+        {
+          "word": "small",
+          "start": 13.595,
+          "end": 13.873
+        },
+        {
+          "word": "places.",
+          "start": 13.931,
+          "end": 14.57
+        }
+      ]
+    },
+    {
+      "text": "If you feel like you're too much —",
+      "index": 8,
+      "start": 15.162,
+      "end": 16.857,
+      "words": [
+        {
+          "word": "If",
+          "start": 15.162,
+          "end": 15.301
+        },
+        {
+          "word": "you",
+          "start": 15.348,
+          "end": 15.429
+        },
+        {
+          "word": "feel",
+          "start": 15.51,
+          "end": 15.719
+        },
+        {
+          "word": "like",
+          "start": 15.766,
+          "end": 15.928
+        },
+        {
+          "word": "you're",
+          "start": 15.963,
+          "end": 16.126
+        },
+        {
+          "word": "too",
+          "start": 16.149,
+          "end": 16.288
+        },
+        {
+          "word": "much",
+          "start": 16.358,
+          "end": 16.66
+        },
+        {
+          "word": "--",
+          "start": 16.811,
+          "end": 16.857
+        }
+      ]
+    },
+    {
+      "text": "you're not.",
+      "index": 9,
+      "start": 17.391,
+      "end": 18.041,
+      "words": [
+        {
+          "word": "you're",
+          "start": 17.391,
+          "end": 17.589
+        },
+        {
+          "word": "not.",
+          "start": 17.623,
+          "end": 18.041
+        }
+      ]
+    },
+    {
+      "text": "You're just in the wrong room.",
+      "index": 10,
+      "start": 18.529,
+      "end": 19.911,
+      "words": [
+        {
+          "word": "You're",
+          "start": 18.529,
+          "end": 18.75
+        },
+        {
+          "word": "just",
+          "start": 18.784,
+          "end": 18.959
+        },
+        {
+          "word": "in",
+          "start": 19.005,
+          "end": 19.063
+        },
+        {
+          "word": "the",
+          "start": 19.098,
+          "end": 19.168
+        },
+        {
+          "word": "wrong",
+          "start": 19.202,
+          "end": 19.4
+        },
+        {
+          "word": "room.",
+          "start": 19.469,
+          "end": 19.911
+        }
+      ]
+    }
+  ]
+}

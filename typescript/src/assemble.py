@@ -48,14 +48,14 @@ def _get_clip_files(clips_dir: Path) -> list[Path]:
 def _select_clips(
     available: list[Path],
     count: int,
-    mode: str = "sequential",
+    seed: str = "",
 ) -> list[Path]:
     if not available:
         raise ValueError("No clips available for assembly")
-    if mode == "random":
-        return [random.choice(available) for _ in range(count)]
-    else:  # sequential / round_robin
-        return [available[i % len(available)] for i in range(count)]
+    rng = random.Random(seed)
+    shuffled = available[:]
+    rng.shuffle(shuffled)
+    return [shuffled[i % len(shuffled)] for i in range(count)]
 
 
 def _get_video_duration(path: Path) -> float:
