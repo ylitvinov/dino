@@ -6,7 +6,7 @@ elevenlabs:
     similarity_boost: 0.80
     style: 0.15
   voices:
-    en: "JBFqnCBsd6RMkjVDRZzb"  # George
+    en: "9OyNWpTuy2hpP6FKez2U"  # Andrea
 
 clips_dir: "clips"
 
@@ -16,12 +16,14 @@ platforms:
   - instagram_reels
 
 assembly:
-  font: "/System/Library/Fonts/Helvetica.ttc"
+  font: "fonts/SpecialElite-Regular.ttf"
   font_size: 48
   font_color: "white"
   border_width: 2
   border_color: "black"
-  text_y_position: "h-th-120"  # FFmpeg expression
+  text_y_min: 400
+  text_y_max: 1500
+  text_y_step: 150
   max_chars_per_line: 30
   resolution: "1080x1920"
   fps: 30

@@ -4,8 +4,6 @@ Usage:
     python -m src voiceover <lang> [quote_ids...]
     python -m src assemble <lang> [quote_ids...]
     python -m src produce <lang> [quote_ids...]
-    python -m src status [lang...]
-    python -m src deploy_status <lang> [quote_ids...]
 """
 
 from __future__ import annotations
@@ -45,19 +43,6 @@ def _resolve_lang_dir(config_path: str, lang: str) -> Path:
     return lang_dir
 
 
-def _find_lang_dirs(config_path: str) -> list[Path]:
-    """Find all language directories (dirs containing .txt files)."""
-    from src.config import get_project_root
-    root = get_project_root(config_path)
-    exclude = {"src", "clips", ".git", "__pycache__", "node_modules"}
-    dirs = []
-    for d in sorted(root.iterdir()):
-        if d.is_dir() and d.name not in exclude and not d.name.startswith("."):
-            if any(d.glob("*.txt")):
-                dirs.append(d)
-    return dirs
-
-
 @click.group()
 @click.option("--config", "-c", default=_DEFAULT_CONFIG, help="Path to config.yaml")
 @click.option("--verbose", "-v", is_flag=True, help="Enable debug logging")
@@ -76,8 +61,9 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
 @cli.command("voiceover")
 @click.argument("lang")
 @click.argument("quote_ids", nargs=-1)
+@click.option("--force", "-f", is_flag=True, help="Regenerate even if transcript exists")
 @click.pass_context
-def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
+def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], force: bool) -> None:
     """Generate TTS voiceovers with timestamps."""
     from src.config import load_config
     from src.quotes import load_quotes, filter_quotes
@@ -104,18 +90,19 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> 
         raw_path = quote_dir / f"{quote.id}_elevenlabs_raw.json"
         audio_path = quote_dir / f"{quote.id}_voice.mp3"
 
-        if transcript_path.exists():
-            console.print(f"  [dim]{quote.id}: skip (transcript exists)[/dim]")
-            continue
+        if not force:
+            if transcript_path.exists():
+                console.print(f"  [dim]{quote.id}: skip (transcript exists)[/dim]")
+                continue
 
-        if raw_path.exists() and audio_path.exists():
-            try:
-                console.print(f"  [yellow]{quote.id}: rebuilding transcript from raw...[/yellow]")
-                result = rebuild_transcript(quote, output_dir)
-                console.print(f"  [green]{quote.id}: transcript rebuilt ({result.duration:.1f}s)[/green]")
-            except Exception as exc:
-                console.print(f"  [red]{quote.id}: transcript rebuild failed — {exc}[/red]")
-            continue
+            if raw_path.exists() and audio_path.exists():
+                try:
+                    console.print(f"  [yellow]{quote.id}: rebuilding transcript from raw...[/yellow]")
+                    result = rebuild_transcript(quote, output_dir)
+                    console.print(f"  [green]{quote.id}: transcript rebuilt ({result.duration:.1f}s)[/green]")
+                except Exception as exc:
+                    console.print(f"  [red]{quote.id}: transcript rebuild failed — {exc}[/red]")
+                continue
 
         try:
             console.print(f"  {quote.id}: calling ElevenLabs API...")
@@ -223,142 +210,17 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
 @cli.command("produce")
 @click.argument("lang")
 @click.argument("quote_ids", nargs=-1)
+@click.option("--force", "-f", is_flag=True, help="Regenerate even if output exists")
 @click.pass_context
-def cmd_produce(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
+def cmd_produce(ctx: click.Context, lang: str, quote_ids: tuple[str, ...], force: bool) -> None:
     """Full pipeline: voiceover -> assemble."""
     console.rule("[bold blue]Step 1: Voiceover[/bold blue]")
-    ctx.invoke(cmd_voiceover, lang=lang, quote_ids=quote_ids)
+    ctx.invoke(cmd_voiceover, lang=lang, quote_ids=quote_ids, force=force)
 
     console.rule("[bold blue]Step 2: Assemble[/bold blue]")
     ctx.invoke(cmd_assemble, lang=lang, quote_ids=quote_ids)
 
     console.rule("[bold green]Pipeline Complete[/bold green]")
-
-
-# ------------------------------------------------------------------
-# deploy_status
-# ------------------------------------------------------------------
-
-@cli.command("deploy_status")
-@click.argument("lang")
-@click.argument("quote_ids", nargs=-1)
-@click.pass_context
-def cmd_deploy_status(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
-    """Show deployment status for quotes across platforms."""
-    from src.config import load_config, get_platforms
-    from src.quotes import load_quotes, filter_quotes, load_status, save_status
-
-    config_path = ctx.obj["config"]
-    config = load_config(config_path)
-    lang_dir = _resolve_lang_dir(config_path, lang)
-    platforms = get_platforms(config)
-
-    quotes = load_quotes(lang_dir)
-    quotes = filter_quotes(quotes, list(quote_ids) or None)
-    status = load_status(lang_dir)
-
-    changed = False
-    for quote in quotes:
-        q_status = status.setdefault(quote.id, {})
-        deploy = q_status.setdefault("deploy", {})
-        for platform in platforms:
-            if platform not in deploy:
-                deploy[platform] = "pending"
-                changed = True
-    if changed:
-        save_status(lang_dir, status)
-
-    table = Table(title=f"Deploy Status [{lang}]", show_lines=True)
-    table.add_column("Quote", style="cyan")
-    for platform in platforms:
-        table.add_column(platform, justify="center")
-
-    for quote in quotes:
-        deploy = status.get(quote.id, {}).get("deploy", {})
-        row = [quote.id]
-        for platform in platforms:
-            st = deploy.get(platform, "pending")
-            if st == "published":
-                row.append("[green]published[/green]")
-            elif st == "scheduled":
-                row.append("[yellow]scheduled[/yellow]")
-            else:
-                row.append("[dim]pending[/dim]")
-        table.add_row(*row)
-
-    console.print(table)
-    console.print()
-
-
-# ------------------------------------------------------------------
-# status
-# ------------------------------------------------------------------
-
-@cli.command("status")
-@click.argument("langs", nargs=-1)
-@click.pass_context
-def cmd_status(ctx: click.Context, langs: tuple[str, ...]) -> None:
-    """Show current pipeline status. Pass language names or omit for all."""
-    from src.config import load_config, get_clips_dir
-    from src.quotes import load_quotes, load_status
-
-    config_path = ctx.obj["config"]
-    config = load_config(config_path)
-    clips_dir = get_clips_dir(config, config_path)
-
-    if langs:
-        lang_dirs = [_resolve_lang_dir(config_path, l) for l in langs]
-    else:
-        lang_dirs = _find_lang_dirs(config_path)
-
-    clip_files = sorted(clips_dir.glob("*.mp4")) if clips_dir.exists() else []
-    if clip_files:
-        console.print(f"[bold]Clips:[/bold] {len(clip_files)} file(s) in {clips_dir}")
-        for f in clip_files:
-            console.print(f"  [dim]{f.name}[/dim]")
-        console.print()
-
-    if not lang_dirs:
-        console.print("[yellow]No language directories found.[/yellow]")
-        return
-
-    for lang_dir in lang_dirs:
-        quotes = load_quotes(lang_dir)
-        status = load_status(lang_dir)
-
-        if not quotes:
-            console.print(f"[dim]{lang_dir.name}: no quotes[/dim]")
-            continue
-
-        table = Table(title=f"[{lang_dir.name}]", show_lines=True)
-        table.add_column("Quote", style="cyan")
-        table.add_column("Lines", justify="center")
-        table.add_column("Voiceover", justify="center")
-        table.add_column("Assembly", justify="center")
-
-        output_dir = lang_dir / "output"
-        for quote in quotes:
-            q_status = status.get(quote.id, {})
-            transcript_path = output_dir / quote.id / f"{quote.id}_transcript.json"
-            vo_st = "completed" if transcript_path.exists() else ""
-            asm_st = q_status.get("assembly", {}).get("status", "")
-
-            def _fmt(st: str) -> str:
-                if st == "completed":
-                    return "[green]done[/green]"
-                elif st == "failed":
-                    return "[red]failed[/red]"
-                return "[dim]—[/dim]"
-
-            table.add_row(
-                quote.id,
-                str(len(quote.lines)),
-                _fmt(vo_st),
-                _fmt(asm_st),
-            )
-
-        console.print(table)
-        console.print()
 
 
 def main() -> None:

@@ -5,16 +5,13 @@ Pipeline for generating short-form video content from text quotes.
 ## Quick start
 ```bash
 cd /Users/yurylitvinov/Projects-dino/typescript
-python -m src status
 python -m src produce en
 ```
 
 ## Commands
-- `python -m src voiceover <lang> [quote_ids...]` — generate TTS
+- `python -m src voiceover <lang> [quote_ids...] [-f]` — generate TTS (`-f` to regenerate)
 - `python -m src assemble <lang> [quote_ids...]` — assemble videos
-- `python -m src produce <lang> [quote_ids...]` — full pipeline (voiceover + assemble)
-- `python -m src deploy_status <lang> [quote_ids...]` — show deploy status
-- `python -m src status [lang...]` — show pipeline status
+- `python -m src produce <lang> [quote_ids...] [-f]` — full pipeline (`-f` to regenerate)
 
 ## Structure
 ```

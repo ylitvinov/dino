@@ -41,6 +41,19 @@ def _wrap_text(text: str, max_chars: int) -> str:
     return "\n".join(lines)
 
 
+def _generate_y_positions(
+    count: int, seed: str, y_min: int = 400, y_max: int = 1500, max_step: int = 150,
+) -> list[int]:
+    rng = random.Random(seed)
+    y = rng.randint(y_min, y_max)
+    positions = []
+    for _ in range(count):
+        positions.append(y)
+        delta = rng.randint(-max_step, max_step)
+        y = max(y_min, min(y_max, y + delta))
+    return positions
+
+
 def _get_clip_files(clips_dir: Path) -> list[Path]:
     return sorted(clips_dir.glob("*.mp4"))
 
@@ -109,13 +122,18 @@ def _assemble_inner(
 
     selected = _select_clips(available_clips, len(lines), seed=voiceover.quote_id)
 
-    font = config.get("font", "/System/Library/Fonts/Helvetica.ttc")
+    font = config.get("font", "fonts/SpecialElite-Regular.ttf")
     font_size = config.get("font_size", 48)
     font_color = config.get("font_color", "white")
     border_w = config.get("border_width", 2)
     border_color = config.get("border_color", "black")
-    text_y = config.get("text_y_position", "h-th-120")
     max_chars = config.get("max_chars_per_line", 30)
+
+    y_min = config.get("text_y_min", 400)
+    y_max = config.get("text_y_max", 1500)
+    y_step = config.get("text_y_step", 150)
+
+    y_positions = _generate_y_positions(len(lines), voiceover.quote_id, y_min, y_max, y_step)
     resolution = config.get("resolution", "1080x1920")
     fps = config.get("fps", 30)
 
@@ -157,7 +175,7 @@ def _assemble_inner(
                 f":borderw={border_w}"
                 f":bordercolor={border_color}"
                 f":x=(w-tw)/2"
-                f":y={text_y}"
+                f":y={y_positions[i]}"
             ),
         ]
         vf = ",".join(filter_parts)
