@@ -80,8 +80,8 @@ def cli(ctx: click.Context, config: str, verbose: bool) -> None:
 def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
     """Generate TTS voiceovers with timestamps."""
     from src.config import load_config
-    from src.quotes import load_quotes, filter_quotes, load_status, save_status
-    from src.voiceover import generate_voiceover
+    from src.quotes import load_quotes, filter_quotes
+    from src.voiceover import generate_voiceover, rebuild_transcript
 
     config_path = ctx.obj["config"]
     config = load_config(config_path)
@@ -90,7 +90,6 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> 
 
     quotes = load_quotes(lang_dir)
     quotes = filter_quotes(quotes, list(quote_ids) or None)
-    status = load_status(lang_dir)
 
     elevenlabs_config = config["elevenlabs"]
     if not elevenlabs_config.get("api_key"):
@@ -100,29 +99,30 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> 
     console.print(f"[bold]Generating voiceovers for {len(quotes)} quote(s) [{lang}]...[/bold]\n")
 
     for quote in quotes:
-        q_status = status.setdefault(quote.id, {})
+        quote_dir = output_dir / quote.id
+        transcript_path = quote_dir / f"{quote.id}_transcript.json"
+        raw_path = quote_dir / f"{quote.id}_elevenlabs_raw.json"
+        audio_path = quote_dir / f"{quote.id}_voice.mp3"
 
-        if q_status.get("voiceover", {}).get("status") == "completed":
-            console.print(f"  [dim]{quote.id}: already voiced[/dim]")
+        if transcript_path.exists():
+            console.print(f"  [dim]{quote.id}: skip (transcript exists)[/dim]")
+            continue
+
+        if raw_path.exists() and audio_path.exists():
+            try:
+                console.print(f"  [yellow]{quote.id}: rebuilding transcript from raw...[/yellow]")
+                result = rebuild_transcript(quote, output_dir)
+                console.print(f"  [green]{quote.id}: transcript rebuilt ({result.duration:.1f}s)[/green]")
+            except Exception as exc:
+                console.print(f"  [red]{quote.id}: transcript rebuild failed — {exc}[/red]")
             continue
 
         try:
-            result = generate_voiceover(quote, output_dir, elevenlabs_config)
-            q_status["voiceover"] = {
-                "status": "completed",
-                "audio_path": result.audio_path,
-                "duration": result.duration,
-                "lines": [
-                    {"text": lt.text, "start": lt.start, "end": lt.end}
-                    for lt in result.lines
-                ],
-            }
+            console.print(f"  {quote.id}: calling ElevenLabs API...")
+            result = generate_voiceover(quote, output_dir, elevenlabs_config, lang)
             console.print(f"  [green]{quote.id}: done ({result.duration:.1f}s)[/green]")
         except Exception as exc:
-            q_status["voiceover"] = {"status": "failed", "error": str(exc)}
             console.print(f"  [red]{quote.id}: failed — {exc}[/red]")
-
-        save_status(lang_dir, status)
 
     console.print("\n[bold]Voiceover complete.[/bold]")
 
@@ -137,6 +137,7 @@ def cmd_voiceover(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> 
 @click.pass_context
 def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> None:
     """Assemble final videos from clips + voiceover."""
+    import json as _json
     from src.config import load_config, get_clips_dir
     from src.quotes import load_quotes, filter_quotes, load_status, save_status
     from src.assemble import assemble_quote
@@ -153,6 +154,9 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
     status = load_status(lang_dir)
 
     assembly_config = config["assembly"]
+    music_path = lang_dir / "background_music.mp3"
+    if not music_path.exists():
+        music_path = None
 
     console.print(f"[bold]Assembling videos for {len(quotes)} quote(s) [{lang}]...[/bold]\n")
 
@@ -163,24 +167,28 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
             console.print(f"  [dim]{quote.id}: already assembled[/dim]")
             continue
 
-        vo = q_status.get("voiceover")
-        if not vo or vo.get("status") != "completed":
+        transcript_path = output_dir / quote.id / f"{quote.id}_transcript.json"
+        audio_path = output_dir / quote.id / f"{quote.id}_voice.mp3"
+        if not transcript_path.exists():
             console.print(f"  [yellow]{quote.id}: no voiceover, skipping[/yellow]")
             continue
+
+        with open(transcript_path, "r", encoding="utf-8") as tf:
+            transcript = _json.load(tf)
 
         vo_lines = [
             LineTimestamp(
                 text=lt["text"],
-                index=i,
+                index=lt.get("index", i),
                 start=lt["start"],
                 end=lt["end"],
             )
-            for i, lt in enumerate(vo["lines"])
+            for i, lt in enumerate(transcript["lines"])
         ]
         voiceover_result = VoiceoverResult(
             quote_id=quote.id,
-            audio_path=vo["audio_path"],
-            duration=vo["duration"],
+            audio_path=str(audio_path),
+            duration=transcript["duration"],
             lines=vo_lines,
         )
 
@@ -192,6 +200,7 @@ def cmd_assemble(ctx: click.Context, lang: str, quote_ids: tuple[str, ...]) -> N
                 clips_dir=clips_dir,
                 output_path=video_path,
                 assembly_config=assembly_config,
+                music_path=music_path,
             )
             q_status["assembly"] = {
                 "status": "completed",
@@ -327,9 +336,11 @@ def cmd_status(ctx: click.Context, langs: tuple[str, ...]) -> None:
         table.add_column("Voiceover", justify="center")
         table.add_column("Assembly", justify="center")
 
+        output_dir = lang_dir / "output"
         for quote in quotes:
             q_status = status.get(quote.id, {})
-            vo_st = q_status.get("voiceover", {}).get("status", "")
+            transcript_path = output_dir / quote.id / f"{quote.id}_transcript.json"
+            vo_st = "completed" if transcript_path.exists() else ""
             asm_st = q_status.get("assembly", {}).get("status", "")
 
             def _fmt(st: str) -> str:

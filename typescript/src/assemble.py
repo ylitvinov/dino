@@ -79,11 +79,12 @@ def assemble_quote(
     clips_dir: Path,
     output_path: Path,
     assembly_config: dict,
+    music_path: Path | None = None,
 ) -> Path:
     """Assemble a final video for one quote."""
     tmpdir = tempfile.mkdtemp(prefix="quotes_video_")
     try:
-        return _assemble_inner(voiceover, clips_dir, output_path, assembly_config, tmpdir)
+        return _assemble_inner(voiceover, clips_dir, output_path, assembly_config, tmpdir, music_path)
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
 
@@ -94,6 +95,7 @@ def _assemble_inner(
     output_path: Path,
     config: dict,
     tmpdir: str,
+    music_path: Path | None = None,
 ) -> Path:
     tmp = Path(tmpdir)
     lines = voiceover.lines
@@ -200,18 +202,36 @@ def _assemble_inner(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    cmd_mux = [
-        "ffmpeg", "-y",
-        "-i", str(concat_video),
-        "-i", str(voiceover.audio_path),
-        "-c:v", "copy",
-        "-c:a", "aac",
-        "-b:a", "192k",
-        "-map", "0:v:0",
-        "-map", "1:a:0",
-        "-shortest",
-        str(output_path),
-    ]
+    if music_path and music_path.exists():
+        music_vol = config.get("music_volume", 0.15)
+        cmd_mux = [
+            "ffmpeg", "-y",
+            "-i", str(concat_video),
+            "-i", str(voiceover.audio_path),
+            "-i", str(music_path),
+            "-filter_complex",
+            f"[1:a]volume=1.0[voice];[2:a]volume={music_vol}[music];[voice][music]amix=inputs=2:duration=first[aout]",
+            "-map", "0:v:0",
+            "-map", "[aout]",
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-b:a", "192k",
+            "-shortest",
+            str(output_path),
+        ]
+    else:
+        cmd_mux = [
+            "ffmpeg", "-y",
+            "-i", str(concat_video),
+            "-i", str(voiceover.audio_path),
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-b:a", "192k",
+            "-map", "0:v:0",
+            "-map", "1:a:0",
+            "-shortest",
+            str(output_path),
+        ]
     result = subprocess.run(cmd_mux, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(f"FFmpeg mux failed: {result.stderr[-500:]}")
